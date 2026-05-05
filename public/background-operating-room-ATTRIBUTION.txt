@@ -1,0 +1,9 @@
+Fichier : background-operating-room.jpg
+Usage : fond de la carte mission urgente lorsqu’il n’y a pas de photo ville dédiée (repli) ; plus de fond plein page.
+
+Ancien usage (retiré) : image de fond sur `body` — revenu à un fond uni `--bg` sur la landing.
+Photo : Alexander Mass (@alexandermassph) — Unsplash
+Page : https://unsplash.com/photos/END14vM3wsQ
+Licence : https://unsplash.com/license
+
+Téléchargement source : unsplash.com/photos/END14vM3wsQ/download (recadrage 2400px).

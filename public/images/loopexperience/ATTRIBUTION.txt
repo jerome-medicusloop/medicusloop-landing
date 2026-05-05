@@ -1,0 +1,9 @@
+Illustrations LoopExperience — licence Unsplash (https://unsplash.com/fr/licence)
+Fichiers téléchargés localement pour performance et hors-ligne partiel.
+
+- hotel.jpg       — https://unsplash.com/photos/1566073771259-6a8506099945
+- gastronomie.jpg — https://unsplash.com/photos/1517248135467-4c7edcad34c4
+- spa.jpg         — https://unsplash.com/photos/1540555700478-4be289fbecef
+- musee-hall.jpg  — https://unsplash.com/photos/n1ZtVaGarAQ (intérieur musée, architecture / coupole — visuel générique)
+
+Crédit recommandé sur supports marketing : « Photo : Unsplash » + lien vers le photographe depuis la page de chaque photo.

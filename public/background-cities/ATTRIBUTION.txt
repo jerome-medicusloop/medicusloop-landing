@@ -1,0 +1,20 @@
+Fonds carte mission (hero) — à versionner avec le dépôt.
+
+Fichier          Rôle
+---------------  ------------------------------------------------------------------
+default.jpg      Repli si /background-cities/{ville}.jpg absent ou en erreur.
+                 Unsplash UN7-iS_79oE — Erwan Hesry (@erwanhesry).
+                 Couloir d’etablissement de sante tres flou (ambiance medicale ; silhouettes non identifiables).
+                 https://unsplash.com/photos/UN7-iS_79oE
+
+montpellier.jpg  Unsplash photo-1664457188478-8c57c33c7982 (pT0VcbG70tg) — Emil Gabrovski (@emil_gabrovski).
+                 Porte du Peyrou / arc Montpellier.
+
+marseille.jpg    Unsplash photo-1711199872709 (eau / ville).
+
+toulouse.jpg     Unsplash photo-1650707199496 (Capitole / centre).
+
+Deck demo (hero-cards) : 4 missions urgentes — Montpellier, Marseille, Toulouse (photos ci-dessus) ;
+une quatrieme (Lyon) sans lyon.jpg utilise default.jpg volontairement.
+
+Licence : https://unsplash.com/license
