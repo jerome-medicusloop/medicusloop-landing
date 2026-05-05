@@ -387,38 +387,14 @@ function deckOrderMissionIndices(length: number, seedString: string): number[] {
 const HERO_MISSION_DECK_INITIAL_ORDER = deckOrderMissionIndices(CARDS.length, 'medicusloop-hero-missions-v1')
 
 /**
- * Fonds locaux : `public/background-cities/{slug}.jpg` (slug = nom de ville sans accent).
- * Si le fichier manque ou renvoie une erreur au chargement → photo bloc opératoire (`/background-operating-room.jpg`).
- *
- * - montpellier.jpg, marseille.jpg, toulouse.jpg — photos ville pour missions **urgentes** concernées.
- * - Ville urgente sans fichier dédié (ex. Lyon) → `background-operating-room.jpg` (voir `public/background-operating-room-ATTRIBUTION.txt`).
- * Affichage : **photo uniquement sur les cartes `urgent`** ; sinon fond uni `--hero-card-bg`.
+ * Landing : pas de chargement par ville (`/background-cities/…`) — évite 404 / requêtes inutiles.
+ * Les photos ville type « premium » pourront être réactivées côté produit quand les assets sont garantis.
+ * Missions **urgentes** : fond photo unique bloc opératoire (`public/background-operating-room.jpg`).
+ * Autres missions : fond uni `--hero-card-bg`.
  */
-const CITY_BG_BASE = '/background-cities'
-/** Repli visuel carte mission urgente (fichier ville absent / erreur) — bloc opératoire, pas le fond de page */
 const DEFAULT_CITY_BG = '/background-operating-room.jpg'
 
-function slugifyCityBackground(name: string): string {
-  return name
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'ville'
-}
-
-function cityBackgroundCandidate(city: string): string {
-  return `${CITY_BG_BASE}/${slugifyCityBackground(city)}.jpg`
-}
-
-/**
- * Cadrage du calque photo (dernier background) : carte portrait + image paysage
- * en `cover` → beaucoup de rognage ; un ancrage vertical évite de « rater » le centre-ville.
- * Ajuster ici si une ville s’affiche trop haut / trop bas.
- */
-const HERO_CARD_CITY_BG_POSITION = 'center 48%'
-/** Cadrage du repli bloc op. (paysage → portrait carte) */
+/** Cadrage photo bloc op. (paysage → portrait carte) */
 const HERO_CARD_OR_FALLBACK_BG_POSITION = 'center 30%'
 
 /**
@@ -520,13 +496,6 @@ const detailCellShell: CSSProperties = {
 
 export default function HeroCards() {
   const [order, setOrder] = useState(() => [...HERO_MISSION_DECK_INITIAL_ORDER])
-  const [cityCoverUrl, setCityCoverUrl] = useState<Record<string, string>>(() => {
-    const init: Record<string, string> = {}
-    for (const c of CARDS) {
-      init[c.city] = DEFAULT_CITY_BG
-    }
-    return init
-  })
   const [swiping, setSwiping] = useState(false)
   const [swipeDir, setSwipeDir] = useState<'right' | 'left'>('right')
   const [btnActivating, setBtnActivating] = useState(false)
@@ -581,57 +550,6 @@ export default function HeroCards() {
     }
   }, [])
 
-  /* Vérifie que /background-cities/{ville}.jpg existe et décode ; sinon photo bloc op. */
-  useEffect(() => {
-    let cancelled = false
-    const cities = [...new Set(CARDS.map((c) => c.city))]
-
-    const apply = (city: string, url: string) => {
-      if (cancelled) return
-      setCityCoverUrl((prev) => ({ ...prev, [city]: url }))
-    }
-
-    const probeImage = (city: string, candidate: string) => {
-      const img = new Image()
-      img.onload = () => {
-        const ok = img.naturalWidth > 0 && img.naturalHeight > 0
-        apply(city, ok ? candidate : DEFAULT_CITY_BG)
-      }
-      img.onerror = () => apply(city, DEFAULT_CITY_BG)
-      img.src = candidate
-    }
-
-    for (const city of cities) {
-      const candidate = cityBackgroundCandidate(city)
-
-      void fetch(candidate, { method: 'HEAD', cache: 'no-store' })
-        .then((res) => {
-          if (cancelled) return
-          const ct = (res.headers.get('content-type') || '').toLowerCase()
-          /* 405 ou pas de HEAD fiable : chargement image */
-          if (res.status === 405) {
-            probeImage(city, candidate)
-            return
-          }
-          if (!res.ok) {
-            apply(city, DEFAULT_CITY_BG)
-            return
-          }
-          /* Page HTML (fallback SPA) ou texte → défaut ; sinon (image/*, octet-stream, vide) on décode */
-          if (ct.startsWith('text/') || ct.includes('html')) {
-            apply(city, DEFAULT_CITY_BG)
-            return
-          }
-          probeImage(city, candidate)
-        })
-        .catch(() => probeImage(city, candidate))
-    }
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   return (
     <>
     <div
@@ -672,16 +590,13 @@ export default function HeroCards() {
         }
 
         const palette = getCardPalette(card)
-        /* Photo ville : uniquement si urgent ; sinon fond uni carte (pas d’URL). */
-        const coverUrl = cityCoverUrl[card.city] ?? DEFAULT_CITY_BG
-        const isOrFallbackBg = coverUrl.includes('background-operating-room')
+        /* Photo : uniquement si urgent — toujours le repli bloc op. (pas de fetch par ville sur la landing). */
+        const coverUrl = DEFAULT_CITY_BG
         const backdropBgImage = card.urgent
           ? `${HERO_CARD_URGENT_TINT}, ${HERO_CARD_READABILITY_SCRIM}, url(${coverUrl})`
           : 'none'
         const backdropBgSize = card.urgent ? '100% 100%, 100% 100%, cover' : undefined
-        const backdropBgPos = card.urgent
-          ? `0 0, 0 0, ${isOrFallbackBg ? HERO_CARD_OR_FALLBACK_BG_POSITION : HERO_CARD_CITY_BG_POSITION}`
-          : undefined
+        const backdropBgPos = card.urgent ? `0 0, 0 0, ${HERO_CARD_OR_FALLBACK_BG_POSITION}` : undefined
 
         const totalRemunerationEuros = card.missionDays * card.rateEuros
         const formattedDailyRate = formatEurosFr(card.rateEuros)

@@ -357,7 +357,7 @@ function FormulairePionnier() {
       >
         {state.status === 'duplicate' && <DuplicateNotice />}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="formulaire-row-2">
           <Field label="Prénom" id="prenom" required error={state.errors?.prenom}>
             <input
               id="prenom"
@@ -397,7 +397,7 @@ function FormulairePionnier() {
           />
         </Field>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="formulaire-row-2">
           <Field label="Région" id="region" required error={state.errors?.region}>
             <select
               id="region"
@@ -454,19 +454,13 @@ function FormulairePionnier() {
             </span>
           </legend>
           <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '10px',
-              alignItems: 'stretch',
-            }}
+            className="formulaire-profil-radios"
             role="radiogroup"
             aria-label="Profil d’inscription"
             aria-required="true"
           >
             <label
               style={{
-                flex: '1 1 140px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -491,7 +485,6 @@ function FormulairePionnier() {
             </label>
             <label
               style={{
-                flex: '1 1 140px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -519,7 +512,6 @@ function FormulairePionnier() {
             </label>
             <label
               style={{
-                flex: '1 1 160px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -615,7 +607,8 @@ export default function FormulaireSection({
       style={{
         background: 'var(--surface)',
         borderTop: '1px solid var(--border)',
-        padding: `${compactSectionTop ? 'clamp(16px, 2.2vw, 26px)' : 'var(--ml-section-pad-top)'} var(--ml-content-inline) var(--ml-section-pad-bottom)`,
+        padding: `${compactSectionTop ? 'clamp(16px, 2.2vw, 26px)' : 'var(--ml-section-pad-top)'} var(--ml-content-inline) ${compactSectionTop ? 'clamp(20px, 3.2vw, 40px)' : 'var(--ml-section-pad-bottom)'}`,
+        overflowX: 'clip',
       }}
       aria-labelledby="inscription-title"
     >

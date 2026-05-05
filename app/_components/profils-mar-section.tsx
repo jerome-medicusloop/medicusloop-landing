@@ -74,6 +74,23 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
     return () => window.removeEventListener('hashchange', applyHash)
   }, [applyHash])
 
+  const scrollProfilTabsIntoView = useCallback(() => {
+    const el = document.getElementById('profils-mar-tabs-top')
+    if (!el) return
+    const instant = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'start' })
+  }, [])
+
+  const selectRemFromEndcap = useCallback(() => {
+    setTab('remplacant')
+    scrollProfilTabsIntoView()
+  }, [scrollProfilTabsIntoView])
+
+  const selectEtabFromEndcap = useCallback(() => {
+    setTab('etablissement')
+    scrollProfilTabsIntoView()
+  }, [scrollProfilTabsIntoView])
+
   return (
     <section id="profils" className="profils-mar" aria-labelledby="profils-mar-title">
       <div className="profils-mar-inner">
@@ -98,6 +115,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
         </header>
 
         <div
+          id="profils-mar-tabs-top"
           className="profils-mar-tablist"
           role="tablist"
           aria-label="Choisissez votre profil : MAR en rempla ou établissement"
@@ -185,6 +203,29 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
               </article>
             ))}
           </div>
+        </div>
+
+        <div
+          className="profils-mar-tablist profils-mar-tablist--endcap"
+          role="group"
+          aria-label="Raccourci : même choix MAR ou établissement qu’en haut de section ; le clic remonte pour afficher le contenu depuis le début"
+        >
+          <button
+            type="button"
+            aria-pressed={tab === 'remplacant'}
+            className={`profils-mar-tab${tab === 'remplacant' ? ' profils-mar-tab--active' : ''}`}
+            onClick={selectRemFromEndcap}
+          >
+            Vous êtes un MAR en rempla
+          </button>
+          <button
+            type="button"
+            aria-pressed={tab === 'etablissement'}
+            className={`profils-mar-tab${tab === 'etablissement' ? ' profils-mar-tab--active' : ''}`}
+            onClick={selectEtabFromEndcap}
+          >
+            Vous êtes un établissement
+          </button>
         </div>
 
         <PionnierCtaStrip listePleinePionniers={listePleinePionniers} />

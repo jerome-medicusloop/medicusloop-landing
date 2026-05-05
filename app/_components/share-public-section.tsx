@@ -3,7 +3,7 @@ import { SHARE_PUBLIC_EMAIL_SUBJECT, SHARE_PUBLIC_MESSAGE, SHARE_PUBLIC_PAGE_URL
 
 type SharePublicSectionProps = {
   /**
-   * Intégré dans #pionniers : carte mise en avant, pleine largeur utile.
+   * Carte mise en avant (sous #inscription sur la home), pleine largeur utile.
    * Sinon : bandeau entre deux sections (bordures haut/bas).
    */
   embedded?: boolean

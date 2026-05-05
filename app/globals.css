@@ -104,10 +104,11 @@
   --pill-teal-soft-border: rgba(20, 184, 166, 0.35);
   --pill-teal-mid-bg: rgba(20, 184, 166, 0.1);
   --pill-teal-mid-border: rgba(20, 184, 166, 0.35);
-  --versus-icon: #475569;
-  --versus-text: #94a3b8;
-  --versus-col-bg: rgba(100, 116, 139, 0.1);
-  --versus-col-border: rgba(100, 116, 139, 0.2);
+  /* Comparatif « hors jeu » : même famille que les cartes Pionniers (teinte marque), pas gris ardoise froid */
+  --versus-icon: color-mix(in srgb, var(--accent-blue) 35%, var(--text-muted));
+  --versus-text: var(--text-muted);
+  --versus-col-bg: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-2));
+  --versus-col-border: color-mix(in srgb, var(--accent-blue) 22%, var(--border) 78%);
   --faq-card-bg: rgba(22, 30, 42, 0.82);
   --faq-card-border: rgba(16, 185, 129, 0.3);
   --radial-blue-soft: rgba(16, 185, 129, 0.12);
@@ -217,10 +218,10 @@
     --pill-teal-soft-border: rgba(20, 184, 166, 0.32);
     --pill-teal-mid-bg: rgba(20, 184, 166, 0.12);
     --pill-teal-mid-border: rgba(20, 184, 166, 0.32);
-    --versus-icon: #64748b;
-    --versus-text: #475569;
-    --versus-col-bg: rgba(71, 85, 105, 0.08);
-    --versus-col-border: rgba(71, 85, 105, 0.18);
+    --versus-icon: color-mix(in srgb, var(--accent-blue) 42%, var(--text-muted));
+    --versus-text: var(--text-muted);
+    --versus-col-bg: color-mix(in srgb, var(--accent-blue) 9%, var(--surface));
+    --versus-col-border: color-mix(in srgb, var(--accent-blue) 24%, var(--border) 76%);
     --faq-card-bg: rgba(255, 255, 255, 0.92);
     --faq-card-border: rgba(16, 185, 129, 0.28);
     --radial-blue-soft: rgba(16, 185, 129, 0.14);
@@ -315,10 +316,10 @@ html[data-theme="light"] {
   --pill-teal-soft-border: rgba(20, 184, 166, 0.32);
   --pill-teal-mid-bg: rgba(20, 184, 166, 0.12);
   --pill-teal-mid-border: rgba(20, 184, 166, 0.32);
-  --versus-icon: #64748b;
-  --versus-text: #475569;
-  --versus-col-bg: rgba(71, 85, 105, 0.08);
-  --versus-col-border: rgba(71, 85, 105, 0.18);
+  --versus-icon: color-mix(in srgb, var(--accent-blue) 42%, var(--text-muted));
+  --versus-text: var(--text-muted);
+  --versus-col-bg: color-mix(in srgb, var(--accent-blue) 9%, var(--surface));
+  --versus-col-border: color-mix(in srgb, var(--accent-blue) 24%, var(--border) 76%);
   --faq-card-bg: rgba(255, 255, 255, 0.92);
   --faq-card-border: rgba(16, 185, 129, 0.28);
   --radial-blue-soft: rgba(16, 185, 129, 0.14);
@@ -1132,10 +1133,7 @@ html[data-theme="light"] .nav-theme-btn:hover {
     padding: 6px 8px !important;
   }
 
-  .nav-logo-svg {
-    height: clamp(44px, 13vw, 54px);
-    max-width: min(260px, 58vw);
-  }
+  /* Ne pas réduire le logo header ici : la barre mobile est pilotée par ≤991px (.nav-brand-cluster) */
 
   .footer-brand-logo.nav-logo-svg {
     height: clamp(36px, 11vw, 48px);
@@ -1143,8 +1141,11 @@ html[data-theme="light"] .nav-theme-btn:hover {
   }
 
   .nav-cta {
-    font-size: 0.78rem !important;
-    padding: 7px 14px !important;
+    padding: 8px 10px !important;
+  }
+
+  .nav-cta__icon {
+    font-size: 22px;
   }
 
   .nav-theme-btn {
@@ -1161,12 +1162,43 @@ html[data-theme="light"] .nav-theme-btn:hover {
 }
 
 @media (max-width: 991.98px) {
+  /* Hauteur utile nav : laisse respirer un logo mobile plus haut */
+  :root {
+    --ml-navbar-inner-height: 5.25rem;
+  }
+
   .nav-links-wrap {
     display: none !important;
   }
 
   .nav-drawer-toggle {
     display: inline-flex !important;
+  }
+
+  /* Logo barre principale mobile : bien visible ; tiroir = .nav-drawer-panel__brand .nav-logo-svg */
+  .nav-brand-cluster .nav-logo-svg {
+    height: clamp(48px, 13vw, 62px);
+    max-width: min(300px, 78vw);
+  }
+
+  /* Thème uniquement dans le menu latéral (évite doublon avec le soleil dans la barre) */
+  .nav-header-actions .nav-header-theme {
+    display: none !important;
+  }
+
+  /* Icône seule : uniquement le CTA du header, pas le bandeau Pionnier (inscription + partage). */
+  .nav-header-actions .nav-cta__label {
+    display: none;
+  }
+
+  .nav-header-actions .nav-cta {
+    gap: 0;
+    padding: 9px 11px;
+    font-size: 0;
+  }
+
+  .nav-header-actions .nav-cta__icon {
+    font-size: 21px;
   }
 }
 
@@ -1253,6 +1285,27 @@ html[data-theme="light"] .nav-theme-btn:hover {
   flex-shrink: 0;
 }
 
+/* Logo à la place du libellé « Menu » : lisible (currentColor = --text) */
+.nav-drawer-panel__brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
+  margin-right: 4px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav-drawer-panel__brand .nav-logo-svg {
+  display: block;
+  height: clamp(46px, 13vw, 58px);
+  width: auto;
+  max-width: 100%;
+  flex-shrink: 1;
+  color: var(--text);
+}
+
 .nav-drawer-panel__title {
   font-family: var(--font-fraunces), ui-serif, Georgia, serif;
   font-weight: 700;
@@ -1267,8 +1320,38 @@ html[data-theme="light"] .nav-theme-btn:hover {
 .nav-drawer-links {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 8px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+  padding: 8px 0 0;
+}
+
+.nav-drawer-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  flex-shrink: 0;
+  /* Padding bas un peu plus généreux : évite le coin bas-gauche du viewport (indicateur Next.js « N » en dev, home indicator) */
+  padding: 14px 16px calc(22px + env(safe-area-inset-bottom, 0px))
+    calc(16px + env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-2) 35%, var(--navbar-bg));
+  position: relative;
+  z-index: 100001;
+}
+
+.nav-drawer-footer__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Deuxième ligne : bouton à droite, loin du bord gauche (chevauchement outils dev) */
+.nav-drawer-footer .nav-theme-btn {
+  align-self: flex-end;
+  flex-shrink: 0;
 }
 
 .nav-drawer-link {
@@ -1497,6 +1580,11 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   background-clip: text;
   animation: gradient-text 5s ease infinite;
   display: inline-block;
+}
+
+/* H1 hero : « un remplacement, » tient sur une ligne (virgule jamais orpheline) */
+.hero-h1-line-nobreak {
+  white-space: nowrap;
 }
 
 /* ─── Glow pulse on primary CTA (vert header) ─── */
@@ -2009,6 +2097,13 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   margin: 0;
 }
 
+@media (max-width: 639.98px) {
+  .ml-hero-h1 {
+    font-size: clamp(2.58rem, 5.5vw, 3.25rem);
+    line-height: 1.02;
+  }
+}
+
 .hero-spec-badges-row {
   display: flex;
   gap: 10px;
@@ -2066,6 +2161,25 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   color: #0891b2;
   background: rgba(8, 145, 178, 0.12);
   border-color: rgba(8, 145, 178, 0.32);
+}
+
+@media (max-width: 640px) {
+  .hero-spec-badges-row {
+    gap: 7px;
+  }
+
+  .hero-spec-badge {
+    gap: 5px;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.8125rem;
+    letter-spacing: 0.012em;
+  }
+
+  .hero-spec-badge__dot {
+    width: 6px;
+    height: 6px;
+  }
 }
 
 .hero-cta-primary {
@@ -2190,15 +2304,19 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   overflow: hidden;
 }
 
-/* Colonnes 1–2 : même carte que la section mais visuellement « hors jeu » (grisé) */
+/* Colonnes 1–2 : même vocabulaire que les cartes Pionniers (liste pleine) — pas d’opacité / grayscale boueux */
 .comparatif-vs-col--muted,
 .comparatif-vs-col--muted-soft {
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--border) 42%, transparent);
+  box-sizing: border-box;
   border-radius: 20px;
   padding: 28px;
-  opacity: 0.7;
-  filter: grayscale(0.92) saturate(0.42) contrast(0.88);
+  background: color-mix(in srgb, var(--surface-2) 62%, var(--surface) 38%);
+  border: 1px dashed color-mix(in srgb, var(--text-muted) 35%, var(--border) 65%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.comparatif-vs-col--muted-soft {
+  background: color-mix(in srgb, var(--surface-2) 48%, var(--surface) 52%);
 }
 
 /* Colonne MedicusLoop : halo primary (vert) pour la mettre en avant */
@@ -2245,8 +2363,9 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 }
 
 .pionniers-avantage-card--interactive {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  /* Plus clair que --surface plein : fusion avec le fond section (clair / sombre via tokens). */
+  background: color-mix(in srgb, var(--surface) 68%, var(--bg) 32%);
+  border: 1px solid color-mix(in srgb, var(--border) 62%, var(--bg) 38%);
   border-radius: 16px;
   padding: 28px;
 }
@@ -2566,6 +2685,9 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
     column-gap: 0;
     row-gap: clamp(16px, 4vw, 28px);
   }
+  .hero-spec-badges-row {
+    justify-content: center;
+  }
   .hero-cards-col {
     order: 2;
     align-items: center;
@@ -2693,7 +2815,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   max-width: 100%;
 }
 
-/* Pastilles inactives = même vocabulaire visuel que comparatif-vs (pills neutres + texte « job ») */
+/* Pastilles : inactives volontairement plus grisées que les actives (teal). */
 .loopexperience-interest-pill {
   display: inline-flex;
   align-items: center;
@@ -2705,16 +2827,20 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   box-sizing: border-box;
 }
 
-.loopexperience-interest-pill--inactive {
-  background: var(--versus-col-bg);
-  border: 1px solid var(--versus-col-border);
-  color: var(--versus-text);
+/* Inactives : lisibles mais clairement « éteintes » (pas de teal), désaturation forte vs pastilles actives. */
+.loopexperience-interest-pills .loopexperience-interest-pill--inactive {
+  background: color-mix(in srgb, var(--text-muted) 11%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--text-muted) 32%, var(--border));
+  color: color-mix(in srgb, var(--text-muted) 58%, var(--text-subtle) 42%);
   font-weight: 500;
+  filter: grayscale(1);
+  opacity: 0.82;
 }
 
-.loopexperience-interest-pill--inactive .material-symbols-outlined {
+.loopexperience-interest-pills .loopexperience-interest-pill--inactive .material-symbols-outlined {
   font-size: 18px;
-  color: var(--versus-icon);
+  color: inherit;
+  opacity: 0.95;
 }
 
 .loopexperience-interest-pill--active {
@@ -2726,6 +2852,28 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 
 .loopexperience-interest-pill--active .material-symbols-outlined {
   font-size: 18px;
+}
+
+@media (max-width: 991.98px) {
+  .loopexperience-split-examples__label {
+    font-size: 0.72rem;
+    margin-bottom: clamp(10px, 2.2vw, 16px);
+  }
+
+  .loopexperience-interest-pills {
+    gap: 6px;
+  }
+
+  .loopexperience-interest-pill {
+    gap: 5px;
+    padding: 5px 11px;
+    font-size: clamp(0.7rem, 2.4vw, 0.8rem);
+  }
+
+  .loopexperience-interest-pill--inactive .material-symbols-outlined,
+  .loopexperience-interest-pill--active .material-symbols-outlined {
+    font-size: 15px;
+  }
 }
 
 /* Quatre cartes sur une ligne ; 2 colonnes tablette ; 1 colonne mobile */
@@ -3631,7 +3779,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
     margin-right: 0;
   }
 
-  .pionniers-section .share-public-section--embedded {
+  .share-public-wrap--post-form .share-public-section--embedded {
     width: 100%;
     max-width: 100%;
     margin-left: 0;
@@ -3759,32 +3907,33 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   position: relative;
   border-radius: 16px;
   padding: 28px;
-  opacity: 0.82;
-  filter: grayscale(0.88) saturate(0.45) contrast(0.92) brightness(0.97);
-  background: color-mix(in srgb, var(--surface-2) 62%, var(--surface) 38%);
-  border: 1px dashed color-mix(in srgb, var(--text-muted) 35%, var(--border) 65%);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
+  opacity: 0.88;
+  filter: grayscale(0.92) saturate(0.38) contrast(0.9) brightness(0.96);
+  /* Plus d’aplats « surface » : carte un peu plus claire tout en restant distincte du --bg */
+  background: color-mix(in srgb, var(--surface-2) 52%, var(--surface) 48%);
+  border: 1px dashed color-mix(in srgb, var(--text-muted) 24%, var(--border) 76%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 4%, transparent);
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-title {
-  color: color-mix(in srgb, var(--text) 68%, var(--text-muted) 32%);
+  color: color-mix(in srgb, var(--text-muted) 52%, var(--text-subtle) 48%);
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-text {
-  color: color-mix(in srgb, var(--text-muted) 72%, var(--text-subtle) 28%);
+  color: color-mix(in srgb, var(--text-muted) 58%, var(--text-subtle) 42%);
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-icon {
-  opacity: 0.72;
+  opacity: 0.58;
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-icon--pionnier-seal .material-symbols-outlined {
-  color: color-mix(in srgb, var(--text-muted) 70%, var(--accent-gold) 30%);
+  color: color-mix(in srgb, var(--text-muted) 78%, var(--accent-gold) 22%);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pionniers-avantage-card--liste-pleine {
-    filter: grayscale(0.88) saturate(0.45) contrast(0.92) brightness(0.97);
+    filter: grayscale(0.92) saturate(0.38) contrast(0.9) brightness(0.96);
   }
 }
 
@@ -3987,17 +4136,37 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 
 .profils-mar-tablist {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: stretch;
   gap: 8px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: clamp(22px, 3.5vw, 32px);
-  padding: 5px;
+  padding: 6px;
   border-radius: 14px;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
+  max-width: min(640px, 100%);
+  box-sizing: border-box;
+}
+
+/* Ancre scroll : dégagement nav sticky au remontée depuis le raccourci bas (mobile). */
+#profils-mar-tabs-top {
+  scroll-margin-top: var(--ml-anchor-scroll-padding);
+}
+
+/* Répétition mobile uniquement : MAR / établissement avant le bandeau CTA (#profils). */
+.profils-mar-tablist--endcap {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .profils-mar-tablist--endcap {
+    display: flex;
+    margin-top: clamp(22px, 4vw, 36px);
+    margin-bottom: clamp(8px, 1.6vw, 14px);
+  }
 }
 
 .profils-mar-tab {
@@ -4008,16 +4177,34 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   font-weight: 600;
   text-align: center;
   line-height: 1.35;
-  padding: 10px 18px;
+  padding: 10px 14px;
   border-radius: 10px;
   color: var(--text-muted);
   background: color-mix(in srgb, var(--surface) 55%, transparent);
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  flex: 1 1 0;
+  min-width: 0;
   transition:
     color 0.15s ease,
     background 0.15s ease,
     border-color 0.15s ease,
     box-shadow 0.15s ease;
+}
+
+/* Très étroit : pile verticale, même largeur — plus de « bloc gris » déséquilibré */
+@media (max-width: 479.98px) {
+  .profils-mar-tablist {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .profils-mar-tab {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: 12px 16px;
+  }
 }
 
 /* Survol onglet non sélectionné : primary plein + texte blanc (aperçu avant clic) */
@@ -4207,7 +4394,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   border-bottom: 1px solid var(--border);
 }
 
-/* Partage dans #pionniers : carte pleine largeur, mise en avant */
+/* Ancre #partage (bloc invitation sous le formulaire) */
 #partage {
   scroll-margin-top: clamp(72px, 12vw, 100px);
 }
@@ -4251,22 +4438,15 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   color: color-mix(in srgb, var(--accent-blue) 85%, var(--text) 15%);
 }
 
-#pionniers .share-public-section--embedded .share-public-section__inner {
+#partage.share-public-section--embedded .share-public-section__inner {
   max-width: 100%;
 }
 
-/* Partage dans le pied de page */
-.footer-share {
-  max-width: var(--ml-content-max);
-  margin: clamp(28px, 4vw, 44px) auto 0;
-  padding-top: clamp(28px, 4vw, 40px);
-  border-top: 1px solid var(--footer-border);
-  box-sizing: border-box;
-}
-
-.footer-share .share-invite-channels {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+/* Bloc partage sous #inscription : moins d’air entre formulaire et cartes RS */
+.share-public-wrap--post-form .share-public-section--embedded {
+  margin-top: 0;
+  margin-bottom: clamp(10px, 1.8vw, 18px);
+  padding: clamp(18px, 2.6vw, 30px) clamp(14px, 2.2vw, 28px);
 }
 
 /* Partage : petit écran = pastilles icône seule (libellés masqués, aria-label inchangé) */
@@ -4296,22 +4476,69 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   }
 }
 
-/* Formulaire : même largeur utile que le titre / lead de la section (conteneur parent = --ml-content-max) */
+/* Formulaire : même largeur utile que le titre / lead (pas de dépassement viewport — évite bleed + marges négatives) */
 #inscription .formulaire-card-outer {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  min-width: 0;
 }
 
-/* Formulaire : sur petits / moyens écrans, carte quasi pleine largeur (compense le padding de section) */
-@media (max-width: 900px) {
-  #inscription .formulaire-card-outer {
-    width: calc(100% + 2 * var(--ml-content-inline));
-    max-width: none;
-    margin-left: calc(-1 * var(--ml-content-inline));
-    margin-right: calc(-1 * var(--ml-content-inline));
+#inscription .formulaire-glass {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#inscription #form-pionnier {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Grilles 2 colonnes : minmax(0,1fr) pour que les champs puissent rétrécir (select / inputs) */
+.formulaire-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+}
+
+.formulaire-row-2 > * {
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .formulaire-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Choix profil : une colonne sur étroit pour éviter de forcer la largeur minimale */
+.formulaire-profil-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.formulaire-profil-radios > label {
+  flex: 1 1 140px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 520px) {
+  .formulaire-profil-radios {
+    flex-direction: column;
   }
 
+  .formulaire-profil-radios > label {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 900px) {
   #inscription .formulaire-glass {
     padding: clamp(18px, 4.2vw, 30px) clamp(14px, 3.8vw, 22px);
     border-radius: clamp(14px, 3vw, 20px);
@@ -4321,6 +4548,9 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 /* Formulaire : typo alignée sur les cartes / lead de section */
 #inscription .ml-input {
   font-size: clamp(0.9rem, 0.25vw + 0.84rem, 1rem);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Texte saisi vs invite : placeholder plus pâle + italique ; saisie en gras léger */
@@ -4487,6 +4717,78 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   gap: clamp(10px, 2vw, 16px);
 }
 
+/* Rail icônes partage : uniquement mobile, scroll horizontal sous le duo CTA */
+.pionnier-cta-share-rail {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  /* Rail d’icônes sous les CTA : le bouton « Inviter » doublonne — on le masque (la modale reste ouvrable via liens type compteur liste pleine). */
+  .pionnier-cta-strip .pionnier-cta-strip__share.nav-cta {
+    display: none !important;
+  }
+
+  .pionnier-cta-share-rail {
+    display: block;
+    width: 100%;
+    max-width: min(520px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: clamp(12px, 2.2vw, 18px);
+    padding: 0 2px 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    text-align: initial;
+  }
+
+  .pionnier-cta-share-rail__track {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+    min-height: 48px;
+    padding: 2px 4px 6px;
+  }
+
+  .pionnier-cta-share-rail__chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    border: 1px solid;
+    box-sizing: border-box;
+    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+    scroll-snap-align: start;
+    transition:
+      filter 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .pionnier-cta-share-rail__chip:hover {
+    filter: brightness(1.06);
+  }
+
+  .pionnier-cta-share-rail__chip:active {
+    transform: scale(0.96);
+  }
+
+  .pionnier-cta-share-rail__chip:focus-visible {
+    outline: 2px solid var(--nav-cta-border);
+    outline-offset: 2px;
+  }
+}
+
 button.nav-cta {
   cursor: pointer;
   font: inherit;
@@ -4596,15 +4898,6 @@ button.nav-cta {
   box-sizing: border-box;
 }
 
-.share-invite-dialog__eyebrow {
-  margin: 0 0 8px;
-  font-size: clamp(0.65rem, 0.12vw + 0.6rem, 0.72rem);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-blue);
-}
-
 .share-invite-dialog__title {
   margin: 0 auto 12px;
   max-width: 18ch;
@@ -4613,14 +4906,28 @@ button.nav-cta {
   font-style: italic;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(--nav-cta-bg);
 }
 
 .share-invite-dialog__lead {
-  margin: 0 auto 20px;
-  max-width: min(48ch, 100%);
-  font-size: clamp(0.84rem, 0.18vw + 0.78rem, 0.92rem);
-  line-height: 1.55;
+  margin: 0 auto 10px;
+  max-width: 100%;
+  font-size: clamp(0.72rem, 2.2vw + 0.62rem, 0.92rem);
+  line-height: 1.5;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.share-invite-dialog__sublead {
+  margin: 0 auto 18px;
+  max-width: min(52ch, 100%);
+  font-size: clamp(0.8rem, 0.16vw + 0.74rem, 0.88rem);
+  line-height: 1.5;
   color: var(--text-muted);
   text-wrap: balance;
 }

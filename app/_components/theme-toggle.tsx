@@ -11,19 +11,29 @@ function applyDomTheme(mode: ThemeChoice) {
   document.documentElement.setAttribute('data-theme', mode)
 }
 
+/** Mobile (≤992px) : défaut sombre si aucune clé localStorage. */
+function defaultThemeForViewport(): ThemeChoice {
+  if (typeof window === 'undefined') return 'light'
+  return window.matchMedia('(max-width: 991.98px)').matches ? 'dark' : 'light'
+}
+
+function resolveInitialTheme(): ThemeChoice {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw === 'dark' || raw === 'light') return raw
+  } catch {
+    /* ignore */
+  }
+  return defaultThemeForViewport()
+}
+
 export default function ThemeToggle() {
   const [theme, setThemeState] = useState<ThemeChoice>('light')
 
   useLayoutEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      const mode: ThemeChoice = raw === 'dark' ? 'dark' : 'light'
-      setThemeState(mode)
-      applyDomTheme(mode)
-    } catch {
-      setThemeState('light')
-      applyDomTheme('light')
-    }
+    const mode = resolveInitialTheme()
+    setThemeState(mode)
+    applyDomTheme(mode)
   }, [])
 
   const setTheme = useCallback((mode: ThemeChoice) => {

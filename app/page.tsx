@@ -11,7 +11,6 @@ import HeroTrustBlock from './_components/trust-strip'
 import ProfilsMarSection from './_components/profils-mar-section'
 import PionnierCtaStrip from './_components/pionnier-cta-strip'
 import SharePublicSection from './_components/share-public-section'
-import FooterShare from './_components/footer-share'
 
 // ─── Grain SVG (id de filtre unique par instance — évite artefacts / « lignes » avec plusieurs SVG) ───
 
@@ -87,12 +86,14 @@ function Hero({ placesPrises }: { placesPrises: number }) {
           {/* H1 */}
           <h1
             className="font-fraunces fade-in-2 ml-hero-h1"
-            aria-label="Remplacement MAR en clinique privée — Un bloc, un remplacement MAR, une expérience"
+            aria-label="Remplacement MAR en clinique privée — Un bloc, un remplacement, une expérience"
           >
             Un bloc,<br />
-            un{' '}
-            <span className="hero-gradient-text">remplacement MAR</span>
-            ,<br />
+            <span className="hero-h1-line-nobreak">
+              un{' '}
+              <span className="hero-gradient-text">remplacement</span>,
+            </span>
+            <br />
             une{' '}
             <span className="hero-gradient-text">expérience</span>.
           </h1>
@@ -698,8 +699,6 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
               </article>
             ))}
         </div>
-
-        <SharePublicSection embedded />
       </div>
       <PionnierCtaStrip listePleinePionniers={listePleine} inviterButtonId="pionniers-inviter-confrere" />
     </section>
@@ -886,7 +885,7 @@ function Footer() {
           <p className="site-footer__tagline">
             Un bloc,
             <br />
-            un rempla MAR,
+            un remplacement,
             <br />
             une expérience.
           </p>
@@ -921,8 +920,6 @@ function Footer() {
         </div>
       </div>
 
-      <FooterShare />
-
       <div className="site-footer__bar">
         <span className="site-footer__copy">{new Date().getFullYear()} MedicusLoop</span>
         <div className="site-footer__legal">
@@ -953,6 +950,19 @@ export default async function HomePage() {
       <TarifsSection placesPrises={placesPrises} />
       <PionniersSection placesPrises={placesPrises} />
       <FormulaireSection compactSectionTop listePleinePionniers={listePleinePionniers} />
+      <div
+        className="share-public-wrap--post-form"
+        style={{
+          background: 'var(--surface)',
+          borderTop: '1px solid var(--border)',
+          padding: `clamp(6px, 1.2vw, 12px) var(--ml-content-inline) clamp(16px, 2.8vw, 36px)`,
+          overflowX: 'clip',
+        }}
+      >
+        <div className="ml-section-max">
+          <SharePublicSection embedded />
+        </div>
+      </div>
       <Footer />
       </main>
     </>

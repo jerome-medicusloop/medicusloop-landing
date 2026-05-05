@@ -55,14 +55,15 @@ export default function ShareInviteDialog({ open, onClose }: ShareInviteDialogPr
       </button>
 
       <div className="share-invite-dialog__inner">
-        <p className="share-invite-dialog__eyebrow" aria-hidden="true">
-          Partage
-        </p>
         <h2 id={titleId} className="share-invite-dialog__title font-fraunces">
           Inviter un confrère
         </h2>
         <p className="share-invite-dialog__lead">
           Partage simple, sans inscription : envoyez le lien public du site par le canal de votre choix.
+        </p>
+        <p className="share-invite-dialog__sublead">
+          Il n’y a pas d’espace de connexion : ce partage envoie le lien public du site. Après l’envoi du
+          formulaire Pionnier, vous recevrez un lien personnalisé pour le parrainage.
         </p>
 
         <div className="share-invite-dialog__channels">

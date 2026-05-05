@@ -61,9 +61,15 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
         aria-labelledby={drawerTitleId}
       >
         <div className="nav-drawer-panel__head">
-          <span id={drawerTitleId} className="nav-drawer-panel__title">
-            Menu
-          </span>
+          <a
+            id={drawerTitleId}
+            href="#intro"
+            className="nav-drawer-panel__brand"
+            onClick={closeDrawer}
+            aria-label="MedicusLoop — menu de navigation"
+          >
+            <MedicusLoopLogo className="nav-drawer-panel__logo" />
+          </a>
           <button
             type="button"
             className="nav-drawer-close nav-theme-btn"
@@ -82,6 +88,10 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
             </a>
           ))}
         </nav>
+        <div className="nav-drawer-footer">
+          <span className="nav-drawer-footer__label">Clair / sombre</span>
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   )
@@ -178,13 +188,15 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
             </nav>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-            <ThemeToggle />
+          <div className="nav-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+            <div className="nav-header-theme">
+              <ThemeToggle />
+            </div>
             <a href="#inscription" className="nav-cta" aria-label={cta.ariaNav}>
               <span className="material-symbols-outlined nav-cta__icon" aria-hidden="true">
                 {cta.icon}
               </span>
-              {cta.label}
+              <span className="nav-cta__label">{cta.label}</span>
             </a>
           </div>
         </div>

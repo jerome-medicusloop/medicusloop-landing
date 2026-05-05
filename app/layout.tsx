@@ -62,14 +62,6 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: 'MedicusLoop',
     locale: 'fr_FR',
-    images: [
-      {
-        url: `${SITE_URL}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: 'MedicusLoop — Rempla MAR en clinique privée, contrat automatique et LoopExpérience',
-      },
-    ],
     type: 'website',
   },
   twitter: {
@@ -79,7 +71,6 @@ export const metadata: Metadata = {
       'Matchs MAR-clinique avec forfait journalier clair, contrat avec signature électronique et LoopExpérience sur mesure. Gratuit pour les MAR en rempla.',
     site: '@medicusloop',
     creator: '@medicusloop',
-    images: [`${SITE_URL}/og-image.png`],
   },
   icons: {
     icon: [
@@ -101,9 +92,7 @@ const jsonLd = {
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/og-image.png`,
-        width: 1200,
-        height: 630,
+        url: `${SITE_URL}/logo/MedicusLoop_MAR_transparent_FINAL.png`,
       },
       description:
         'Plateforme de mise en relation entre médecins anesthésistes-réanimateurs (MAR) en rempla et cliniques privées en France. Contrat de rempla automatique, vérification CNOM, LoopExpérience sur mesure.',
@@ -145,8 +134,16 @@ export default function RootLayout({
           id="theme-boot"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html:
-              "(function(){try{var t=localStorage.getItem('medicusloop-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();",
+            __html: `(function(){
+var m=typeof matchMedia==='function'&&matchMedia('(max-width: 991.98px)').matches;
+var d=m?'dark':'light';
+try{
+var t=localStorage.getItem('medicusloop-theme');
+document.documentElement.setAttribute('data-theme',(t==='dark'||t==='light')?t:d);
+}catch(e){
+document.documentElement.setAttribute('data-theme',d);
+}
+})();`,
           }}
         />
         {/* Preconnect critique */}
