@@ -5,12 +5,32 @@ import { z } from 'zod'
 import { emailSourceHash } from '@/lib/share-email-source'
 import { REGIONS_FRANCE } from '@/lib/regions-france'
 
+/** Logs détaillés + message d’erreur UI enrichi (définir à `1` ou `true` sur Vercel le temps du debug). */
+function waitlistSupabaseDebug(): boolean {
+  const v = process.env.LANDING_FORM_DEBUG_SUPABASE?.trim().toLowerCase()
+  return v === '1' || v === 'true' || v === 'yes'
+}
+
+function supabaseInsertLogPayload(err: { message?: string; code?: string; details?: string; hint?: string }) {
+  return {
+    code: err.code ?? null,
+    message: err.message ?? null,
+    details: err.details ?? null,
+    hint: err.hint ?? null,
+  }
+}
+
 function getSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!url || !key) {
-    throw new Error('Missing Supabase environment variables')
+    const missing = [
+      !url ? 'NEXT_PUBLIC_SUPABASE_URL' : null,
+      !key ? 'SUPABASE_SERVICE_ROLE_KEY ou NEXT_PUBLIC_SUPABASE_ANON_KEY' : null,
+    ].filter(Boolean)
+    console.error('[waitlist-pionnier] Supabase env manquante', { missing })
+    throw new Error(`Missing Supabase environment variables: ${missing.join(', ')}`)
   }
   return createClient(url, key)
 }
@@ -127,9 +147,26 @@ export async function submitWaitlistPionnier(
     return { status: 'error', errors: fieldErrors, values: snap, draftKey: Date.now() }
   }
 
+  const debug = waitlistSupabaseDebug()
+
   try {
     const { consent_donnees: _consent, ...row } = parsed.data
     const shareSource = emailSourceHash(parsed.data.email)
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const usingServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())
+    if (debug) {
+      let host: string | null = null
+      try {
+        host = url ? new URL(url).host : null
+      } catch {
+        host = null
+      }
+      console.warn('[waitlist-pionnier] tentative insert', {
+        host,
+        keyMode: usingServiceRole ? 'service_role' : 'anon_fallback',
+      })
+    }
+
     const supabase = getSupabaseClient()
     const { error } = await supabase.from('waitlist_pionniers').insert({
       ...row,
@@ -141,23 +178,34 @@ export async function submitWaitlistPionnier(
     })
 
     if (error) {
+      console.error('[waitlist-pionnier] insert Supabase', supabaseInsertLogPayload(error))
       if (error.code === '23505')
         return { status: 'duplicate', values: snap, draftKey: Date.now() }
       const base =
         'Impossible d’enregistrer votre inscription pour le moment. Réessayez dans quelques instants ou contactez-nous si le problème continue.'
-      const message =
-        process.env.NODE_ENV === 'development' && error.message
-          ? `${base} [détail : ${error.message}]`
-          : base
+      const showDetail =
+        (process.env.NODE_ENV === 'development' || debug) && Boolean(error.message)
+      const message = showDetail
+        ? `${base} [${error.code ?? 'sans-code'}: ${error.message}${error.hint ? ` — hint: ${error.hint}` : ''}]`
+        : base
       return { status: 'error', message, values: snap, draftKey: Date.now() }
     }
 
+    if (debug) {
+      console.warn('[waitlist-pionnier] insert OK (sans ligne retournée — vérifier la table)')
+    }
+
     return { status: 'success', successProfil: parsed.data.profil, shareSource }
-  } catch {
+  } catch (e) {
+    const err = e instanceof Error ? e : new Error(String(e))
+    console.error('[waitlist-pionnier] exception', { name: err.name, message: err.message, stack: err.stack })
+    const base =
+      'Impossible d’enregistrer votre inscription pour le moment. Réessayez dans quelques instants ou contactez-nous si le problème continue.'
+    const message =
+      debug && err.message ? `${base} [exception: ${err.message}]` : base
     return {
       status: 'error',
-      message:
-        'Impossible d’enregistrer votre inscription pour le moment. Réessayez dans quelques instants ou contactez-nous si le problème continue.',
+      message,
       values: snap,
       draftKey: Date.now(),
     }
