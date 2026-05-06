@@ -1,4 +1,6 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
+import { homeMetadata } from '@/lib/site-metadata'
 import { getWaitlistPionniersCount } from '@/lib/waitlist-pionniers-count'
 import { PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
 import FounderCounter from './_components/urgence-section'
@@ -11,6 +13,8 @@ import ProfilsMarSection from './_components/profils-mar-section'
 import PionnierCtaStrip from './_components/pionnier-cta-strip'
 import SharePublicSection from './_components/share-public-section'
 import SiteFooter from './_components/site-footer'
+
+export const metadata: Metadata = homeMetadata()
 
 // ─── Grain SVG (id de filtre unique par instance — évite artefacts / « lignes » avec plusieurs SVG) ───
 
@@ -86,7 +90,7 @@ function Hero({ placesPrises }: { placesPrises: number }) {
           {/* H1 */}
           <h1
             className="font-fraunces fade-in-2 ml-hero-h1"
-            aria-label="Remplacement MAR en clinique privée — Un bloc, un remplacement, une expérience"
+            aria-label="MedicusLoop — MAR et établissements de santé. Un bloc, un remplacement, une expérience"
           >
             Un bloc,<br />
             <span className="hero-h1-line-nobreak">

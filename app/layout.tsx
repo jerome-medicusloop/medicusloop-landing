@@ -2,6 +2,13 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { Fraunces, DM_Sans } from 'next/font/google'
 import Script from 'next/script'
+import {
+  OG_IMAGE_ALT,
+  OG_IMAGE_PATH,
+  OG_SITE_DESCRIPTION,
+  OG_SITE_TITLE,
+  SITE_URL,
+} from '@/lib/site-metadata'
 import { GoogleTagManagerHead, GoogleTagManagerNoscript } from './_components/google-tag-manager'
 import './globals.css'
 
@@ -19,13 +26,6 @@ const dmSans = DM_Sans({
   display: 'swap',
   preload: true,
 })
-
-const SITE_URL = 'https://medicus-loop.com'
-
-/** Titre / accroche partagés (OG, Twitter, onglet) — ton LinkedIn & RS : explicite, sans jargon « rempla ». */
-const OG_SITE_TITLE = 'MedicusLoop · Remplacement MAR — matching, contrat et LoopExpérience'
-const OG_SITE_DESCRIPTION =
-  'MedicusLoop met en relation MAR et structures de santé : forfait journalier explicite, contrat avec signature électronique, vérification CNOM. Moins de friction administrative — plus de temps pour le soin.'
 
 /** Origine Supabase pour preconnect (sans lever si l’URL d’env est invalide). */
 function supabaseOriginForHints(): string | null {
@@ -79,6 +79,7 @@ export const metadata: Metadata = {
     siteName: 'MedicusLoop',
     locale: 'fr_FR',
     type: 'website',
+    images: [{ url: OG_IMAGE_PATH, width: 1200, height: 630, alt: OG_IMAGE_ALT }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -86,6 +87,7 @@ export const metadata: Metadata = {
     description: OG_SITE_DESCRIPTION,
     site: '@medicusloop',
     creator: '@medicusloop',
+    images: [OG_IMAGE_PATH],
   },
 }
 
