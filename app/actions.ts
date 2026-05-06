@@ -5,6 +5,13 @@ import { z } from 'zod'
 import { sendPionnierWelcomeEmail } from '@/lib/send-pionnier-welcome-email'
 import { emailSourceHash } from '@/lib/share-email-source'
 import { REGIONS_FRANCE } from '@/lib/regions-france'
+import {
+  DISPOSABLE_EMAIL_USER_MESSAGE,
+  domainLikelyAcceptsMail,
+  getEmailDomain,
+  INVALID_EMAIL_DOMAIN_USER_MESSAGE,
+  isDisposableEmailDomain,
+} from '@/lib/email-signup-eligibility'
 import { createWaitlistSupabaseClient } from '@/lib/supabase-waitlist-client'
 
 /** Logs détaillés + message d’erreur UI enrichi (définir à `1` ou `true` sur Vercel le temps du debug). */
@@ -37,7 +44,10 @@ const optionalTrimmed = (max: number, label: string) =>
 const WaitlistPionnierSchema = z.object({
   prenom: z.string().min(1, 'Le prénom est requis').max(100),
   nom: z.string().min(1, 'Le nom est requis').max(100),
-  email: z.string().email("L'email est invalide"),
+  email: z
+    .string()
+    .transform((s) => s.trim().toLowerCase())
+    .pipe(z.string().email("L'email est invalide")),
   ville: optionalTrimmed(120, 'La ville'),
   region: z.preprocess(
     (v) => (v == null || v === '' ? '' : String(v)),
@@ -134,11 +144,29 @@ export async function submitWaitlistPionnier(
     return { status: 'error', errors: fieldErrors, values: snap, draftKey: Date.now() }
   }
 
+  const emailKey = parsed.data.email
+  const emailHost = getEmailDomain(emailKey)
+  if (emailHost && isDisposableEmailDomain(emailHost)) {
+    return {
+      status: 'error',
+      errors: { email: DISPOSABLE_EMAIL_USER_MESSAGE },
+      values: snap,
+      draftKey: Date.now(),
+    }
+  }
+  if (emailHost && !(await domainLikelyAcceptsMail(emailHost))) {
+    return {
+      status: 'error',
+      errors: { email: INVALID_EMAIL_DOMAIN_USER_MESSAGE },
+      values: snap,
+      draftKey: Date.now(),
+    }
+  }
+
   const debug = waitlistSupabaseDebug()
 
   try {
     const { consent_donnees: _consent, ...row } = parsed.data
-    const emailKey = parsed.data.email.trim().toLowerCase()
     const shareSource = emailSourceHash(emailKey)
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     const usingServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())

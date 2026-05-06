@@ -43,20 +43,6 @@ ALTER TABLE public.waitlist_pionniers DROP CONSTRAINT IF EXISTS waitlist_pionnie
 ALTER TABLE public.waitlist_pionniers ADD CONSTRAINT waitlist_pionniers_profil_check
   CHECK (profil IN ('remplacant', 'etablissement', 'les_deux'));
 
--- Comptage public : uniquement les inscriptions validées (sans SELECT sur les lignes ; la RLS « deny » reste).
-CREATE OR REPLACE FUNCTION public.count_waitlist_pionniers()
-RETURNS bigint
-LANGUAGE sql
-STABLE
-SECURITY DEFINER
-SET search_path = public
-AS $$
-  SELECT count(*)::bigint FROM public.waitlist_pionniers WHERE validated = true;
-$$;
-
-REVOKE ALL ON FUNCTION public.count_waitlist_pionniers() FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.count_waitlist_pionniers() TO anon, authenticated;
-
 -- Bases créées avant `source` dans le CREATE : ajout + backfill (même règle que l’app : md5(trim(lower(email)))).
 ALTER TABLE public.waitlist_pionniers ADD COLUMN IF NOT EXISTS source TEXT;
 
@@ -115,3 +101,21 @@ COMMENT ON COLUMN public.waitlist_pionniers.last_modified_at IS
 UPDATE public.waitlist_pionniers
 SET email = lower(trim(email))
 WHERE lower(trim(email)) IS DISTINCT FROM email;
+
+-- Comptage public (jauge / pages légales) : validés ET encore abonnés aux e-mails.
+-- Défini en fin de fichier pour que `email_communication_status` existe sur les anciennes bases.
+CREATE OR REPLACE FUNCTION public.count_waitlist_pionniers()
+RETURNS bigint
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT count(*)::bigint
+  FROM public.waitlist_pionniers
+  WHERE validated = true
+    AND email_communication_status = 'subscribed';
+$$;
+
+REVOKE ALL ON FUNCTION public.count_waitlist_pionniers() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.count_waitlist_pionniers() TO anon, authenticated;

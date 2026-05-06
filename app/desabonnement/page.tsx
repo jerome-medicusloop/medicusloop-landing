@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { z } from 'zod'
-import { PATH_MENTIONS_LEGALES } from '@/lib/legal-routes'
 import { getWaitlistPionniersCount } from '@/lib/waitlist-pionniers-count'
 import { PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
 import { getWaitlistUnsubscribePreview } from '@/lib/waitlist-unsubscribe-lookup'
@@ -59,10 +58,6 @@ export default async function DesabonnementPage({
                 <a href="mailto:hello@medicus-loop.com" className="mentions-legales-inline-mailto">
                   hello@medicus-loop.com
                 </a>
-                {' · '}
-                <Link href={PATH_MENTIONS_LEGALES} prefetch={false} className="mentions-legales-inline-mailto">
-                  Mentions légales
-                </Link>
               </p>
             </article>
           </div>
@@ -214,18 +209,11 @@ export default async function DesabonnementPage({
               </h1>
               <span className="mentions-legales-h1-rule" aria-hidden="true" />
               <p className="mentions-legales-lead">
-                Vous avez reçu un message automatique après votre inscription sur la liste d’attente. Si vous ne
-                souhaitez plus recevoir d’e-mails d’information de notre part, confirmez ci-dessous : votre demande est
-                enregistrée dans nos systèmes (statut « désabonné »). Le lien ci-dessous est personnel et ne doit pas
-                être partagé.
+                Si vous souhaitez vous désinscrire des e-mails envoyés par MedicusLoop MAR, remplissez le formulaire
+                ci-dessous et confirmez votre choix de désinscription. Ce lien est personnel : ne le partagez pas.
               </p>
             </header>
             <DesabonnementForm token={tokenRaw} email={preview.email} />
-            <p className="desabonnement-footnote">
-              <Link href={PATH_MENTIONS_LEGALES} prefetch={false} className="mentions-legales-inline-mailto">
-                Mentions légales
-              </Link>
-            </p>
           </article>
         </div>
       </main>

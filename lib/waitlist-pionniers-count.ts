@@ -21,7 +21,8 @@ function toDisplayPionnierCount(raw: number): number {
 }
 
 /**
- * Nombre d’inscrits **validés** (`validated = true`) dans `waitlist_pionniers` pour la jauge Pionniers.
+ * Nombre d’inscrits **validés** et **abonnés aux e-mails** (`validated` + `email_communication_status = 'subscribed'`)
+ * dans `waitlist_pionniers` pour la jauge Pionniers.
  * 1) RPC `count_waitlist_pionniers` (clé anon suffit une fois la migration appliquée).
  * 2) Sinon comptage `head: true` avec `SUPABASE_SERVICE_ROLE_KEY` si défini (contourne la RLS).
  */
@@ -51,6 +52,7 @@ export async function getWaitlistPionniersCount(): Promise<number> {
       .from('waitlist_pionniers')
       .select('*', { count: 'exact', head: true })
       .eq('validated', true)
+      .eq('email_communication_status', 'subscribed')
     if (!error && count != null) return toDisplayPionnierCount(count)
   }
 
