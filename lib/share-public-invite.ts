@@ -51,3 +51,36 @@ export const SHARE_PUBLIC_MESSAGES = {
 export const SHARE_PUBLIC_MESSAGE = SHARE_PUBLIC_MESSAGES.whatsapp
 
 export const SHARE_PUBLIC_EMAIL_SUBJECT = 'MedicusLoop — à faire découvrir entre confrères (MAR)'
+
+/** Canaux avec deep link (comme la landing `PionnierCtaShareRail`, hors SMS / copie). */
+export type ShareInviteDeepLinkChannel = 'whatsapp' | 'email' | 'linkedin' | 'facebook' | 'twitter'
+
+/**
+ * URL de partage pour un canal — même encodage que le rail « Partager » de la landing.
+ * @param pageUrl URL complète à partager (ex. `buildSharePageUrl(hash)` avec `?source=`).
+ */
+export function buildShareInviteDeepLink(
+  channel: ShareInviteDeepLinkChannel,
+  pageUrl: string,
+  messages: Record<ShareInviteChannelId, string> = SHARE_PUBLIC_MESSAGES,
+): string {
+  const u = encodeURIComponent(pageUrl)
+  const textFor = (id: ShareInviteChannelId) => messages[id] ?? SHARE_PUBLIC_MESSAGE
+  const fullText = (id: ShareInviteChannelId) => `${textFor(id)} ${pageUrl}`.trim()
+
+  switch (channel) {
+    case 'whatsapp':
+      return `https://wa.me/?text=${encodeURIComponent(fullText('whatsapp'))}`
+    case 'email': {
+      const sub = encodeURIComponent(SHARE_PUBLIC_EMAIL_SUBJECT)
+      const mailBody = encodeURIComponent(`${textFor('email')}\n\n${pageUrl}`)
+      return `mailto:?subject=${sub}&body=${mailBody}`
+    }
+    case 'linkedin':
+      return `https://www.linkedin.com/sharing/share-offsite/?url=${u}`
+    case 'facebook':
+      return `https://www.facebook.com/sharer/sharer.php?u=${u}&quote=${encodeURIComponent(textFor('facebook'))}`
+    case 'twitter':
+      return `https://twitter.com/intent/tweet?text=${encodeURIComponent(textFor('twitter'))}&url=${u}`
+  }
+}

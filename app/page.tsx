@@ -11,6 +11,7 @@ import Navbar from './_components/site-navbar'
 import HeroTrustBlock from './_components/trust-strip'
 import ProfilsMarSection from './_components/profils-mar-section'
 import PionnierCtaStrip from './_components/pionnier-cta-strip'
+import PreuveFaqSection from './_components/preuve-faq-section'
 import SharePublicSection from './_components/share-public-section'
 import SiteFooter from './_components/site-footer'
 
@@ -110,6 +111,7 @@ function Hero({ placesPrises }: { placesPrises: number }) {
               { label: 'Astreinte', mod: 'hero-spec-badge--astreinte' as const },
               { label: 'Garde', mod: 'hero-spec-badge--garde' as const },
               { label: 'Réanimation', mod: 'hero-spec-badge--rea' as const },
+              { label: 'USC', mod: 'hero-spec-badge--usc' as const },
             ].map((s) => (
               <span key={s.label} className={`hero-spec-badge ${s.mod}`}>
                 <span className="hero-spec-badge__dot" aria-hidden="true" />
@@ -907,6 +909,7 @@ export default async function HomePage() {
           <SharePublicSection embedded />
         </div>
       </div>
+      <PreuveFaqSection />
       <SiteFooter />
       </main>
     </>

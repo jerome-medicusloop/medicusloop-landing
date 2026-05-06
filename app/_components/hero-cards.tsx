@@ -85,7 +85,7 @@ type Card = {
   loopTags: string[]
   loopType: 'restaurant' | 'hotel' | 'activity' | 'museum'
   accentColor: string
-  missionType: Array<'AG' | 'ALR' | 'Réa' | 'Garde' | 'Astreinte'>
+  missionType: Array<'AG' | 'ALR' | 'Réa' | 'Garde' | 'Astreinte' | 'USC'>
   urgent?: boolean
 }
 
@@ -99,6 +99,7 @@ const MISSION_COLORS: Record<string, { color: string; text: string; bg: string; 
   'Réa':       { color: '#0891b2', text: '#0e7490', bg: '#a5f3fc', border: '#0891b2', label: 'Réanimation' },
   'Garde':     { color: '#7c3aed', text: '#5b21b6', bg: '#ddd6fe', border: '#7c3aed', label: 'Garde' },
   'Astreinte': { color: '#db2777', text: '#9d174d', bg: '#fbcfe8', border: '#db2777', label: 'Astreinte' },
+  'USC': { color: '#ea580c', text: '#9a3412', bg: '#ffedd5', border: '#ea580c', label: 'USC' },
 }
 
 /** Vert logo / primary (aligné sur --accent-blue) */
@@ -212,8 +213,8 @@ const CARDS: Card[] = [
     loopRating: '4.7',
     loopTags: ['Billet coupe-file', 'Audio-guide', '12 min du bloc'],
     loopType: 'museum',
-    accentColor: '#0891b2',
-    missionType: ['Réa'],
+    accentColor: '#ea580c',
+    missionType: ['USC'],
   },
   {
     city: 'Toulouse',

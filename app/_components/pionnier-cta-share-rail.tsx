@@ -1,14 +1,12 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { getShareDeviceProfile, type ShareDeviceProfile } from '@/lib/share-device-detection'
+import { useCallback, useMemo, useState } from 'react'
 import type { ShareInviteChannelId } from '@/lib/share-public-invite'
 import {
-  SHARE_PUBLIC_EMAIL_SUBJECT,
+  buildShareInviteDeepLink,
   SHARE_PUBLIC_MESSAGES,
   SHARE_PUBLIC_PAGE_URL,
-  SHARE_PUBLIC_MESSAGE,
 } from '@/lib/share-public-invite'
 import { IconFacebook, IconLinkedIn, IconWhatsApp, IconX } from './share-channel-icons'
 
@@ -23,39 +21,15 @@ type RailItem = {
   color: string
   bg: string
   border: string
-  mobileOnly?: boolean
-  icon?: 'sms' | 'email'
+  icon?: 'email'
   iconSvg?: ReactNode
 }
 
 export default function PionnierCtaShareRail() {
-  const [shareDevice, setShareDevice] = useState<ShareDeviceProfile>(() => ({
-    legacyMobileUa: false,
-    likelyMobileOrTablet: false,
-    likelyPhone: false,
-    coarsePointer: false,
-    hoverNone: false,
-  }))
   const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    setShareDevice(getShareDeviceProfile())
-  }, [])
 
   const pageUrl = SHARE_PUBLIC_PAGE_URL
   const messagesByChannel = SHARE_PUBLIC_MESSAGES
-  const fallback = SHARE_PUBLIC_MESSAGE
-  const emailSubject = SHARE_PUBLIC_EMAIL_SUBJECT
-
-  const textFor = useCallback(
-    (id: ShareInviteChannelId) => messagesByChannel[id] ?? fallback,
-    [messagesByChannel, fallback],
-  )
-
-  const fullText = useCallback(
-    (id: ShareInviteChannelId) => `${textFor(id)} ${pageUrl}`.trim(),
-    [textFor, pageUrl],
-  )
 
   const handleCopy = useCallback(() => {
     void navigator.clipboard.writeText(pageUrl).then(() => {
@@ -65,17 +39,11 @@ export default function PionnierCtaShareRail() {
   }, [pageUrl])
 
   const items: RailItem[] = useMemo(() => {
-    const u = encodeURIComponent(pageUrl)
-    const sub = encodeURIComponent(emailSubject)
-    const mailBody = encodeURIComponent(`${textFor('email')}\n\n${pageUrl}`)
-    const fbQuote = encodeURIComponent(textFor('facebook'))
-    const twText = encodeURIComponent(textFor('twitter'))
-
     return [
       {
         id: 'whatsapp',
         aria: 'Partager via WhatsApp',
-        href: `https://wa.me/?text=${encodeURIComponent(fullText('whatsapp'))}`,
+        href: buildShareInviteDeepLink('whatsapp', pageUrl, messagesByChannel),
         newTab: true,
         color: '#25D366',
         bg: 'rgba(37,211,102,0.12)',
@@ -83,19 +51,9 @@ export default function PionnierCtaShareRail() {
         iconSvg: <IconWhatsApp size={ICON_SZ} />,
       },
       {
-        id: 'sms',
-        aria: 'Partager par SMS',
-        href: `sms:?body=${encodeURIComponent(fullText('sms'))}`,
-        mobileOnly: true,
-        color: '#10B981',
-        bg: 'rgba(16,185,129,0.12)',
-        border: 'rgba(16,185,129,0.35)',
-        icon: 'sms',
-      },
-      {
         id: 'email',
         aria: 'Partager par e-mail',
-        href: `mailto:?subject=${sub}&body=${mailBody}`,
+        href: buildShareInviteDeepLink('email', pageUrl, messagesByChannel),
         color: 'var(--text-muted)',
         bg: 'var(--surface-2)',
         border: 'var(--border-hover)',
@@ -104,7 +62,7 @@ export default function PionnierCtaShareRail() {
       {
         id: 'linkedin',
         aria: 'Partager sur LinkedIn',
-        href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
+        href: buildShareInviteDeepLink('linkedin', pageUrl, messagesByChannel),
         newTab: true,
         color: '#0A66C2',
         bg: 'rgba(10,102,194,0.12)',
@@ -114,7 +72,7 @@ export default function PionnierCtaShareRail() {
       {
         id: 'facebook',
         aria: 'Partager sur Facebook',
-        href: `https://www.facebook.com/sharer/sharer.php?u=${u}&quote=${fbQuote}`,
+        href: buildShareInviteDeepLink('facebook', pageUrl, messagesByChannel),
         newTab: true,
         color: '#1877F2',
         bg: 'rgba(24,119,242,0.12)',
@@ -124,7 +82,7 @@ export default function PionnierCtaShareRail() {
       {
         id: 'twitter',
         aria: 'Partager sur X',
-        href: `https://twitter.com/intent/tweet?text=${twText}&url=${u}`,
+        href: buildShareInviteDeepLink('twitter', pageUrl, messagesByChannel),
         newTab: true,
         color: 'var(--text)',
         bg: 'var(--surface-2)',
@@ -132,14 +90,12 @@ export default function PionnierCtaShareRail() {
         iconSvg: <IconX size={ICON_SZ} />,
       },
     ]
-  }, [emailSubject, fullText, pageUrl, textFor])
-
-  const visible = items.filter((c) => !c.mobileOnly || shareDevice.likelyMobileOrTablet)
+  }, [messagesByChannel, pageUrl])
 
   return (
     <nav className="pionnier-cta-share-rail" aria-label="Partager MedicusLoop — faire défiler horizontalement">
       <div className="pionnier-cta-share-rail__track">
-        {visible.map((c) => {
+        {items.map((c) => {
           const chipStyle = {
             color: c.color,
             background: c.bg,

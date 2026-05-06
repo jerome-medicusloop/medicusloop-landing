@@ -10,6 +10,7 @@ import {
   SITE_URL,
 } from '@/lib/site-metadata'
 import { GoogleTagManagerHead, GoogleTagManagerNoscript } from './_components/google-tag-manager'
+import '@fontsource-variable/material-symbols-outlined/full.css'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -26,10 +27,6 @@ const dmSans = DM_Sans({
   display: 'swap',
   preload: true,
 })
-
-/** Même URL pour preload + stylesheet ; `display=block` limite l’affichage des ligatures avant la police. */
-const MATERIAL_SYMBOLS_STYLESHEET =
-  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block'
 
 /** Origine Supabase pour preconnect (sans lever si l’URL d’env est invalide). */
 function supabaseOriginForHints(): string | null {
@@ -162,11 +159,6 @@ document.documentElement.setAttribute('data-theme',d);
 })();`,
           }}
         />
-        {/* Icônes : preconnect + preload + feuille tôt pour éviter le flash des noms de ligature */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" href={MATERIAL_SYMBOLS_STYLESHEET} as="style" />
-        <link rel="stylesheet" href={MATERIAL_SYMBOLS_STYLESHEET} />
         {/* Axeptio — chargement SDK (preconnect ici, scripts en tête de <body>) */}
         <link rel="preconnect" href="https://static.axept.io" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://static.axept.io" />
@@ -188,8 +180,8 @@ document.documentElement.setAttribute('data-theme',d);
       <body>
         <GoogleTagManagerNoscript />
         {/*
-          Axeptio : config puis SDK en deux scripts beforeInteractive (évite l’IIFE insertBefore
-          sur le 1er <script>, fragile avec Next). À charger avant le reste — voir support Axeptio.
+          Axeptio : config inline tôt ; SDK en afterInteractive pour ne pas bloquer le document hors ligne
+          (beforeInteractive + src externe = attente timeout réseau avant hydratation).
         */}
         <Script
           id="axeptio-settings"
@@ -201,7 +193,7 @@ document.documentElement.setAttribute('data-theme',d);
         <Script
           id="axeptio-sdk"
           src="https://static.axept.io/sdk.js"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         {children}
         <Script

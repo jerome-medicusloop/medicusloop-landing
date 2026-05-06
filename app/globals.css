@@ -2015,14 +2015,23 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   gap: clamp(12px, 1.8vw, 14px);
 }
 
-/* ─── Material Symbols sizing fix ─── */
+/* ─── Material Symbols (self-host @fontsource-variable ; hors ligne après 1er chargement du bundle) ─── */
 .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined Variable', 'Material Symbols Outlined', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  display: inline-block;
   font-size: inherit;
   line-height: 1;
   vertical-align: middle;
   user-select: none;
   speak: none;
-  font-style: normal;
 }
 
 /* ─── Page d’accueil (app/page.tsx) : mises en page / cartes (évite styles inline) ─── */
@@ -2030,7 +2039,8 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 .ml-hero,
 .ccm-outer,
 .loopexperience-section,
-.pionniers-section {
+.pionniers-section,
+.ml-preuve-faq-section {
   background-color: var(--bg);
   background-image:
     radial-gradient(ellipse 108% 92% at 86% -12%, color-mix(in srgb, var(--nav-cta-bg) 22%, transparent) 0%, transparent 58%),
@@ -2161,6 +2171,12 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   color: #0891b2;
   background: rgba(8, 145, 178, 0.12);
   border-color: rgba(8, 145, 178, 0.32);
+}
+
+.hero-spec-badge--usc {
+  color: #c2410c;
+  background: rgba(234, 88, 12, 0.12);
+  border-color: rgba(234, 88, 12, 0.32);
 }
 
 @media (max-width: 640px) {
@@ -2302,6 +2318,198 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   padding: var(--ml-section-pad-top) 24px 0;
   position: relative;
   overflow: hidden;
+}
+
+/* ─── Témoignages illustratifs + FAQ (confiance hero : trust-strip.tsx) ─── */
+.ml-preuve-faq-section {
+  padding: var(--ml-section-pad-top) var(--ml-content-inline) clamp(48px, 6vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ml-preuve-head {
+  margin-bottom: clamp(20px, 3vw, 28px);
+}
+
+.ml-preuve-quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2vw, 20px);
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+@media (max-width: 960px) {
+  .ml-preuve-quotes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ml-preuve-quote {
+  margin: 0;
+  padding: 24px 22px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ml-preuve-quote__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text);
+  font-style: italic;
+}
+
+.ml-preuve-quote__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.ml-preuve-quote__avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-gold) 22%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 45%, var(--border));
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+}
+
+.ml-preuve-quote__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ml-preuve-quote__role {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--text);
+}
+
+.ml-preuve-quote__region {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.ml-faq-block {
+  padding-top: clamp(8px, 2vw, 16px);
+  border-top: 1px solid var(--border);
+}
+
+.ml-faq-head {
+  text-align: center;
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+
+.ml-faq-title {
+  margin-bottom: 12px !important;
+}
+
+.ml-faq-lead {
+  margin-bottom: 0;
+}
+
+.ml-faq-list {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ml-faq-details {
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--nav-cta-bg) 12%);
+  background: color-mix(in srgb, var(--surface) 88%, var(--surface-2) 12%);
+  overflow: hidden;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.ml-faq-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: clamp(16px, 2vw, 20px) 52px clamp(16px, 2vw, 20px) clamp(20px, 2.5vw, 28px);
+  font-size: clamp(0.9375rem, 1.05vw, 1.02rem);
+  font-weight: 700;
+  color: var(--accent-blue);
+  position: relative;
+  user-select: none;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.ml-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ml-faq-summary::after {
+  content: '';
+  position: absolute;
+  right: clamp(18px, 2.2vw, 24px);
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid color-mix(in srgb, var(--accent-blue) 72%, var(--text-muted) 28%);
+  border-bottom: 2px solid color-mix(in srgb, var(--accent-blue) 72%, var(--text-muted) 28%);
+  transform: translateY(-65%) rotate(45deg);
+  transition:
+    transform 0.2s ease,
+    border-color 0.18s ease;
+}
+
+.ml-faq-details[open] .ml-faq-summary::after {
+  transform: translateY(-35%) rotate(225deg);
+  border-right-color: var(--nav-cta-bg);
+  border-bottom-color: var(--nav-cta-bg);
+}
+
+.ml-faq-summary:hover {
+  color: var(--nav-cta-bg);
+  background: color-mix(in srgb, var(--nav-cta-bg) 11%, var(--surface));
+}
+
+.ml-faq-details[open] .ml-faq-summary {
+  color: var(--nav-cta-bg);
+  background: color-mix(in srgb, var(--nav-cta-bg) 9%, var(--surface));
+}
+
+.ml-faq-summary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--nav-cta-bg) 55%, var(--accent-blue) 45%);
+  outline-offset: 2px;
+}
+
+.ml-faq-answer {
+  padding: clamp(20px, 2.8vw, 28px) clamp(22px, 3.2vw, 32px) clamp(22px, 3vw, 30px);
+  font-size: 0.90625rem;
+  line-height: 1.68;
+  color: var(--text-muted);
+  border-top: 1px solid color-mix(in srgb, var(--nav-cta-bg) 32%, var(--border) 68%);
+}
+
+.ml-faq-inline-link {
+  color: var(--accent-blue);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ml-faq-inline-link:hover {
+  color: var(--nav-cta-bg);
 }
 
 /* Colonnes 1–2 : même vocabulaire que les cartes Pionniers (liste pleine) — pas d’opacité / grayscale boueux */
@@ -2484,6 +2692,141 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   line-height: 1.6;
   margin: 0;
   max-width: none;
+}
+
+/* ─── Désabonnement e-mails (page /desabonnement) ─── */
+.desabonnement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 32rem;
+}
+
+.desabonnement-form__email {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.desabonnement-form__email-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.desabonnement-form__email-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.desabonnement-form__fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.desabonnement-form__legend {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.desabonnement-form__radios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.desabonnement-form__radio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.desabonnement-form__radio-row input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.desabonnement-form__details-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.desabonnement-form__details-caption {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.desabonnement-form__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid var(--border-hover);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.desabonnement-form__textarea:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 1px;
+}
+
+.desabonnement-form__error {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+.desabonnement-form__submit {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 40%, var(--border));
+  background: var(--nav-cta-bg);
+  color: var(--nav-cta-text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+
+.desabonnement-form__submit:hover:not(:disabled) {
+  opacity: 0.95;
+}
+
+.desabonnement-form__submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.desabonnement-footnote {
+  margin: clamp(18px, 2vw, 24px) 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .mentions-legales-lead a {
@@ -3608,6 +3951,13 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 .trust-strip-icon .material-symbols-outlined {
   font-size: 20px;
   font-variation-settings: "FILL" 0;
+}
+
+/* Hero : pastilles vert / menthe (aligné marque — pas bleu) */
+.trust-strip--in-hero .trust-strip-icon {
+  background: color-mix(in srgb, var(--nav-cta-bg) 18%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 32%, transparent);
+  color: var(--nav-cta-bg);
 }
 
 .trust-strip-title {

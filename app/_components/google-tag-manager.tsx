@@ -13,7 +13,7 @@ function gtmContainerId(): string {
 
 const GTM_ID = gtmContainerId()
 
-/** Script GTM — le plus haut possible dans `<head>` (`beforeInteractive`). */
+/** Script GTM — `afterInteractive` : n’empêche pas l’affichage si le réseau est lent ou hors ligne. */
 export function GoogleTagManagerHead() {
   return (
     <>
@@ -21,7 +21,7 @@ export function GoogleTagManagerHead() {
       <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
       <Script
         id="google-tag-manager"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

@@ -3,3 +3,6 @@ export const PATH_CONDITIONS_GENERALES_UTILISATION = '/conditions-generales-util
 
 /** Page mentions légales. */
 export const PATH_MENTIONS_LEGALES = '/mentions-legales' as const
+
+/** Désabonnement e-mails (liste d’attente) — lien signé par token en query. */
+export const PATH_DESABONNEMENT = '/desabonnement' as const

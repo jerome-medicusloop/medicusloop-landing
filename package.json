@@ -10,6 +10,9 @@
     "compress:public": "node scripts/compress-public-assets.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/material-symbols-outlined": "^5.2.43",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.0.8",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.105.1",
     "@vercel/analytics": "^2.0.1",
@@ -17,6 +20,7 @@
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "resend": "^6.12.2",
     "zod": "^4.4.1"
   },
   "devDependencies": {

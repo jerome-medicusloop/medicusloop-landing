@@ -1,9 +1,11 @@
 'use server'
 
-import { createClient } from '@supabase/supabase-js'
+import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
+import { sendPionnierWelcomeEmail } from '@/lib/send-pionnier-welcome-email'
 import { emailSourceHash } from '@/lib/share-email-source'
 import { REGIONS_FRANCE } from '@/lib/regions-france'
+import { createWaitlistSupabaseClient } from '@/lib/supabase-waitlist-client'
 
 /** Logs détaillés + message d’erreur UI enrichi (définir à `1` ou `true` sur Vercel le temps du debug). */
 function waitlistSupabaseDebug(): boolean {
@@ -18,21 +20,6 @@ function supabaseInsertLogPayload(err: { message?: string; code?: string; detail
     details: err.details ?? null,
     hint: err.hint ?? null,
   }
-}
-
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!url || !key) {
-    const missing = [
-      !url ? 'NEXT_PUBLIC_SUPABASE_URL' : null,
-      !key ? 'SUPABASE_SERVICE_ROLE_KEY ou NEXT_PUBLIC_SUPABASE_ANON_KEY' : null,
-    ].filter(Boolean)
-    console.error('[waitlist-pionnier] Supabase env manquante', { missing })
-    throw new Error(`Missing Supabase environment variables: ${missing.join(', ')}`)
-  }
-  return createClient(url, key)
 }
 
 // ─── Waitlist Pionnier (landing : inscription minimale) ─────────────────────
@@ -151,7 +138,8 @@ export async function submitWaitlistPionnier(
 
   try {
     const { consent_donnees: _consent, ...row } = parsed.data
-    const shareSource = emailSourceHash(parsed.data.email)
+    const emailKey = parsed.data.email.trim().toLowerCase()
+    const shareSource = emailSourceHash(emailKey)
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     const usingServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())
     if (debug) {
@@ -167,14 +155,87 @@ export async function submitWaitlistPionnier(
       })
     }
 
-    const supabase = getSupabaseClient()
+    const supabase = createWaitlistSupabaseClient()
+    const nowIso = new Date().toISOString()
+    const unsubscribeToken = randomUUID()
+
+    const { data: existing, error: selErr } = await supabase
+      .from('waitlist_pionniers')
+      .select('id, email_communication_status')
+      .eq('email', emailKey)
+      .maybeSingle()
+
+    if (selErr) {
+      console.error('[waitlist-pionnier] select existant', supabaseInsertLogPayload(selErr))
+      const base =
+        'Impossible d’enregistrer votre inscription pour le moment. Réessayez dans quelques instants ou contactez-nous si le problème continue.'
+      const message =
+        debug && selErr.message ? `${base} [select: ${selErr.message}]` : base
+      return { status: 'error', message, values: snap, draftKey: Date.now() }
+    }
+
+    if (existing?.email_communication_status === 'subscribed') {
+      return { status: 'duplicate', values: snap, draftKey: Date.now() }
+    }
+
+    /* Déjà en base mais désabonné e-mail : réactiver (sub), nouveau jeton + last_modified, renvoyer le mail. */
+    if (existing && existing.email_communication_status === 'unsubscribed') {
+      const reactivatedAt = new Date().toISOString()
+      const { error: upErr } = await supabase
+        .from('waitlist_pionniers')
+        .update({
+          prenom: row.prenom,
+          nom: row.nom,
+          email: emailKey,
+          ville: row.ville ?? null,
+          region: row.region ?? null,
+          annees_experience: row.annees_experience ?? null,
+          profil: row.profil,
+          validated: false,
+          source: shareSource,
+          email_communication_status: 'subscribed',
+          unsubscribed_at: null,
+          unsubscribe_reason: null,
+          unsubscribe_token: unsubscribeToken,
+          last_modified_at: reactivatedAt,
+        })
+        .eq('id', existing.id)
+
+      if (upErr) {
+        console.error('[waitlist-pionnier] update réabonnement', supabaseInsertLogPayload(upErr))
+        const base =
+          'Impossible d’enregistrer votre inscription pour le moment. Réessayez dans quelques instants ou contactez-nous si le problème continue.'
+        const message =
+          debug && upErr.message ? `${base} [update: ${upErr.message}]` : base
+        return { status: 'error', message, values: snap, draftKey: Date.now() }
+      }
+
+      if (debug) {
+        console.warn('[waitlist-pionnier] réabonnement e-mail OK', { id: existing.id })
+      }
+
+      await sendPionnierWelcomeEmail({
+        to: emailKey,
+        prenom: parsed.data.prenom,
+        shareSourceHash: shareSource,
+        unsubscribeToken,
+      })
+
+      return { status: 'success', successProfil: parsed.data.profil, shareSource }
+    }
+
     const { error } = await supabase.from('waitlist_pionniers').insert({
       ...row,
+      email: emailKey,
       ville: row.ville ?? null,
       region: row.region ?? null,
       annees_experience: row.annees_experience ?? null,
       validated: false,
       source: shareSource,
+      unsubscribe_token: unsubscribeToken,
+      email_communication_status: 'subscribed',
+      register_date: nowIso,
+      last_modified_at: nowIso,
     })
 
     if (error) {
@@ -194,6 +255,13 @@ export async function submitWaitlistPionnier(
     if (debug) {
       console.warn('[waitlist-pionnier] insert OK (sans ligne retournée — vérifier la table)')
     }
+
+    await sendPionnierWelcomeEmail({
+      to: emailKey,
+      prenom: parsed.data.prenom,
+      shareSourceHash: shareSource,
+      unsubscribeToken,
+    })
 
     return { status: 'success', successProfil: parsed.data.profil, shareSource }
   } catch (e) {

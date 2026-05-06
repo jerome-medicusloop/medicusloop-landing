@@ -46,7 +46,7 @@ export default function SiteFooter() {
             </div>
           </div>
           <div className="site-footer__social" aria-label="Réseaux sociaux">
-            <p className="site-footer__col-title site-footer__social-heading">Réseaux</p>
+            <p className="site-footer__col-title site-footer__social-heading">Réseaux sociaux</p>
             <ul className="site-footer__social-list">
               <li>
                 <a
