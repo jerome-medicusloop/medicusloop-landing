@@ -1,12 +1,12 @@
 'use client'
 
 import { buildSharePageUrl } from '@/lib/share-public-invite'
+import {
+  PIONNIER_EMAIL_SUBJECT,
+  PIONNIER_SHARE_MESSAGE,
+  PIONNIER_SHARE_MESSAGES,
+} from '@/lib/share-pionnier-invite'
 import ShareInviteChannels from './share-invite-channels'
-
-const MESSAGE =
-  "J'ai une info avant les autres : MedicusLoop lance la première plateforme MAR avec matching IA, contrat automatique et LoopExpérience sur mesure sur chaque lieu. Je viens de rejoindre en Pionnier — 50 places uniquement. Tu devrais regarder avant que ce soit complet :"
-
-const SUBJECT = "J'ai trouvé le bon plan pour les rempla MAR"
 
 type InvitationBlockProps = {
   /** MD5 hex (32 car.) : liens avec `?source=` : après inscription uniquement. */
@@ -17,12 +17,13 @@ export default function InvitationBlock({ shareSource }: InvitationBlockProps) {
   return (
     <ShareInviteChannels
       pageUrl={buildSharePageUrl(shareSource)}
-      message={MESSAGE}
-      emailSubject={SUBJECT}
+      message={PIONNIER_SHARE_MESSAGE}
+      messagesByChannel={PIONNIER_SHARE_MESSAGES}
+      emailSubject={PIONNIER_EMAIL_SUBJECT}
       title="Vous avez trouvé le bon plan avant les autres."
       subtitle={
         <>
-          Invitez un confrère MAR — en exclusivité.{' '}
+          Invitez un confrère — en exclusivité.{' '}
           <span style={{ color: 'var(--text-subtle)', fontSize: '0.78rem' }}>
             Celui qui invite passe pour celui qui sait.
           </span>

@@ -48,6 +48,7 @@ export default function PionnierCtaStrip({
           <span className="pionnier-cta-strip__lbl-share">Inviter un confrère</span>
         </button>
       </div>
+      <p className="pionnier-cta-strip__share-hint">et/ou partagez sur&nbsp;:</p>
       <PionnierCtaShareRail />
       <ShareInviteDialog open={shareOpen} onClose={closeShare} />
     </div>

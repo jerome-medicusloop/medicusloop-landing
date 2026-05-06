@@ -1,16 +1,20 @@
 'use client'
 
 import type { CSSProperties, MouseEvent, ReactNode } from 'react'
-import { useCallback, useEffect, useState } from 'react'
-import { IconFacebook, IconInstagram, IconLinkedIn, IconTikTok, IconWhatsApp } from './share-channel-icons'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { getShareDeviceProfile, type ShareDeviceProfile } from '@/lib/share-device-detection'
+import type { ShareInviteChannelId } from '@/lib/share-public-invite'
+import { IconFacebook, IconLinkedIn, IconWhatsApp, IconX } from './share-channel-icons'
 
 const DEFAULT_PAGE_URL = 'https://medicus-loop.com'
 
 export type ShareInviteChannelsProps = {
-  /** Texte inclus dans WhatsApp / SMS / corps d’e-mail avant l’URL. */
+  /** Texte par défaut si `messagesByChannel` n’a pas la clé du canal. */
   message: string
   emailSubject: string
   pageUrl?: string
+  /** Textes adaptés au canal (WhatsApp ≠ LinkedIn ≠ X, etc.). */
+  messagesByChannel?: Partial<Record<ShareInviteChannelId, string>>
   title?: ReactNode
   subtitle?: ReactNode
   footnote?: ReactNode
@@ -24,9 +28,25 @@ export type ShareInviteChannelsProps = {
   wideCopy?: boolean
 }
 
+type ChannelRow = {
+  id: ShareInviteChannelId
+  label: string
+  color: string
+  bg: string
+  border: string
+  mobileOnly?: boolean
+  href?: string
+  newTab?: boolean
+  onPress?: () => void
+  actionAriaLabel?: string
+  icon?: string
+  iconSvg?: ReactNode
+}
+
 export default function ShareInviteChannels({
   message,
   emailSubject,
+  messagesByChannel,
   pageUrl = DEFAULT_PAGE_URL,
   title,
   subtitle,
@@ -36,138 +56,122 @@ export default function ShareInviteChannels({
   titleId,
   wideCopy = false,
 }: ShareInviteChannelsProps) {
-  const [isMobile, setIsMobile] = useState(false)
+  const [shareDevice, setShareDevice] = useState<ShareDeviceProfile>(() => ({
+    legacyMobileUa: false,
+    likelyMobileOrTablet: false,
+    likelyPhone: false,
+    coarsePointer: false,
+    hoverNone: false,
+  }))
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    setIsMobile(/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent))
+    setShareDevice(getShareDeviceProfile())
   }, [])
 
-  const encodedMsg = encodeURIComponent(`${message} ${pageUrl}`)
+  const textFor = useCallback(
+    (id: ShareInviteChannelId) => messagesByChannel?.[id] ?? message,
+    [messagesByChannel, message],
+  )
+
+  const fullText = useCallback(
+    (id: ShareInviteChannelId) => `${textFor(id)} ${pageUrl}`.trim(),
+    [textFor, pageUrl],
+  )
+
   const encodedSubject = encodeURIComponent(emailSubject)
-  const encodedBody = encodeURIComponent(`${message}\n\n${pageUrl}`)
+  const encodeEmailBody = useCallback(
+    () => encodeURIComponent(`${textFor('email')}\n\n${pageUrl}`),
+    [textFor, pageUrl],
+  )
 
   function handleCopy() {
-    navigator.clipboard.writeText(pageUrl).then(() => {
+    void navigator.clipboard.writeText(pageUrl).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     })
   }
 
-  const copyMessageAndOpen = useCallback(
-    (openUrl: string) => {
-      const text = `${message} ${pageUrl}`.trim()
-      void navigator.clipboard.writeText(text).then(() => {
-        window.open(openUrl, '_blank', 'noopener,noreferrer')
-      })
-    },
-    [message, pageUrl],
+  const channels: ChannelRow[] = useMemo(() => {
+    const wa = encodeURIComponent(fullText('whatsapp'))
+    const smsBody = encodeURIComponent(fullText('sms'))
+    const mailBody = encodeEmailBody()
+    const sub = encodedSubject
+    const u = encodeURIComponent(pageUrl)
+    const fbQuote = encodeURIComponent(textFor('facebook'))
+    const twText = encodeURIComponent(textFor('twitter'))
+
+    return [
+      {
+        id: 'whatsapp',
+        label: 'WhatsApp',
+        iconSvg: <IconWhatsApp />,
+        color: '#25D366',
+        bg: 'rgba(37,211,102,0.1)',
+        border: 'rgba(37,211,102,0.25)',
+        href: `https://wa.me/?text=${wa}`,
+        mobileOnly: false,
+        newTab: true,
+      },
+      {
+        id: 'sms',
+        label: 'SMS',
+        icon: 'sms',
+        color: '#10B981',
+        bg: 'rgba(16,185,129,0.1)',
+        border: 'rgba(16,185,129,0.25)',
+        href: `sms:?body=${smsBody}`,
+        mobileOnly: true,
+      },
+      {
+        id: 'email',
+        label: 'E-mail',
+        icon: 'email',
+        color: 'var(--text-muted)',
+        bg: 'var(--surface-2)',
+        border: 'var(--border-hover)',
+        href: `mailto:?subject=${sub}&body=${mailBody}`,
+        mobileOnly: false,
+      },
+      {
+        id: 'linkedin',
+        label: 'LinkedIn',
+        iconSvg: <IconLinkedIn />,
+        color: '#0A66C2',
+        bg: 'rgba(10,102,194,0.1)',
+        border: 'rgba(10,102,194,0.25)',
+        href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
+        mobileOnly: false,
+        newTab: true,
+      },
+      {
+        id: 'facebook',
+        label: 'Facebook',
+        iconSvg: <IconFacebook />,
+        color: '#1877F2',
+        bg: 'rgba(24,119,242,0.1)',
+        border: 'rgba(24,119,242,0.28)',
+        href: `https://www.facebook.com/sharer/sharer.php?u=${u}&quote=${fbQuote}`,
+        mobileOnly: false,
+        newTab: true,
+      },
+      {
+        id: 'twitter',
+        label: 'X',
+        iconSvg: <IconX />,
+        color: 'var(--text)',
+        bg: 'var(--surface-2)',
+        border: 'var(--border-hover)',
+        href: `https://twitter.com/intent/tweet?text=${twText}&url=${u}`,
+        mobileOnly: false,
+        newTab: true,
+      },
+    ]
+  }, [encodeEmailBody, encodedSubject, fullText, pageUrl, textFor])
+
+  const visibleChannels = channels.filter(
+    (c) => !c.mobileOnly || shareDevice.likelyMobileOrTablet,
   )
-
-  const handleInstagramShare = useCallback(
-    () => copyMessageAndOpen('https://www.instagram.com/'),
-    [copyMessageAndOpen],
-  )
-
-  const handleTikTokShare = useCallback(
-    () => copyMessageAndOpen('https://www.tiktok.com/'),
-    [copyMessageAndOpen],
-  )
-
-  const channels: Array<{
-    id: string
-    label: string
-    color: string
-    bg: string
-    border: string
-    mobileOnly?: boolean
-    href?: string
-    newTab?: boolean
-    onPress?: () => void
-    actionAriaLabel?: string
-    icon?: string
-    iconSvg?: ReactNode
-  }> = [
-    {
-      id: 'whatsapp',
-      label: 'WhatsApp',
-      iconSvg: <IconWhatsApp />,
-      color: '#25D366',
-      bg: 'rgba(37,211,102,0.1)',
-      border: 'rgba(37,211,102,0.25)',
-      href: `https://wa.me/?text=${encodedMsg}`,
-      mobileOnly: false,
-      newTab: true,
-    },
-    {
-      id: 'sms',
-      label: 'SMS',
-      icon: 'sms',
-      color: '#10B981',
-      bg: 'rgba(16,185,129,0.1)',
-      border: 'rgba(16,185,129,0.25)',
-      href: `sms:?body=${encodedMsg}`,
-      mobileOnly: true,
-    },
-    {
-      id: 'email',
-      label: 'E-mail',
-      icon: 'email',
-      color: 'var(--text-muted)',
-      bg: 'var(--surface-2)',
-      border: 'var(--border-hover)',
-      href: `mailto:?subject=${encodedSubject}&body=${encodedBody}`,
-      mobileOnly: false,
-    },
-    {
-      id: 'linkedin',
-      label: 'LinkedIn',
-      iconSvg: <IconLinkedIn />,
-      color: '#0A66C2',
-      bg: 'rgba(10,102,194,0.1)',
-      border: 'rgba(10,102,194,0.25)',
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`,
-      mobileOnly: false,
-      newTab: true,
-    },
-    {
-      id: 'facebook',
-      label: 'Facebook',
-      iconSvg: <IconFacebook />,
-      color: '#1877F2',
-      bg: 'rgba(24,119,242,0.1)',
-      border: 'rgba(24,119,242,0.28)',
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`,
-      mobileOnly: false,
-      newTab: true,
-    },
-    {
-      id: 'instagram',
-      label: 'Instagram',
-      iconSvg: <IconInstagram />,
-      color: '#E4405F',
-      bg: 'rgba(228,64,95,0.1)',
-      border: 'rgba(228,64,95,0.28)',
-      mobileOnly: false,
-      onPress: handleInstagramShare,
-      actionAriaLabel:
-        'Copier le message avec le lien, puis ouvrir Instagram pour le coller dans un message ou une story',
-    },
-    {
-      id: 'tiktok',
-      label: 'TikTok',
-      iconSvg: <IconTikTok />,
-      color: '#fe2c55',
-      bg: 'rgba(254,44,85,0.1)',
-      border: 'rgba(254,44,85,0.3)',
-      mobileOnly: false,
-      onPress: handleTikTokShare,
-      actionAriaLabel:
-        'Copier le message avec le lien, puis ouvrir TikTok pour le coller dans une publication ou un message',
-    },
-  ]
-
-  const visibleChannels = channels.filter((c) => !c.mobileOnly || isMobile)
   const showHeader = title != null || subtitle != null
 
   return (
@@ -321,12 +325,12 @@ export default function ShareInviteChannels({
             cursor: 'pointer',
             transition: 'all 200ms',
           }}
-          aria-label={copied ? 'Lien copié dans le presse-papiers' : 'Copier le lien pour inviter un confrère'}
+          aria-label={copied ? 'Lien copié dans le presse-papiers' : 'Copier uniquement l’URL'}
         >
           <span className="material-symbols-outlined" style={{ fontSize: '16px' }} aria-hidden="true">
             {copied ? 'check_circle' : 'content_copy'}
           </span>
-          <span className="share-invite-channels__label">{copied ? 'Lien copié !' : 'Copier le lien'}</span>
+          <span className="share-invite-channels__label">{copied ? 'Copié !' : 'Copier le lien'}</span>
         </button>
       </div>
 

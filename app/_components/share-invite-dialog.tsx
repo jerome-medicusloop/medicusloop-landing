@@ -2,7 +2,12 @@
 
 import { useEffect, useId, useRef } from 'react'
 import ShareInviteChannels from './share-invite-channels'
-import { SHARE_PUBLIC_EMAIL_SUBJECT, SHARE_PUBLIC_MESSAGE, SHARE_PUBLIC_PAGE_URL } from '@/lib/share-public-invite'
+import {
+  SHARE_PUBLIC_EMAIL_SUBJECT,
+  SHARE_PUBLIC_MESSAGE,
+  SHARE_PUBLIC_MESSAGES,
+  SHARE_PUBLIC_PAGE_URL,
+} from '@/lib/share-public-invite'
 
 type ShareInviteDialogProps = {
   open: boolean
@@ -63,7 +68,8 @@ export default function ShareInviteDialog({ open, onClose }: ShareInviteDialogPr
         </p>
         <p className="share-invite-dialog__sublead">
           Il n’y a pas d’espace de connexion : ce partage envoie le lien public du site. Après l’envoi du
-          formulaire Pionnier, vous recevrez un lien personnalisé pour le parrainage.
+          formulaire Pionnier, vous recevrez un lien personnalisé dans la confirmation pour participer au
+          programme de parrainage et obtenir des avantages.
         </p>
 
         <div className="share-invite-dialog__channels">
@@ -71,6 +77,7 @@ export default function ShareInviteDialog({ open, onClose }: ShareInviteDialogPr
             withTopRule={false}
             pageUrl={SHARE_PUBLIC_PAGE_URL}
             message={SHARE_PUBLIC_MESSAGE}
+            messagesByChannel={SHARE_PUBLIC_MESSAGES}
             emailSubject={SHARE_PUBLIC_EMAIL_SUBJECT}
           />
         </div>

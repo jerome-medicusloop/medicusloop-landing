@@ -3,8 +3,15 @@ import { PIONNIER_COUNT_DISPLAY_MIN, PIONNIER_PLACES_TOTAL } from '@/lib/pionnie
 
 export { PIONNIER_COUNT_DISPLAY_MIN, PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
 
-/** `next dev` uniquement : simule la réponse BDD. `null` = toujours requête réelle (Supabase). */
-const DEV_MOCK_PIONNIERS_COUNT: number | null = 50
+/**
+ * Simuler « liste Pionniers complète » : uniquement si `PIONNIER_MOCK_LISTE_PLEINE=true` est **défini**
+ * dans `.env` / `.env.local`. Variable absente, vide ou autre valeur → **pas de bypass**, comptage réel Supabase.
+ */
+function mockListePleineFromEnv(): boolean {
+  const raw = process.env.PIONNIER_MOCK_LISTE_PLEINE
+  if (raw == null || raw === '') return false
+  return raw.trim() === 'true'
+}
 
 /** Borne [0, 50] puis plancher d’affichage à {@link PIONNIER_COUNT_DISPLAY_MIN}. */
 function toDisplayPionnierCount(raw: number): number {
@@ -19,8 +26,8 @@ function toDisplayPionnierCount(raw: number): number {
  * 2) Sinon comptage `head: true` avec `SUPABASE_SERVICE_ROLE_KEY` si défini (contourne la RLS).
  */
 export async function getWaitlistPionniersCount(): Promise<number> {
-  if (process.env.NODE_ENV === 'development' && DEV_MOCK_PIONNIERS_COUNT != null) {
-    return toDisplayPionnierCount(DEV_MOCK_PIONNIERS_COUNT)
+  if (mockListePleineFromEnv()) {
+    return toDisplayPionnierCount(PIONNIER_PLACES_TOTAL)
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

@@ -1,7 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useFormStatus } from 'react-dom'
+import { PATH_CONDITIONS_GENERALES_UTILISATION } from '@/lib/legal-routes'
 import {
   submitWaitlistPionnier,
   type WaitlistPionnierFormState,
@@ -15,8 +17,7 @@ function isProfilPionnierUrl(v: string | null | undefined): v is ProfilPionnier 
   return v === 'remplacant' || v === 'etablissement' || v === 'les_deux'
 }
 
-/** Remplacez par l’URL définitive des CGU une fois publiées. */
-const FORM_CGU_HREF = '#conditions-generales-utilisation'
+const FORM_CGU_HREF = PATH_CONDITIONS_GENERALES_UTILISATION
 
 // ─── Submit button (reads form status) ──────────────────────────────────────
 
@@ -268,15 +269,17 @@ function ConsentPrivacyField({
         <label htmlFor={id} className="formulaire-consent-label" style={{ cursor: 'pointer', margin: 0 }}>
           <span className="formulaire-consent-text">
             J&apos;ai lu les{' '}
-            <a
+            <Link
               href={FORM_CGU_HREF}
+              prefetch={false}
               target="_blank"
               rel="noopener noreferrer"
               className="formulaire-consent-link"
               onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
             >
               conditions générales d&apos;utilisation
-            </a>
+            </Link>
             {' '}
             et j&apos;accepte le traitement de mes données personnelles aux fins de la prise en compte de mon
             inscription.

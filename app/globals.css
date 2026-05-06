@@ -2377,6 +2377,409 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   overflow: hidden;
 }
 
+/* ─── Mentions légales (page dédiée) ─── */
+.mentions-legales-main {
+  min-height: min(72vh, 100svh);
+  padding: clamp(16px, 3vw, 28px) var(--ml-content-inline) clamp(56px, 7vw, 88px);
+  box-sizing: border-box;
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -20%,
+    color-mix(in srgb, var(--accent-blue) 8%, transparent),
+    transparent 55%
+  );
+}
+
+.mentions-legales-inner {
+  margin: 0 auto;
+}
+
+.mentions-legales-back {
+  margin: 0 0 clamp(18px, 2.4vw, 26px);
+}
+
+.mentions-legales-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--nav-link);
+  background: color-mix(in srgb, var(--surface-2) 88%, var(--surface));
+  border: 1px solid var(--border-hover);
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.mentions-legales-back-link:hover {
+  color: var(--accent-blue);
+  border-color: color-mix(in srgb, var(--accent-blue) 35%, var(--border));
+  background: color-mix(in srgb, var(--accent-blue) 7%, var(--surface-2));
+}
+
+.mentions-legales-back-link:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 2px;
+}
+
+.mentions-legales-back-icon {
+  font-size: 18px;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.mentions-legales-doc {
+  max-width: min(var(--ml-content-max), 100%);
+  margin: 0 auto;
+}
+
+.mentions-legales-shell {
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border) 82%);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--surface) 92%, var(--surface-2) 8%) 0%,
+    var(--surface) 48%,
+    color-mix(in srgb, var(--surface-2) 35%, var(--surface)) 100%
+  );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--text) 4%, transparent),
+    0 24px 48px color-mix(in srgb, var(--text) 6%, transparent);
+  padding: clamp(22px, 3.2vw, 36px) clamp(18px, 2.8vw, 28px) clamp(26px, 3.5vw, 36px);
+  box-sizing: border-box;
+}
+
+.mentions-legales-hero {
+  margin-bottom: clamp(22px, 3vw, 30px);
+  padding-bottom: clamp(20px, 2.6vw, 26px);
+  border-bottom: 1px solid var(--border);
+}
+
+.mentions-legales-h1 {
+  font-size: clamp(1.75rem, 1vw + 1.4rem, 2.15rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text);
+  margin: 0 0 10px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.mentions-legales-h1-rule {
+  display: block;
+  width: min(4rem, 28vw);
+  height: 3px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: var(--accent-blue);
+  opacity: 0.95;
+}
+
+.mentions-legales-lead {
+  color: var(--text-muted);
+  font-size: clamp(0.9rem, 0.2vw + 0.84rem, 0.98rem);
+  line-height: 1.6;
+  margin: 0;
+  max-width: none;
+}
+
+.mentions-legales-lead a {
+  color: var(--accent-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mentions-legales-lead a:hover {
+  color: color-mix(in srgb, var(--accent-blue) 88%, var(--text) 12%);
+}
+
+.mentions-legales-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 18px);
+}
+
+.mentions-legales-block {
+  border-radius: 14px;
+  padding: clamp(16px, 2.2vw, 20px) clamp(16px, 2.4vw, 22px);
+  background: color-mix(in srgb, var(--surface-2) 55%, var(--surface) 45%);
+  border: 1px solid color-mix(in srgb, var(--border) 90%, var(--accent-blue) 10%);
+  border-left: 3px solid var(--accent-blue);
+  box-sizing: border-box;
+}
+
+.mentions-legales-h2 {
+  margin: 0 0 12px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.mentions-legales-block-body {
+  font-size: 0.9rem;
+  line-height: 1.68;
+  color: var(--text-muted);
+}
+
+.mentions-legales-block-body p {
+  margin: 0 0 12px;
+}
+
+.mentions-legales-block-body p:last-child {
+  margin-bottom: 0;
+}
+
+.mentions-legales-block-body strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Carte unique : identité Vercel + moyens de contact */
+.mentions-legales-vercel-card {
+  margin: 0 0 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border) 78%);
+  background: color-mix(in srgb, var(--accent-blue) 6%, var(--surface));
+  box-sizing: border-box;
+}
+
+.mentions-legales-vercel-card .mentions-legales-address {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.mentions-legales-vercel-card__contacts {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--accent-blue) 18%, var(--border) 82%);
+}
+
+.mentions-legales-address-name {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.mentions-legales-address-lines {
+  display: block;
+}
+
+.mentions-legales-address-site {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  width: fit-content;
+  font-weight: 700;
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.mentions-legales-address-site:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mentions-legales-external {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.mentions-legales-host-contact-intro {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
+}
+
+.mentions-legales-host-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mentions-legales-host-links li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 12%, var(--border));
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+.mentions-legales-host-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.mentions-legales-host-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mentions-legales-host-link:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.mentions-legales-host-link-url {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+  font-weight: 500;
+}
+
+.mentions-legales-callout {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 20%, var(--border) 80%);
+  background: color-mix(in srgb, var(--accent-blue) 5%, var(--surface-2));
+}
+
+.mentions-legales-callout__icon {
+  flex-shrink: 0;
+  font-size: 22px;
+  color: var(--accent-blue);
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  margin-top: 1px;
+}
+
+.mentions-legales-callout p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.62;
+  color: var(--text-muted);
+}
+
+.mentions-legales-callout strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.mentions-legales-callout abbr {
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
+.mentions-legales-inline-mailto {
+  color: var(--accent-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mentions-legales-inline-mailto:hover {
+  color: color-mix(in srgb, var(--accent-blue) 88%, var(--text) 12%);
+}
+
+.mentions-legales-inline-mailto:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Avant hydratation : pas de mailto, même style que le lien final sans soulignement factice */
+span.mentions-legales-inline-mailto.mentions-legales-inline-mailto--obfuscated {
+  cursor: help;
+  user-select: text;
+  text-decoration: none;
+}
+
+.mentions-legales-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  text-decoration: none;
+  padding: 6px 12px 6px 8px;
+  margin: 4px 0 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-blue) 28%, var(--border));
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.mentions-legales-mail:hover {
+  background: color-mix(in srgb, var(--accent-blue) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent-blue) 45%, var(--border));
+}
+
+.mentions-legales-mail:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 2px;
+}
+
+/* Avant hydratation : pas de mailto dans le HTML, anti-moissonnage basique ; texte encore utilisable à la main */
+span.mentions-legales-mail--obfuscated {
+  cursor: help;
+  user-select: text;
+}
+
+span.mentions-legales-mail--obfuscated:hover {
+  background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+  border-color: color-mix(in srgb, var(--accent-blue) 28%, var(--border));
+}
+
+.mentions-legales-mail-icon {
+  font-size: 18px;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.mentions-legales-maj {
+  margin: clamp(24px, 3vw, 32px) 0 0;
+  padding-top: clamp(18px, 2.2vw, 22px);
+  border-top: 1px dashed color-mix(in srgb, var(--text-muted) 35%, var(--border));
+  text-align: center;
+}
+
+.mentions-legales-maj time {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+  background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
+  border: 1px solid var(--border);
+}
+
 .site-footer {
   background: var(--bg);
   border-top: 1px solid var(--border);
@@ -2452,6 +2855,83 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 
 .site-footer__contact-line .material-symbols-outlined {
   font-size: 14px;
+}
+
+/* E-mail obfusqué : même logique que la page mentions légales, rendu discret comme le reste du footer */
+.site-footer__contact-mail.mentions-legales-mail {
+  font-weight: 500;
+  font-size: inherit;
+  color: var(--text-muted);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  gap: 8px;
+}
+
+.site-footer__contact-mail.mentions-legales-mail:hover {
+  color: var(--text);
+  background: none;
+  border: none;
+}
+
+.site-footer__contact-mail.mentions-legales-mail:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+span.site-footer__contact-mail.mentions-legales-mail--obfuscated {
+  cursor: help;
+}
+
+span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
+  color: var(--text);
+  background: none;
+}
+
+.site-footer__contact-mail .mentions-legales-mail-icon {
+  font-size: 14px;
+}
+
+.site-footer__social {
+  margin-top: clamp(20px, 2.8vw, 28px);
+}
+
+.site-footer__social-heading {
+  margin-bottom: 10px;
+}
+
+.site-footer__social-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.site-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: color 0.15s ease;
+}
+
+.site-footer__social-link:hover {
+  color: var(--text);
+}
+
+.site-footer__social-link:focus-visible {
+  outline: 2px solid var(--nav-cta-border);
+  outline-offset: 3px;
 }
 
 .site-footer__bar {
@@ -3907,8 +4387,8 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   position: relative;
   border-radius: 16px;
   padding: 28px;
-  opacity: 0.88;
-  filter: grayscale(0.92) saturate(0.38) contrast(0.9) brightness(0.96);
+  opacity: 0.56;
+  filter: grayscale(1) saturate(0.18) contrast(0.82) brightness(0.87);
   /* Plus d’aplats « surface » : carte un peu plus claire tout en restant distincte du --bg */
   background: color-mix(in srgb, var(--surface-2) 52%, var(--surface) 48%);
   border: 1px dashed color-mix(in srgb, var(--text-muted) 24%, var(--border) 76%);
@@ -3916,15 +4396,15 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-title {
-  color: color-mix(in srgb, var(--text-muted) 52%, var(--text-subtle) 48%);
+  color: color-mix(in srgb, var(--text-muted) 42%, var(--text-subtle) 58%);
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-text {
-  color: color-mix(in srgb, var(--text-muted) 58%, var(--text-subtle) 42%);
+  color: color-mix(in srgb, var(--text-muted) 48%, var(--text-subtle) 52%);
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-icon {
-  opacity: 0.58;
+  opacity: 0.36;
 }
 
 .pionniers-avantage-card--liste-pleine .pionniers-avantage-card-icon--pionnier-seal .material-symbols-outlined {
@@ -3933,7 +4413,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 
 @media (prefers-reduced-motion: reduce) {
   .pionniers-avantage-card--liste-pleine {
-    filter: grayscale(0.92) saturate(0.38) contrast(0.9) brightness(0.96);
+    filter: grayscale(1) saturate(0.18) contrast(0.82) brightness(0.87);
   }
 }
 
@@ -3946,7 +4426,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  margin: 0 0 clamp(20px, 2.8vw, 30px);
+  margin: 0 0 clamp(10px, 1.5vw, 18px);
   padding: clamp(18px, 2.4vw, 24px) clamp(16px, 2.2vw, 26px);
   border-radius: 16px;
   border: 1px solid color-mix(in srgb, var(--accent-blue) 22%, var(--border) 78%);
@@ -4000,6 +4480,11 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   color: var(--text);
   text-align: center;
   text-wrap: balance;
+}
+
+/* Contraste net vs corps en 500 (preflight / polices variables peuvent tuer le « bold » par défaut) */
+.pionniers-avantage-ferme-lead__text strong {
+  font-weight: 700;
 }
 
 /* Comparatif 3 colonnes : lisibilité alignée sur Comment ça marche / Profils MAR */
@@ -4717,6 +5202,11 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   gap: clamp(10px, 2vw, 16px);
 }
 
+/* Libellé entre inscription et rail de partage — même plage que le rail (mobile / tablette). */
+.pionnier-cta-strip__share-hint {
+  display: none;
+}
+
 /* Rail icônes partage : uniquement mobile, scroll horizontal sous le duo CTA */
 .pionnier-cta-share-rail {
   display: none;
@@ -4728,13 +5218,26 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
     display: none !important;
   }
 
+  .pionnier-cta-strip__share-hint {
+    display: block;
+    margin: clamp(14px, 2.6vw, 22px) auto 0;
+    padding: 0 clamp(12px, 3vw, 20px);
+    max-width: min(520px, 100%);
+    text-align: center;
+    font-size: clamp(0.8125rem, 0.2vw + 0.75rem, 0.875rem);
+    line-height: 1.45;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
   .pionnier-cta-share-rail {
     display: block;
     width: 100%;
     max-width: min(520px, 100%);
     margin-left: auto;
     margin-right: auto;
-    margin-top: clamp(12px, 2.2vw, 18px);
+    /* Espace sous le libellé « et/ou partagez sur : » */
+    margin-top: clamp(8px, 1.6vw, 14px);
     padding: 0 2px 4px;
     overflow-x: auto;
     overflow-y: hidden;

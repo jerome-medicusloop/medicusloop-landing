@@ -5,12 +5,12 @@ import FounderCounter from './_components/urgence-section'
 import FormulaireSection from './_components/formulaire-section'
 import PageAnimations from './_components/page-animations'
 import HeroCards from './_components/hero-cards'
-import MedicusLoopLogo from './_components/medicusloop-logo'
 import Navbar from './_components/site-navbar'
 import HeroTrustBlock from './_components/trust-strip'
 import ProfilsMarSection from './_components/profils-mar-section'
 import PionnierCtaStrip from './_components/pionnier-cta-strip'
 import SharePublicSection from './_components/share-public-section'
+import SiteFooter from './_components/site-footer'
 
 // ─── Grain SVG (id de filtre unique par instance — évite artefacts / « lignes » avec plusieurs SVG) ───
 
@@ -662,8 +662,8 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
               <span className="material-symbols-outlined">info</span>
             </span>
             <p className="pionniers-avantage-ferme-lead__text">
-              Les trois avantages ci-dessous étaient réservés aux 50 premiers inscrits — la liste Pionniers est complète
-              : ils ne sont plus proposés aux nouvelles inscriptions.
+              Les trois avantages ci-dessous étaient réservés aux 50 premiers inscrits —{' '}
+              <strong>la liste Pionniers est complète</strong> : ils ne sont plus proposés aux nouvelles inscriptions.
             </p>
           </div>
         ) : null}
@@ -871,66 +871,6 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
   )
 }
 
-// ─── Footer ──────────────────────────────────────────────────────────────────
-
-function Footer() {
-  const comingSoon = ['Kinésithérapeutes', 'Infirmiers', 'Pharmaciens']
-
-  return (
-    <footer className="site-footer" aria-label="Pied de page MedicusLoop">
-      <div className="site-footer__grid">
-        {/* Col 1 */}
-        <div>
-          <MedicusLoopLogo labeled className="footer-brand-logo" />
-          <p className="site-footer__tagline">
-            Un bloc,
-            <br />
-            un remplacement,
-            <br />
-            une expérience.
-          </p>
-        </div>
-
-        {/* Col 2 */}
-        <div>
-          <p className="site-footer__col-title">Bientôt disponible pour</p>
-          <ul className="site-footer__soon-list">
-            {comingSoon.map((item) => (
-              <li key={item} className="site-footer__soon-li">
-                <span className="site-footer__soon-label">{item}</span>
-                <span className="site-footer__soon-pill">Bientôt</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Col 3 */}
-        <div>
-          <p className="site-footer__col-title">Contact</p>
-          <div className="site-footer__contact-lines">
-            <span className="site-footer__contact-line">
-              <span className="material-symbols-outlined" aria-hidden="true">email</span>
-              hello@medicus-loop.com
-            </span>
-            <span className="site-footer__contact-line">
-              <span className="material-symbols-outlined" aria-hidden="true">phone</span>
-              @medicusloop
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="site-footer__bar">
-        <span className="site-footer__copy">{new Date().getFullYear()} MedicusLoop</span>
-        <div className="site-footer__legal">
-          <a href="#">Mentions legales</a>
-          <a href="#conditions-generales-utilisation">Conditions générales d&apos;utilisation</a>
-        </div>
-      </div>
-    </footer>
-  )
-}
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
@@ -963,7 +903,7 @@ export default async function HomePage() {
           <SharePublicSection embedded />
         </div>
       </div>
-      <Footer />
+      <SiteFooter />
       </main>
     </>
   )

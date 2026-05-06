@@ -1,5 +1,10 @@
 import ShareInviteChannels from './share-invite-channels'
-import { SHARE_PUBLIC_EMAIL_SUBJECT, SHARE_PUBLIC_MESSAGE, SHARE_PUBLIC_PAGE_URL } from '@/lib/share-public-invite'
+import {
+  SHARE_PUBLIC_EMAIL_SUBJECT,
+  SHARE_PUBLIC_MESSAGE,
+  SHARE_PUBLIC_MESSAGES,
+  SHARE_PUBLIC_PAGE_URL,
+} from '@/lib/share-public-invite'
 
 type SharePublicSectionProps = {
   /**
@@ -22,12 +27,13 @@ export default function SharePublicSection({ embedded = false }: SharePublicSect
         titleId="share-public-title"
         pageUrl={SHARE_PUBLIC_PAGE_URL}
         message={SHARE_PUBLIC_MESSAGE}
+        messagesByChannel={SHARE_PUBLIC_MESSAGES}
         emailSubject={SHARE_PUBLIC_EMAIL_SUBJECT}
         wideCopy={embedded}
         title="Envie de faire découvrir MedicusLoop autour de vous ?"
         subtitle={
           <>
-            <strong>Cliquez</strong> pour inviter vos confrères avec le <strong>lien public</strong>, sans inscription.
+            Cliquez sur l’icône du canal dans lequel vous souhaitez inviter vos confrères.
             <br />
             Après{' '}
             <a
@@ -37,7 +43,9 @@ export default function SharePublicSection({ embedded = false }: SharePublicSect
             >
               votre inscription
             </a>
-            , le <strong>lien perso</strong> sur la confirmation sert au parrainage.
+            , vous aurez un <strong>lien d’invitation nominatif</strong>. Si vous vous inscrivez, ce lien devient
+            nominatif et vous permettra de parrainer vos confrères afin de bénéficier de nombreux avantages&nbsp;: boost
+            d&apos;annonces, mise en avant, première commission de remplacement offerte.
           </>
         }
       />

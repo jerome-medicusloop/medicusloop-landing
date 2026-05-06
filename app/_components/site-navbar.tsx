@@ -7,16 +7,16 @@ import MedicusLoopLogo from './medicusloop-logo'
 import ThemeToggle from './theme-toggle'
 
 const NAV_SECTION_LINKS = [
-  { label: 'MAR ou établissement', href: '#profils' },
-  { label: 'Comment ça marche', href: '#comment-ca-marche' },
-  { label: 'Comparatif', href: '#comparatif' },
-  { label: 'LoopExpérience', href: '#loopexperience' },
-  { label: 'Tarifs', href: '#tarifs' },
-  { label: 'Pionniers', href: '#pionniers' },
+  { label: 'MAR ou établissement', href: '/#profils' },
+  { label: 'Comment ça marche', href: '/#comment-ca-marche' },
+  { label: 'Comparatif', href: '/#comparatif' },
+  { label: 'LoopExpérience', href: '/#loopexperience' },
+  { label: 'Tarifs', href: '/#tarifs' },
+  { label: 'Pionniers', href: '/#pionniers' },
 ] as const
 
-/** Liens du tiroir mobile : accueil + mêmes ancres que la nav desktop. */
-const NAV_HOME = { label: 'Accueil', href: '#intro' } as const
+/** Liens du tiroir mobile : accueil + mêmes ancres que la nav desktop (`/#` pour les sous-pages). */
+const NAV_HOME = { label: 'Accueil', href: '/#intro' } as const
 const NAV_DRAWER_LINKS = [NAV_HOME, ...NAV_SECTION_LINKS]
 
 type NavbarProps = {
@@ -63,7 +63,7 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
         <div className="nav-drawer-panel__head">
           <a
             id={drawerTitleId}
-            href="#intro"
+            href="/#intro"
             className="nav-drawer-panel__brand"
             onClick={closeDrawer}
             aria-label="MedicusLoop — menu de navigation"
@@ -145,7 +145,7 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
               </span>
             </button>
             <a
-              href="#intro"
+              href="/#intro"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -153,7 +153,7 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
                 textDecoration: 'none',
                 color: 'inherit',
               }}
-              aria-label="MedicusLoop — retour en haut de page"
+              aria-label="MedicusLoop — retour à l’accueil"
             >
               <MedicusLoopLogo />
             </a>
@@ -192,7 +192,7 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
             <div className="nav-header-theme">
               <ThemeToggle />
             </div>
-            <a href="#inscription" className="nav-cta" aria-label={cta.ariaNav}>
+            <a href="/#inscription" className="nav-cta" aria-label={cta.ariaNav}>
               <span className="material-symbols-outlined nav-cta__icon" aria-hidden="true">
                 {cta.icon}
               </span>

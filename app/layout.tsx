@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import { Fraunces, DM_Sans } from 'next/font/google'
 import Script from 'next/script'
+import { GoogleTagManagerHead, GoogleTagManagerNoscript } from './_components/google-tag-manager'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -20,22 +22,37 @@ const dmSans = DM_Sans({
 
 const SITE_URL = 'https://medicus-loop.com'
 
+/** Titre / accroche partagés (OG, Twitter, onglet) — ton LinkedIn & RS : explicite, sans jargon « rempla ». */
+const OG_SITE_TITLE = 'MedicusLoop · Remplacement MAR — matching, contrat et LoopExpérience'
+const OG_SITE_DESCRIPTION =
+  'MedicusLoop met en relation MAR et structures de santé : forfait journalier explicite, contrat avec signature électronique, vérification CNOM. Moins de friction administrative — plus de temps pour le soin.'
+
+/** Origine Supabase pour preconnect (sans lever si l’URL d’env est invalide). */
+function supabaseOriginForHints(): string | null {
+  const raw = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!raw?.trim()) return null
+  try {
+    return new URL(raw.trim()).origin
+  } catch {
+    return null
+  }
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'MedicusLoop · Rempla MAR en clinique privée — Contrat & LoopExpérience',
+    default: OG_SITE_TITLE,
     template: '%s · MedicusLoop',
   },
-  description:
-    'Matchs MAR-clinique avec forfait journalier clair, contrat avec signature électronique et vérification CNOM. LoopExpérience sur mesure incluse. Entièrement gratuit pour les MAR en rempla.',
+  description: OG_SITE_DESCRIPTION,
   keywords: [
-    'rempla MAR',
-    'rempla anesthésiste',
-    'médecin anesthésiste en rempla',
-    'clinique privée anesthésiste',
+    'remplacement MAR',
+    'médecin anesthésiste remplaçant',
+    'recrutement MAR',
+    'structure de santé',
     'contrat de rétrocession MAR',
-    'plateforme MAR en rempla',
-    'rempla anesthésie clinique privée',
+    'plateforme MAR',
+    'matching MAR',
     'MedicusLoop',
   ],
   authors: [{ name: 'MedicusLoop', url: SITE_URL }],
@@ -56,9 +73,8 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   openGraph: {
-    title: 'MedicusLoop · Rempla MAR en clinique privée — Contrat & LoopExpérience',
-    description:
-      'Matchs MAR-clinique avec forfait journalier clair, contrat avec signature électronique et vérification CNOM. LoopExpérience sur mesure incluse. Entièrement gratuit pour les MAR en rempla.',
+    title: OG_SITE_TITLE,
+    description: OG_SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: 'MedicusLoop',
     locale: 'fr_FR',
@@ -66,19 +82,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MedicusLoop · Rempla MAR en clinique privée',
-    description:
-      'Matchs MAR-clinique avec forfait journalier clair, contrat avec signature électronique et LoopExpérience sur mesure. Gratuit pour les MAR en rempla.',
+    title: OG_SITE_TITLE,
+    description: OG_SITE_DESCRIPTION,
     site: '@medicusloop',
     creator: '@medicusloop',
-  },
-  icons: {
-    icon: [
-      {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-style='italic'>M</text></svg>",
-        type: 'image/svg+xml',
-      },
-    ],
   },
 }
 
@@ -95,13 +102,13 @@ const jsonLd = {
         url: `${SITE_URL}/logo/MedicusLoop_MAR_transparent_FINAL.png`,
       },
       description:
-        'Plateforme de mise en relation entre médecins anesthésistes-réanimateurs (MAR) en rempla et cliniques privées en France. Contrat de rempla automatique, vérification CNOM, LoopExpérience sur mesure.',
+        'Plateforme de mise en relation entre médecins anesthésistes-réanimateurs (MAR) et structures de santé en France. Contrat de remplacement assisté, vérification CNOM, LoopExpérience sur mesure.',
       email: 'hello@medicus-loop.com',
       foundingDate: '2025',
       areaServed: 'FR',
       knowsAbout: [
-        'Rempla médecin anesthésiste',
-        'Rempla anesthésie clinique privée',
+        'Remplacement médecin anesthésiste',
+        'Remplacement MAR en structure de santé',
         'Contrat de rétrocession MAR',
         'Médecin anesthésiste-réanimateur',
       ],
@@ -122,6 +129,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const supabaseOrigin = supabaseOriginForHints()
+
   return (
     <html
       lang="fr"
@@ -130,6 +139,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <GoogleTagManagerHead />
         <Script
           id="theme-boot"
           strategy="beforeInteractive"
@@ -146,9 +156,26 @@ document.documentElement.setAttribute('data-theme',d);
 })();`,
           }}
         />
+        {/* Axeptio — chargement SDK (preconnect ici, scripts en tête de <body>) */}
+        <link rel="preconnect" href="https://static.axept.io" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://static.axept.io" />
         {/* Preconnect critique */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {supabaseOrigin ? (
+          <>
+            <link rel="dns-prefetch" href={supabaseOrigin} />
+            <link rel="preconnect" href={supabaseOrigin} crossOrigin="anonymous" />
+          </>
+        ) : null}
+        {/* GA / mesure — souvent invoqués via GTM après consentement */}
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        {/* Partage (liens du bloc public) — résolution DNS en avance, sans preconnect agressif */}
+        <link rel="dns-prefetch" href="https://wa.me" />
+        <link rel="dns-prefetch" href="https://www.linkedin.com" />
+        <link rel="dns-prefetch" href="https://www.facebook.com" />
+        <link rel="dns-prefetch" href="https://twitter.com" />
+        <link rel="dns-prefetch" href="https://www.instagram.com" />
         {/* Material Symbols — chargement non-bloquant */}
         <link
           rel="stylesheet"
@@ -156,6 +183,23 @@ document.documentElement.setAttribute('data-theme',d);
         />
       </head>
       <body>
+        <GoogleTagManagerNoscript />
+        {/*
+          Axeptio : config puis SDK en deux scripts beforeInteractive (évite l’IIFE insertBefore
+          sur le 1er <script>, fragile avec Next). À charger avant le reste — voir support Axeptio.
+        */}
+        <Script
+          id="axeptio-settings"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.axeptioSettings={clientId:"69fa81c62584b79a6f940428",cookiesVersion:"029bbdd5-b329-4b84-9c94-645dbda2fb53"};`,
+          }}
+        />
+        <Script
+          id="axeptio-sdk"
+          src="https://static.axept.io/sdk.js"
+          strategy="beforeInteractive"
+        />
         {children}
         <Script
           id="schema-org"
@@ -163,6 +207,7 @@ document.documentElement.setAttribute('data-theme',d);
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           strategy="afterInteractive"
         />
+        <Analytics />
       </body>
     </html>
   )

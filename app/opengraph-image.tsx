@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'nodejs'
-export const alt = 'MedicusLoop — Rempla MAR en clinique privée'
+export const alt = 'MedicusLoop — Remplacement MAR, contrat et LoopExpérience'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -38,7 +38,7 @@ export default async function OpenGraphImage() {
             fontFamily: 'ui-sans-serif, system-ui, sans-serif',
           }}
         >
-          Rempla MAR · contrat & LoopExpérience
+          Remplacement MAR · contrat & LoopExpérience
         </p>
       </div>
     ),
