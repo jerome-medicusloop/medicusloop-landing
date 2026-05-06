@@ -5194,6 +5194,11 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
   text-align: center;
 }
 
+/* Bandeau sans partage : un peu moins d’air bas (pas de rail mobile). */
+.pionnier-cta-strip--inscription-only {
+  padding-bottom: clamp(20px, 3.2vw, 32px);
+}
+
 .pionnier-cta-strip__actions {
   display: flex;
   flex-wrap: wrap;

@@ -228,7 +228,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
           </button>
         </div>
 
-        <PionnierCtaStrip listePleinePionniers={listePleinePionniers} />
+        <PionnierCtaStrip listePleinePionniers={listePleinePionniers} withShareInvite={false} />
       </div>
     </section>
   )

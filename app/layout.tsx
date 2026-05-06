@@ -4,7 +4,7 @@ import { Fraunces, DM_Sans } from 'next/font/google'
 import Script from 'next/script'
 import {
   OG_IMAGE_ALT,
-  OG_IMAGE_PATH,
+  OG_IMAGE_URL,
   OG_SITE_DESCRIPTION,
   OG_SITE_TITLE,
   SITE_URL,
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     siteName: 'MedicusLoop',
     locale: 'fr_FR',
     type: 'website',
-    images: [{ url: OG_IMAGE_PATH, width: 1200, height: 630, alt: OG_IMAGE_ALT }],
+    images: [{ url: OG_IMAGE_URL, width: 1200, height: 630, alt: OG_IMAGE_ALT, type: 'image/jpeg' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     description: OG_SITE_DESCRIPTION,
     site: '@medicusloop',
     creator: '@medicusloop',
-    images: [OG_IMAGE_PATH],
+    images: [OG_IMAGE_URL],
   },
 }
 

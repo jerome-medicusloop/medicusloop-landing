@@ -8,32 +8,23 @@ export const OG_SITE_TITLE = 'MedicusLoop · Remplacement MAR — matching, cont
 export const OG_SITE_DESCRIPTION =
   'MedicusLoop met en relation MAR et établissements de santé : matching clair, forfait journalier explicite, contrat avec signature électronique, vérification CNOM. Moins de friction administrative, plus de temps pour le soin.'
 
-export const OG_IMAGE_PATH = '/og-image.png' as const
+/** Fichier produit par `npm run compress:public` (JPEG 1200×630, léger pour RS). */
+export const OG_IMAGE_PATH = '/og-image.jpg' as const
+
+/** URL absolue — LinkedIn / scrapers après redirect www → apex exigent souvent une URL complète. */
+export const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}` as const
 
 export const OG_IMAGE_ALT = 'MedicusLoop — Remplacement MAR, contrat et LoopExpérience'
 
-/** Métadonnées complètes pour la page d’accueil (`/`) : renforce og:* sur l’URL canonique. */
+/**
+ * Métadonnées spécifiques à la page d’accueil.
+ * `openGraph` / `twitter` / images OG sont définis une seule fois dans `app/layout.tsx` pour éviter
+ * qu’un merge partiel n’écrase `og:image` (ex. LinkedIn « No image found »).
+ */
 export function homeMetadata(): Metadata {
   return {
     title: OG_SITE_TITLE,
     description: OG_SITE_DESCRIPTION,
     alternates: { canonical: SITE_URL },
-    openGraph: {
-      title: OG_SITE_TITLE,
-      description: OG_SITE_DESCRIPTION,
-      url: SITE_URL,
-      siteName: 'MedicusLoop',
-      locale: 'fr_FR',
-      type: 'website',
-      images: [{ url: OG_IMAGE_PATH, width: 1200, height: 630, alt: OG_IMAGE_ALT }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: OG_SITE_TITLE,
-      description: OG_SITE_DESCRIPTION,
-      site: '@medicusloop',
-      creator: '@medicusloop',
-      images: [OG_IMAGE_PATH],
-    },
   }
 }

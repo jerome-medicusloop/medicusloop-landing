@@ -306,7 +306,7 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
         </div>
       </div>
 
-      <PionnierCtaStrip listePleinePionniers={listePleinePionniers} />
+      <PionnierCtaStrip listePleinePionniers={listePleinePionniers} withShareInvite={false} />
     </div>
   )
 }
@@ -601,7 +601,7 @@ function LoopExperienceSection({ listePleinePionniers }: { listePleinePionniers:
           </div>
         </div>
       </div>
-      <PionnierCtaStrip listePleinePionniers={listePleinePionniers} />
+      <PionnierCtaStrip listePleinePionniers={listePleinePionniers} withShareInvite={false} />
     </section>
   )
 }
