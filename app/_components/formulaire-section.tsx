@@ -73,13 +73,7 @@ function SubmitButton({ label, loadingLabel, icon }: { label: string; loadingLab
 
 // ─── Success state ───────────────────────────────────────────────────────────
 
-function successProfilBadgeLabel(profil: ProfilPionnier): string {
-  if (profil === 'remplacant') return 'Pionnier · Membre MAR'
-  if (profil === 'etablissement') return 'Pionnier · Partenaire établissement'
-  return 'Pionnier · Les deux'
-}
-
-function SuccessState({ profil, shareSource }: { profil: ProfilPionnier; shareSource?: string }) {
+function SuccessState({ shareSource }: { shareSource?: string }) {
   return (
     <div
       className="scale-in"
@@ -106,7 +100,7 @@ function SuccessState({ profil, shareSource }: { profil: ProfilPionnier; shareSo
         />
       </svg>
 
-      <div>
+      <div style={{ width: 'min(62ch, 100%)' }}>
         <h3 className="font-fraunces ml-title-block" style={{ margin: '0 0 12px' }}>
           Bienvenue dans la Loop
         </h3>
@@ -115,37 +109,36 @@ function SuccessState({ profil, shareSource }: { profil: ProfilPionnier; shareSo
             color: 'var(--text-muted)',
             fontSize: '0.9rem',
             lineHeight: 1.7,
-            maxWidth: '400px',
-            margin: '0 auto 20px',
+            margin: '0 0 20px',
           }}
         >
           Votre inscription Pionnier est enregistrée. Les informations complémentaires (parcours MAR, structure,
-          besoins de rempla, etc.) vous seront demandées à votre <strong>première connexion</strong> sur la
-          plateforme MedicusLoop — pour garder cette étape aussi simple que possible.
+          besoins de rempla, etc.) vous seront demandées à l’ouverture de la MedicusLoop MAR — pour garder cette
+          étape aussi simple que possible.
         </p>
 
         <span
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '6px',
+            gap: '8px',
             border: '1px solid var(--accent-gold)',
             background: 'var(--accent-gold-subtle)',
             color: 'var(--accent-gold)',
             borderRadius: '9999px',
-            padding: '6px 16px',
-            fontSize: '0.8rem',
+            padding: '8px 18px',
+            fontSize: '0.9rem',
             fontWeight: 700,
           }}
         >
           <span
             className="material-symbols-outlined"
-            style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}
+            style={{ fontSize: '17px', fontVariationSettings: "'FILL' 1" }}
             aria-hidden="true"
           >
             verified
           </span>
-          {successProfilBadgeLabel(profil)}
+          Pionnier
         </span>
       </div>
 
@@ -344,7 +337,7 @@ function FormulairePionnier() {
 
   if (state.status === 'success') {
     return (
-      <SuccessState profil={state.successProfil ?? 'remplacant'} shareSource={state.shareSource} />
+      <SuccessState shareSource={state.shareSource} />
     )
   }
 
@@ -645,8 +638,7 @@ export default function FormulaireSection({
             Une seule inscription : <strong>identité</strong>, <strong>e-mail</strong>, <strong>région</strong>,
             éventuellement <strong>ville</strong> ou <strong>ancienneté</strong> (tranche d’expérience), et
             votre <strong>profil</strong>. Le reste — détails d’exercice,
-            besoins de rempla, etc. — sera complété lors de votre{' '}
-            <strong>première connexion</strong> sur la plateforme MedicusLoop.
+            besoins de rempla, etc. — sera complété à l’ouverture de la MedicusLoop MAR.
           </p>
         </header>
 

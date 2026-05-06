@@ -337,7 +337,7 @@ export default function ShareInviteChannels({
       {footnote != null ? (
         <p
           style={{
-            fontSize: '0.72rem',
+            fontSize: '0.82rem',
             color: 'var(--text-subtle)',
             margin: 0,
             textAlign: 'center',

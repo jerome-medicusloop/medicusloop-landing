@@ -27,6 +27,10 @@ const dmSans = DM_Sans({
   preload: true,
 })
 
+/** Même URL pour preload + stylesheet ; `display=block` limite l’affichage des ligatures avant la police. */
+const MATERIAL_SYMBOLS_STYLESHEET =
+  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block'
+
 /** Origine Supabase pour preconnect (sans lever si l’URL d’env est invalide). */
 function supabaseOriginForHints(): string | null {
   const raw = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -158,12 +162,14 @@ document.documentElement.setAttribute('data-theme',d);
 })();`,
           }}
         />
+        {/* Icônes : preconnect + preload + feuille tôt pour éviter le flash des noms de ligature */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href={MATERIAL_SYMBOLS_STYLESHEET} as="style" />
+        <link rel="stylesheet" href={MATERIAL_SYMBOLS_STYLESHEET} />
         {/* Axeptio — chargement SDK (preconnect ici, scripts en tête de <body>) */}
         <link rel="preconnect" href="https://static.axept.io" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://static.axept.io" />
-        {/* Preconnect critique */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {supabaseOrigin ? (
           <>
             <link rel="dns-prefetch" href={supabaseOrigin} />
@@ -178,11 +184,6 @@ document.documentElement.setAttribute('data-theme',d);
         <link rel="dns-prefetch" href="https://www.facebook.com" />
         <link rel="dns-prefetch" href="https://twitter.com" />
         <link rel="dns-prefetch" href="https://www.instagram.com" />
-        {/* Material Symbols — chargement non-bloquant */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-        />
       </head>
       <body>
         <GoogleTagManagerNoscript />
