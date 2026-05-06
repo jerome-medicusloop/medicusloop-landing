@@ -637,8 +637,9 @@ export default function FormulaireSection({
           <p className="ml-section-lead">
             Une seule inscription : <strong>identité</strong>, <strong>e-mail</strong>, <strong>région</strong>,
             éventuellement <strong>ville</strong> ou <strong>ancienneté</strong> (tranche d’expérience), et
-            votre <strong>profil</strong>. Le reste — détails d’exercice,
-            besoins de rempla, etc. — sera complété à l’ouverture de la MedicusLoop MAR.
+            votre <strong>profil</strong>.
+            <br />
+            Le reste — détails d’exercice, besoins de rempla, etc. — sera à compléter à l’ouverture de la MedicusLoop MAR.
           </p>
         </header>
 
