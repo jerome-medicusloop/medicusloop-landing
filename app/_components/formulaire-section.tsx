@@ -113,8 +113,7 @@ function SuccessState({ shareSource }: { shareSource?: string }) {
           }}
         >
           Votre inscription Pionnier est enregistrée. Les informations complémentaires (parcours MAR, structure,
-          besoins de rempla, etc.) vous seront demandées à l’ouverture de la MedicusLoop MAR — pour garder cette
-          étape aussi simple que possible.
+          besoins de rempla, etc.) vous seront demandées à l’ouverture de la plateforme MedicusLoop MAR.
         </p>
 
         <span
@@ -639,7 +638,7 @@ export default function FormulaireSection({
             éventuellement <strong>ville</strong> ou <strong>ancienneté</strong> (tranche d’expérience), et
             votre <strong>profil</strong>.
             <br />
-            Le reste — détails d’exercice, besoins de rempla, etc. — sera à compléter à l’ouverture de la MedicusLoop MAR.
+            Le reste — détails d’exercice, besoins de rempla, etc. — sera à compléter à l’ouverture de la plateforme MedicusLoop MAR.
           </p>
         </header>
 

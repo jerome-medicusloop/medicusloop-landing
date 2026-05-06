@@ -47,12 +47,12 @@ async function compressLogoPng(absPath) {
   )
 }
 
-/** OG : cible 1200×630, JPEG pour poids faible (LinkedIn / RS acceptent très bien le JPEG). */
+/** OG : 2400×1260 (2× le format classique) + JPEG qualité / chroma pour texte lisible après scrapers. */
 async function compressOg(absPathPng, outJpeg) {
   const before = (await stat(absPathPng)).size
   const buf = await sharp(absPathPng)
-    .resize(1200, 630, { fit: 'cover', position: 'center' })
-    .jpeg({ quality: 88, mozjpeg: true })
+    .resize(2400, 1260, { fit: 'cover', position: 'center' })
+    .jpeg({ quality: 92, mozjpeg: true, chromaSubsampling: '4:4:4' })
     .toBuffer()
   await writeFile(outJpeg, buf)
   await unlink(absPathPng)
@@ -71,6 +71,7 @@ async function main() {
       continue
     }
     if (ext === '.jpg' || ext === '.jpeg') {
+      if (rel === 'og-image.jpg') continue
       await compressJpeg(abs)
       continue
     }
