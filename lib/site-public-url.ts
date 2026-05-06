@@ -1,11 +1,20 @@
 import { SHARE_PUBLIC_PAGE_URL } from '@/lib/share-public-invite'
 
-/** Origine publique du site (liens absolus e-mails, désabonnement). */
+/** URL absolue d’un fichier sous `/public` (images dans les e-mails, etc.). */
+export function buildSitePublicAssetUrl(path: string): string {
+  const base = getSitePublicOrigin()
+  const p = path.startsWith('/') ? path : `/${path}`
+  return `${base}${p}`
+}
+
+/**
+ * Origine pour liens absolus dans les e-mails (désabonnement, images).
+ * Ne pas utiliser l’URL Vercel de preview : les inscrits doivent arriver sur le domaine public.
+ * Définir `NEXT_PUBLIC_SITE_URL` pour forcer (ex. http://localhost:3000 en local).
+ */
 export function getSitePublicOrigin(): string {
   const env = process.env.NEXT_PUBLIC_SITE_URL?.trim()
   if (env) return env.replace(/\/$/, '')
-  const vercel = process.env.NEXT_PUBLIC_VERCEL_URL?.trim()
-  if (vercel) return `https://${vercel.replace(/\/$/, '')}`
   return SHARE_PUBLIC_PAGE_URL.replace(/\/$/, '')
 }
 

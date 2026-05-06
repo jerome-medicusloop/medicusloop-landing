@@ -3,6 +3,7 @@
 import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { sendPionnierWelcomeEmail } from '@/lib/send-pionnier-welcome-email'
+import { parseReferralSourceParam } from '@/lib/referral-source-param'
 import { emailSourceHash } from '@/lib/share-email-source'
 import { REGIONS_FRANCE } from '@/lib/regions-france'
 import {
@@ -97,7 +98,7 @@ export type WaitlistPionnierFormState = {
   values?: WaitlistPionnierFormValues
   /** Profil enregistré (affichage succès). */
   successProfil?: 'remplacant' | 'etablissement' | 'les_deux'
-  /** MD5 hex de l’e-mail (même valeur que colonne `source`) pour liens `?source=` après inscription. */
+  /** MD5 hex de l’e-mail inscrit pour liens `?source=` (UI / e-mail) ; persisté en DB dans `subscriber_source_hash`. */
   shareSource?: string
   draftKey?: number
 }
@@ -145,6 +146,9 @@ export async function submitWaitlistPionnier(
   }
 
   const emailKey = parsed.data.email
+  const referralRaw = formData.get('referral_source')
+  const referredBy =
+    typeof referralRaw === 'string' ? parseReferralSourceParam(referralRaw) : null
   const emailHost = getEmailDomain(emailKey)
   if (emailHost && isDisposableEmailDomain(emailHost)) {
     return {
@@ -220,7 +224,8 @@ export async function submitWaitlistPionnier(
           annees_experience: row.annees_experience ?? null,
           profil: row.profil,
           validated: false,
-          source: shareSource,
+          source: referredBy,
+          subscriber_source_hash: shareSource,
           email_communication_status: 'subscribed',
           unsubscribed_at: null,
           unsubscribe_reason: null,
@@ -259,7 +264,8 @@ export async function submitWaitlistPionnier(
       region: row.region ?? null,
       annees_experience: row.annees_experience ?? null,
       validated: false,
-      source: shareSource,
+      source: referredBy,
+      subscriber_source_hash: shareSource,
       unsubscribe_token: unsubscribeToken,
       email_communication_status: 'subscribed',
       register_date: nowIso,

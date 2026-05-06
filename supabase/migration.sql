@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS public.waitlist_pionniers (
   prenom             TEXT NOT NULL,
   nom                TEXT NOT NULL,
   email              TEXT NOT NULL UNIQUE,
-  -- Parrainage : identifiant public = MD5 hex (32 car.) de trim(lower(email)), aligné avec `emailSourceHash` (serveur).
-  source             TEXT,
+  -- `source` : MD5 hex du parrain (?source=). `subscriber_source_hash` : MD5 de l’e-mail inscrit (partage / comptage).
+  source                  TEXT,
+  subscriber_source_hash  TEXT,
   ville              TEXT,
   region             TEXT,
   annees_experience  TEXT,
@@ -43,15 +44,26 @@ ALTER TABLE public.waitlist_pionniers DROP CONSTRAINT IF EXISTS waitlist_pionnie
 ALTER TABLE public.waitlist_pionniers ADD CONSTRAINT waitlist_pionniers_profil_check
   CHECK (profil IN ('remplacant', 'etablissement', 'les_deux'));
 
--- Bases créées avant `source` dans le CREATE : ajout + backfill (même règle que l’app : md5(trim(lower(email)))).
+-- Bases créées avant `source` dans le CREATE.
 ALTER TABLE public.waitlist_pionniers ADD COLUMN IF NOT EXISTS source TEXT;
 
-UPDATE public.waitlist_pionniers
-SET source = md5(trim(lower(email)))
-WHERE source IS NULL OR btrim(source) = '';
-
 COMMENT ON COLUMN public.waitlist_pionniers.source IS
-  'Parrainage : MD5 hex (32) de l’e-mail inscrit (trim + lower). Lien perso ?source= après inscription ; pas le hash du parrain dans l’URL.';
+  'Parrainage : MD5 hex (32) du parrain, transmis uniquement si l’inscrit arrive avec ?source=<hash> (même format que le hash de l’e-mail du parrain). NULL si arrivée directe sans paramètre.';
+
+ALTER TABLE public.waitlist_pionniers ADD COLUMN IF NOT EXISTS subscriber_source_hash TEXT;
+
+UPDATE public.waitlist_pionniers
+SET subscriber_source_hash = md5(trim(lower(email)))
+WHERE subscriber_source_hash IS NULL OR btrim(subscriber_source_hash) = '';
+
+COMMENT ON COLUMN public.waitlist_pionniers.subscriber_source_hash IS
+  'MD5 hex (32) de trim(lower(email)) de l’inscrit — identifiant public pour ?source= et statistiques de parrainage (aligné avec emailSourceHash côté app).';
+
+ALTER TABLE public.waitlist_pionniers DROP CONSTRAINT IF EXISTS waitlist_pionniers_subscriber_source_hash_check;
+ALTER TABLE public.waitlist_pionniers ADD CONSTRAINT waitlist_pionniers_subscriber_source_hash_check
+  CHECK (subscriber_source_hash ~ '^[a-f0-9]{32}$');
+
+ALTER TABLE public.waitlist_pionniers ALTER COLUMN subscriber_source_hash SET NOT NULL;
 
 -- E-mails liste d’attente : token opaque (UUID) pour page /desabonnement (pas d’e-mail dans l’URL).
 ALTER TABLE public.waitlist_pionniers ADD COLUMN IF NOT EXISTS unsubscribe_token UUID;

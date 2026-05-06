@@ -11,7 +11,7 @@ import DesabonnementForm from './desabonnement-form'
 export const metadata: Metadata = {
   title: 'Désabonnement e-mails',
   description:
-    'Confirmer l’arrêt des e-mails d’information MedicusLoop (liste d’attente) — lien personnel sécurisé.',
+    'Confirmer l’arrêt des e-mails et le retrait de la liste d’attente Pionniers MedicusLoop — lien personnel sécurisé.',
   robots: {
     index: false,
     follow: true,
@@ -49,8 +49,9 @@ export default async function DesabonnementPage({
                 </h1>
                 <span className="mentions-legales-h1-rule" aria-hidden="true" />
                 <p className="mentions-legales-lead">
-                  Vous ne recevrez plus d’e-mails d’information de MedicusLoop sur cette adresse. Votre inscription sur
-                  la liste d’attente reste en place si vous le souhaitez ; seuls les envois e-mail sont stoppés.
+                  Vous ne recevrez plus d’e-mails d’information de MedicusLoop sur cette adresse. Vous n’êtes plus
+                  inscrit(e) sur la liste d’attente Pionniers : votre place n’est plus réservée. Vous pourrez vous
+                  réinscrire à tout moment depuis la page d’accueil si vous changez d’avis.
                 </p>
               </header>
               <p className="desabonnement-footnote">
@@ -172,8 +173,9 @@ export default async function DesabonnementPage({
                 </h1>
                 <span className="mentions-legales-h1-rule" aria-hidden="true" />
                 <p className="mentions-legales-lead">
-                  L’adresse <strong>{preview.email}</strong> est déjà enregistrée comme ne souhaitant plus recevoir
-                  d’e-mails d’information MedicusLoop.
+                  L’adresse <strong>{preview.email}</strong> ne reçoit déjà plus nos e-mails d’information et n’est plus
+                  considérée comme inscrite sur la liste d’attente Pionniers. Vous pouvez vous réinscrire à tout moment
+                  depuis la page d’accueil.
                 </p>
               </header>
               <p className="desabonnement-footnote">
@@ -209,8 +211,10 @@ export default async function DesabonnementPage({
               </h1>
               <span className="mentions-legales-h1-rule" aria-hidden="true" />
               <p className="mentions-legales-lead">
-                Si vous souhaitez vous désinscrire des e-mails envoyés par MedicusLoop MAR, remplissez le formulaire
-                ci-dessous et confirmez votre choix de désinscription. Ce lien est personnel : ne le partagez pas.
+                En confirmant ci-dessous, vous arrêtez les e-mails d’information sur cette adresse{' '}
+                <strong>et</strong> vous quittez la liste d’attente Pionniers : plus d’envois, plus d’inscription
+                active pour le moment — vous perdez votre place sur la liste. Vous pourrez vous réinscrire quand vous le
+                souhaiterez depuis l’accueil du site. Ce lien est personnel : ne le partagez pas.
               </p>
             </header>
             <DesabonnementForm token={tokenRaw} email={preview.email} />

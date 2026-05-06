@@ -8,6 +8,7 @@ import {
   submitWaitlistPionnier,
   type WaitlistPionnierFormState,
 } from '../actions'
+import { parseReferralSourceParam } from '@/lib/referral-source-param'
 import { REGIONS_FRANCE_TRIEES } from '@/lib/regions-france'
 import InvitationBlock from './invitation-block'
 
@@ -315,11 +316,14 @@ const initialWaitlistState: WaitlistPionnierFormState = { status: 'idle' }
 function FormulairePionnier() {
   const [state, formAction] = useActionState(submitWaitlistPionnier, initialWaitlistState)
   const [profil, setProfil] = useState<ProfilPionnier | null>(null)
+  const [referralSource, setReferralSource] = useState('')
 
   useEffect(() => {
     try {
-      const p = new URLSearchParams(window.location.search).get('profil')
+      const q = new URLSearchParams(window.location.search)
+      const p = q.get('profil')
       if (isProfilPionnierUrl(p)) setProfil(p)
+      setReferralSource(parseReferralSourceParam(q.get('source')) ?? '')
     } catch {
       /* ignore */
     }
@@ -350,6 +354,7 @@ function FormulairePionnier() {
         style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
         aria-label="Inscription programme Pionnier MedicusLoop"
       >
+        <input type="hidden" name="referral_source" value={referralSource} />
         {state.status === 'duplicate' && <DuplicateNotice />}
 
         <div className="formulaire-row-2">

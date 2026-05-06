@@ -103,7 +103,9 @@ export default function DesabonnementForm({ token, email }: Props) {
       ) : null}
 
       <button type="submit" className="desabonnement-form__submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Enregistrement…' : 'Confirmer le désabonnement aux e-mails'}
+        {isSubmitting
+          ? 'Enregistrement…'
+          : 'Confirmer : arrêt des e-mails et sortie de la liste d’attente'}
       </button>
     </form>
   )

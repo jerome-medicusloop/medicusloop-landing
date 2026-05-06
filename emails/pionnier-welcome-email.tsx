@@ -2,6 +2,7 @@ import {
   buildShareInviteDeepLink,
   SHARE_PUBLIC_MESSAGES,
 } from '@/lib/share-public-invite'
+import { buildSitePublicAssetUrl } from '@/lib/site-public-url'
 
 export type PionnierWelcomeEmailProps = {
   prenom: string
@@ -24,17 +25,20 @@ const C_BORDER = '#e2e8f0'
  */
 export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: PionnierWelcomeEmailProps) {
   const prenomTitre = prenom.trim() || 'cher confrère'
+  const logoUrl = buildSitePublicAssetUrl('/logo/medicusloop-mar-email.png')
+  const shareIconUrl = (file: string) => buildSitePublicAssetUrl(`/icons/email-share/${file}`)
   const msg = SHARE_PUBLIC_MESSAGES
   const shareWa = buildShareInviteDeepLink('whatsapp', shareUrl, msg)
   const shareMail = buildShareInviteDeepLink('email', shareUrl, msg)
   const shareLi = buildShareInviteDeepLink('linkedin', shareUrl, msg)
   const shareFb = buildShareInviteDeepLink('facebook', shareUrl, msg)
   const shareX = buildShareInviteDeepLink('twitter', shareUrl, msg)
-  const platformLinkStyle = {
+  const shareIconLabelStyle = {
+    fontSize: '11px' as const,
+    fontWeight: 600 as const,
     color: C_PRIMARY_DARK,
-    fontWeight: 700 as const,
-    fontSize: '15px' as const,
     textDecoration: 'underline' as const,
+    lineHeight: 1.3 as const,
   }
 
   return (
@@ -59,26 +63,64 @@ export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: P
           <tr>
             <td
               style={{
-                background: `linear-gradient(135deg, ${C_PRIMARY} 0%, ${C_PRIMARY_DARK} 100%)`,
+                backgroundColor: C_CARD,
+                border: `1px solid ${C_BORDER}`,
+                borderBottom: 'none',
                 borderRadius: '12px 12px 0 0',
-                padding: '24px 28px',
-                color: '#ffffff',
+                borderTop: `4px solid ${C_PRIMARY}`,
+                padding: '24px 28px 28px',
+                color: C_TEXT,
+                textAlign: 'center',
               }}
             >
-              <p style={{ margin: 0, fontSize: '13px', letterSpacing: '0.06em', opacity: 0.95 }}>
-                MEDICUSLOOP · MAR
-              </p>
-              <h1
-                style={{
-                  margin: '10px 0 0',
-                  fontSize: '24px',
-                  fontWeight: 700,
-                  lineHeight: 1.25,
-                  fontFamily: "Georgia, 'Times New Roman', serif",
-                }}
+              <table
+                role="presentation"
+                cellPadding={0}
+                cellSpacing={0}
+                style={{ width: '100%' }}
               >
-                Bienvenue sur MedicusLoop MAR
-              </h1>
+                <tbody>
+                  <tr>
+                    <td align="center" style={{ padding: '0 0 18px' }}>
+                      <a
+                        href={shareUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-block', textDecoration: 'none', lineHeight: 0 }}
+                      >
+                        <img
+                          src={logoUrl}
+                          alt="MedicusLoop MAR"
+                          width={280}
+                          height={73}
+                          style={{
+                            display: 'block',
+                            border: 0,
+                            outline: 'none',
+                            margin: '0 auto',
+                          }}
+                        />
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <h1
+                        style={{
+                          margin: 0,
+                          fontSize: '24px',
+                          fontWeight: 700,
+                          lineHeight: 1.25,
+                          fontFamily: "Georgia, 'Times New Roman', serif",
+                          color: C_TEXT,
+                        }}
+                      >
+                        Bienvenue sur MedicusLoop MAR
+                      </h1>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </td>
           </tr>
           <tr>
@@ -91,6 +133,16 @@ export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: P
                 padding: '28px 28px 32px',
               }}
             >
+              <p
+                style={{
+                  margin: '0 0 16px',
+                  fontSize: '13px',
+                  color: C_MUTED,
+                  lineHeight: 1.5,
+                }}
+              >
+                Ceci est un e-mail automatique, merci de ne pas y répondre.
+              </p>
               <p style={{ margin: '0 0 16px' }}>Bonjour {prenomTitre},</p>
               <p style={{ margin: '0 0 16px', color: C_MUTED }}>
                 Votre inscription à MedicusLoop est bien enregistrée. Nous vous contacterons{' '}
@@ -151,42 +203,97 @@ export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: P
                       >
                         Partager sur les plateformes
                       </p>
-                      <p
-                        style={{
-                          margin: '0 0 22px',
-                          fontSize: '15px',
-                          lineHeight: 2,
-                          color: C_TEXT,
-                        }}
+                      <table
+                        role="presentation"
+                        cellPadding={0}
+                        cellSpacing={0}
+                        style={{ width: '100%', margin: '0 0 22px' }}
                       >
-                        <a href={shareWa} target="_blank" rel="noopener noreferrer" style={platformLinkStyle}>
-                          WhatsApp
-                        </a>
-                        <span style={{ color: C_BORDER, padding: '0 8px' }} aria-hidden="true">
-                          |
-                        </span>
-                        <a href={shareMail} style={platformLinkStyle}>
-                          E-mail
-                        </a>
-                        <span style={{ color: C_BORDER, padding: '0 8px' }} aria-hidden="true">
-                          |
-                        </span>
-                        <a href={shareLi} target="_blank" rel="noopener noreferrer" style={platformLinkStyle}>
-                          LinkedIn
-                        </a>
-                        <span style={{ color: C_BORDER, padding: '0 8px' }} aria-hidden="true">
-                          |
-                        </span>
-                        <a href={shareFb} target="_blank" rel="noopener noreferrer" style={platformLinkStyle}>
-                          Facebook
-                        </a>
-                        <span style={{ color: C_BORDER, padding: '0 8px' }} aria-hidden="true">
-                          |
-                        </span>
-                        <a href={shareX} target="_blank" rel="noopener noreferrer" style={platformLinkStyle}>
-                          X
-                        </a>
-                      </p>
+                        <tbody>
+                          <tr>
+                            <td align="center" style={{ width: '20%', padding: '4px 2px', verticalAlign: 'top' }}>
+                              <a
+                                href={shareWa}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', color: C_TEXT }}
+                              >
+                                <img
+                                  src={shareIconUrl('whatsapp.png')}
+                                  width={40}
+                                  height={40}
+                                  alt=""
+                                  style={{ display: 'block', margin: '0 auto 6px', border: 0 }}
+                                />
+                                <span style={shareIconLabelStyle}>WhatsApp</span>
+                              </a>
+                            </td>
+                            <td align="center" style={{ width: '20%', padding: '4px 2px', verticalAlign: 'top' }}>
+                              <a href={shareMail} style={{ textDecoration: 'none', color: C_TEXT }}>
+                                <img
+                                  src={shareIconUrl('email.png')}
+                                  width={40}
+                                  height={40}
+                                  alt=""
+                                  style={{ display: 'block', margin: '0 auto 6px', border: 0 }}
+                                />
+                                <span style={shareIconLabelStyle}>E-mail</span>
+                              </a>
+                            </td>
+                            <td align="center" style={{ width: '20%', padding: '4px 2px', verticalAlign: 'top' }}>
+                              <a
+                                href={shareLi}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', color: C_TEXT }}
+                              >
+                                <img
+                                  src={shareIconUrl('linkedin.png')}
+                                  width={40}
+                                  height={40}
+                                  alt=""
+                                  style={{ display: 'block', margin: '0 auto 6px', border: 0 }}
+                                />
+                                <span style={shareIconLabelStyle}>LinkedIn</span>
+                              </a>
+                            </td>
+                            <td align="center" style={{ width: '20%', padding: '4px 2px', verticalAlign: 'top' }}>
+                              <a
+                                href={shareFb}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', color: C_TEXT }}
+                              >
+                                <img
+                                  src={shareIconUrl('facebook.png')}
+                                  width={40}
+                                  height={40}
+                                  alt=""
+                                  style={{ display: 'block', margin: '0 auto 6px', border: 0 }}
+                                />
+                                <span style={shareIconLabelStyle}>Facebook</span>
+                              </a>
+                            </td>
+                            <td align="center" style={{ width: '20%', padding: '4px 2px', verticalAlign: 'top' }}>
+                              <a
+                                href={shareX}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', color: C_TEXT }}
+                              >
+                                <img
+                                  src={shareIconUrl('x.png')}
+                                  width={40}
+                                  height={40}
+                                  alt=""
+                                  style={{ display: 'block', margin: '0 auto 6px', border: 0 }}
+                                />
+                                <span style={shareIconLabelStyle}>X</span>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                       <a
                         href={shareUrl}
                         style={{
@@ -218,7 +325,7 @@ export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: P
               </table>
 
               <p style={{ margin: 0, fontSize: '14px', color: C_MUTED }}>
-                Une question ? Répondez à ce message ou écrivez-nous sur{' '}
+                Une question ? Écrivez-nous à l’adresse suivante :{' '}
                 <a href="mailto:hello@medicus-loop.com" style={{ color: C_PRIMARY_DARK, fontWeight: 600 }}>
                   hello@medicus-loop.com
                 </a>
@@ -230,9 +337,10 @@ export function PionnierWelcomeEmail({ prenom, shareUrl, unsubscribePageUrl }: P
             <td style={{ padding: '20px 8px 0', textAlign: 'center', fontSize: '12px', color: C_MUTED }}>
               <p style={{ margin: '0 0 8px' }}>MedicusLoop — MAR & établissements de santé</p>
               <p style={{ margin: '0 0 10px', lineHeight: 1.55 }}>
-                Vous recevez cet e-mail automatiquement suite à votre inscription sur la liste d’attente MedicusLoop. Si
-                vous ne souhaitez plus recevoir d’e-mails d’information de notre part, vous pouvez vous désabonner en
-                un clic — lien personnel, ne le partagez pas :
+                Vous recevez cet e-mail automatiquement suite à votre inscription sur la liste d’attente MedicusLoop. Le
+                lien ci-dessous permet d’arrêter les e-mails d’information <strong>et</strong> de quitter la liste
+                d’attente Pionniers (vous pourrez vous réinscrire plus tard depuis le site). Lien personnel, ne le
+                partagez pas :
               </p>
               <p style={{ margin: 0, lineHeight: 1.5 }}>
                 <a
