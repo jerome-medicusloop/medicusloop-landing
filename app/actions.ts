@@ -3,6 +3,7 @@
 import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { sendPionnierWelcomeEmail } from '@/lib/send-pionnier-welcome-email'
+import { sendContactRequestEmail } from '@/lib/send-contact-request-email'
 import { parseReferralSourceParam } from '@/lib/referral-source-param'
 import { emailSourceHash } from '@/lib/share-email-source'
 import { REGIONS_FRANCE } from '@/lib/regions-france'
@@ -70,7 +71,7 @@ const WaitlistPionnierSchema = z.object({
     z
       .string()
       .min(1, 'Veuillez choisir un profil.')
-      .pipe(z.enum(['remplacant', 'etablissement', 'les_deux'], { message: 'Profil non reconnu.' }))
+      .pipe(z.enum(['remplacant', 'etablissement', 'les_deux', 'titulaire'], { message: 'Profil non reconnu.' }))
   ),
   consent_donnees: z
     .unknown()
@@ -97,7 +98,7 @@ export type WaitlistPionnierFormState = {
   errors?: Partial<Record<keyof z.infer<typeof WaitlistPionnierSchema>, string>>
   values?: WaitlistPionnierFormValues
   /** Profil enregistré (affichage succès). */
-  successProfil?: 'remplacant' | 'etablissement' | 'les_deux'
+  successProfil?: 'remplacant' | 'etablissement' | 'les_deux' | 'titulaire'
   /** MD5 hex de l’e-mail inscrit pour liens `?source=` (UI / e-mail) ; persisté en DB dans `subscriber_source_hash`. */
   shareSource?: string
   draftKey?: number
@@ -311,5 +312,73 @@ export async function submitWaitlistPionnier(
       values: snap,
       draftKey: Date.now(),
     }
+  }
+}
+
+// ─── Contact (page dédiée) ────────────────────────────────────────────────────
+
+const ContactSchema = z.object({
+  prenom: z.string().trim().min(1, 'Le prénom est requis').max(100, 'Le prénom est trop long'),
+  nom: z.string().trim().min(1, 'Le nom est requis').max(100, 'Le nom est trop long'),
+  email: z
+    .string()
+    .trim()
+    .min(1, "L'email est requis")
+    .toLowerCase()
+    .pipe(z.string().email("L'email est invalide")),
+  sujet: z.string().trim().min(3, 'Le sujet est requis').max(120, 'Le sujet est trop long'),
+  message: z.string().trim().min(10, 'Le message est trop court').max(3000, 'Le message est trop long'),
+})
+
+export type ContactFormValues = {
+  prenom: string
+  nom: string
+  email: string
+  sujet: string
+  message: string
+}
+
+export type ContactFormState = {
+  status: 'idle' | 'success' | 'error'
+  message?: string
+  errors?: Partial<Record<keyof ContactFormValues, string>>
+  values?: ContactFormValues
+}
+
+export async function submitContactForm(
+  _prev: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> {
+  const raw = {
+    prenom: String(formData.get('prenom') ?? ''),
+    nom: String(formData.get('nom') ?? ''),
+    email: String(formData.get('email') ?? ''),
+    sujet: String(formData.get('sujet') ?? ''),
+    message: String(formData.get('message') ?? ''),
+  }
+
+  const parsed = ContactSchema.safeParse(raw)
+  if (!parsed.success) {
+    const errors: ContactFormState['errors'] = {}
+    for (const issue of parsed.error.issues) {
+      const field = issue.path[0] as keyof ContactFormValues
+      if (!(field in errors)) errors[field] = issue.message
+    }
+    return { status: 'error', errors, values: raw }
+  }
+
+  const sent = await sendContactRequestEmail(parsed.data)
+  if (!sent.ok) {
+    console.error('[contact-form] email send failed', { reason: sent.reason })
+    return {
+      status: 'error',
+      message: 'Impossible d’envoyer votre message pour le moment. Merci de réessayer dans quelques minutes.',
+      values: raw,
+    }
+  }
+
+  return {
+    status: 'success',
+    message: 'Message envoyé. Nous revenons vers vous rapidement.',
   }
 }

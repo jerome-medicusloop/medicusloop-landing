@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PATH_CONTACT } from '@/lib/legal-routes'
 import { getWaitlistPionniersCount } from '@/lib/waitlist-pionniers-count'
 import { PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
-import MentionsLegalesContactMail from '../_components/mentions-legales-contact-mail'
 import Navbar from '../_components/site-navbar'
 import SiteFooter from '../_components/site-footer'
 
@@ -201,7 +201,13 @@ export default async function ConditionsGeneralesUtilisationPage() {
                 </h2>
                 <div className="mentions-legales-block-body">
                   <p>
-                    Pour toute question relative aux CGU ou au Site : <MentionsLegalesContactMail />
+                    Pour toute question relative aux CGU ou au Site :{' '}
+                    <Link href={PATH_CONTACT} prefetch={false} className="mentions-legales-mail">
+                      <span className="material-symbols-outlined mentions-legales-mail-icon" aria-hidden="true">
+                        mail
+                      </span>
+                      Nous contacter
+                    </Link>
                   </p>
                 </div>
               </section>

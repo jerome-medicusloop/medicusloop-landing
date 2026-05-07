@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { PATH_CONDITIONS_GENERALES_UTILISATION } from '@/lib/legal-routes'
+import { PATH_CONDITIONS_GENERALES_UTILISATION, PATH_CONTACT } from '@/lib/legal-routes'
 import { getWaitlistPionniersCount } from '@/lib/waitlist-pionniers-count'
 import { PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
-import MentionsLegalesContactMail from '../_components/mentions-legales-contact-mail'
 import Navbar from '../_components/site-navbar'
 import SiteFooter from '../_components/site-footer'
 
@@ -216,8 +215,10 @@ export default async function MentionsLegalesPage() {
                   </p>
                   <p>
                     Pour exercer ces droits ou pour toute question relative au traitement de vos données
-                    personnelles, vous pouvez contacter :{' '}
-                    <MentionsLegalesContactMail variant="dpo" inline />
+                    personnelles, vous pouvez passer par notre{' '}
+                    <Link href={PATH_CONTACT} prefetch={false} className="mentions-legales-inline-mailto">
+                      formulaire de contact
+                    </Link>
                     .
                   </p>
                   <p>
@@ -247,7 +248,13 @@ export default async function MentionsLegalesPage() {
                 </h2>
                 <div className="mentions-legales-block-body">
                   <p>
-                    Pour toute question relative au Site : <MentionsLegalesContactMail />
+                    Pour toute question relative au Site :{' '}
+                    <Link href={PATH_CONTACT} prefetch={false} className="mentions-legales-mail">
+                      <span className="material-symbols-outlined mentions-legales-mail-icon" aria-hidden="true">
+                        mail
+                      </span>
+                      Nous contacter
+                    </Link>
                   </p>
                 </div>
               </section>

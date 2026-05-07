@@ -11,10 +11,10 @@ function applyDomTheme(mode: ThemeChoice) {
   document.documentElement.setAttribute('data-theme', mode)
 }
 
-/** Mobile (≤992px) : défaut sombre si aucune clé localStorage. */
+/** Défaut : préférence système ; fallback clair si indisponible. */
 function defaultThemeForViewport(): ThemeChoice {
   if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(max-width: 991.98px)').matches ? 'dark' : 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
 function resolveInitialTheme(): ThemeChoice {

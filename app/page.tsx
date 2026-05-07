@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { homeMetadata } from '@/lib/site-metadata'
+import { homeMetadata, SITE_URL } from '@/lib/site-metadata'
+import { PATH_CONDITIONS_GENERALES_UTILISATION, PATH_CONTACT } from '@/lib/legal-routes'
 import { getWaitlistPionniersCount } from '@/lib/waitlist-pionniers-count'
 import { PIONNIER_PLACES_TOTAL } from '@/lib/pionnier-constants'
 import FounderCounter from './_components/urgence-section'
@@ -16,6 +17,87 @@ import SharePublicSection from './_components/share-public-section'
 import SiteFooter from './_components/site-footer'
 
 export const metadata: Metadata = homeMetadata()
+
+const HOME_FAQ_SCHEMA_ITEMS = [
+  {
+    q: 'Le matching est-il vraiment adapté au MAR et au bloc opératoire ?',
+    a: 'Le moteur croise des critères opérationnels de bloc (spécialité, type de chirurgie, forfait journalier, zone, disponibilités, préférences IADE et matériel).',
+  },
+  {
+    q: 'Comment sont rédigés les contrats de remplacement ?',
+    a: 'Les contrats sont générés à partir de modèles validés juridiquement et adaptés au remplacement libéral, avec signature électronique intégrée.',
+  },
+  {
+    q: 'MedicusLoop est-il gratuit pour les MAR ?',
+    a: 'Oui. Le MAR en remplacement n’a pas de frais sur le matching, le contrat et la LoopExpérience.',
+  },
+  {
+    q: 'Qu’en est-il des données personnelles et de la santé ?',
+    a: 'Les données d’inscription sont traitées selon le RGPD. À ce stade, les données collectées sont celles utiles au matching ; la plateforme est construite avec des prestataires certifiés HDS.',
+  },
+] as const
+
+function buildHomeStructuredData() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${SITE_URL}/#webpage`,
+        url: SITE_URL,
+        name: 'MedicusLoop · Remplacement MAR — matching, contrat et LoopExpérience',
+        inLanguage: 'fr-FR',
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        about: { '@id': `${SITE_URL}/#organization` },
+      },
+      {
+        '@type': 'Service',
+        '@id': `${SITE_URL}/#service`,
+        serviceType: 'Plateforme de remplacement MAR',
+        name: 'MedicusLoop',
+        provider: { '@id': `${SITE_URL}/#organization` },
+        areaServed: 'FR',
+        audience: [
+          { '@type': 'Audience', audienceType: 'Médecins anesthésistes-réanimateurs (MAR) remplaçants' },
+          { '@type': 'Audience', audienceType: 'Titulaires et établissements de santé' },
+        ],
+        offers: {
+          '@type': 'AggregateOffer',
+          lowPrice: 0,
+          highPrice: 6,
+          priceCurrency: 'EUR',
+          description: 'MAR : 0 €. Titulaire/établissement : commission sur mises en relation (standard 6 %, Pionnier 3 %).',
+        },
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/#faq`,
+        mainEntity: HOME_FAQ_SCHEMA_ITEMS.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
+      },
+      {
+        '@type': 'ContactPage',
+        '@id': `${SITE_URL}${PATH_CONTACT}#contact`,
+        url: `${SITE_URL}${PATH_CONTACT}`,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+      },
+      {
+        '@type': 'CreativeWork',
+        '@id': `${SITE_URL}${PATH_CONDITIONS_GENERALES_UTILISATION}#cgu`,
+        url: `${SITE_URL}${PATH_CONDITIONS_GENERALES_UTILISATION}`,
+        name: 'Conditions générales d’utilisation',
+        inLanguage: 'fr-FR',
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+    ],
+  }
+}
 
 // ─── Grain SVG (id de filtre unique par instance — évite artefacts / « lignes » avec plusieurs SVG) ───
 
@@ -127,7 +209,7 @@ function Hero({ placesPrises }: { placesPrises: number }) {
             <strong className="hero-pitch-em">blocs</strong> qui vous correspondent —{' '}
             <strong className="hero-pitch-em">forfait journalier, spécialité, type de chirurgie</strong>
             {' '}— et génère le <strong className="hero-pitch-em">contrat de rempla en un clic</strong>. L’outil{' '}
-            <strong className="hero-pitch-em">relance automatiquement du MAR</strong> pour sécuriser le{' '}
+            <strong className="hero-pitch-em">relance automatiquement le MAR</strong> pour sécuriser le{' '}
             <strong className="hero-pitch-em">planning</strong> et limiter les{' '}
             <strong className="hero-pitch-em">désistements silencieux</strong>.
           </p>
@@ -147,22 +229,21 @@ function Hero({ placesPrises }: { placesPrises: number }) {
         <div className="hero-cta-row fade-in-4" role="group" aria-label="Accès inscription et sections clés">
           <div className="hero-cta-row-inner">
             <a
+              href="#inscription"
+              className="hero-cta-secondary"
+              aria-label="Ouvrir l’inscription Pionnier : vous cherchez un remplaçant — choisissez titulaire ou établissement dans le formulaire"
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">business</span>
+              Je cherche un remplaçant
+            </a>
+            <a
               href="?profil=remplacant#inscription"
               className="cta-primary-glow cta-glow-pulse hero-cta-primary"
-              data-magnetic
               aria-label="S'inscrire en tant que MAR remplaçant"
             >
               <span className="material-symbols-outlined" aria-hidden="true">directions_run</span>
               Je remplace
               <span className="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-            </a>
-            <a
-              href="?profil=etablissement#inscription"
-              className="hero-cta-secondary"
-              aria-label="S'inscrire en tant qu'établissement qui cherche un MAR"
-            >
-              <span className="material-symbols-outlined" aria-hidden="true">business</span>
-              Je cherche un remplaçant
             </a>
           </div>
         </div>
@@ -186,12 +267,12 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
     {
       icon: 'contract',
       title: 'Le forfait flou',
-      text: "Négociation orale, PDF envoyé la veille sans signature. Forfait journalier annoncé à l'oral : 800 € ? 900 € ? Secteur 2 autorisé ? Votre comptable devra reconstituer ce qu'il pourra à partir de là.",
+      text: "Négociation à l'oral, PDF envoyé la veille sans signature. Forfait journalier annoncé oralement : 800 € ? 900 € ? Secteur 2 autorisé ? Votre comptable devra reconstituer les éléments à partir de ces informations.",
     },
     {
       icon: 'explore',
       title: "Première garde dans l'inconnu",
-      text: "Protocoles inconnus, équipe étrangère, SSPI d'une clinique que vous n'avez jamais vue. Et une ville que vous ne connaissez pas. Cela aurait pu être une vraie expérience.",
+      text: "Protocoles inconnus, équipe nouvelle, SSPI d'une clinique que vous n'avez jamais vue, et une ville que vous ne connaissez pas. Dommage : cela aurait pu se passer autrement.",
     },
   ]
 
@@ -204,7 +285,7 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
     {
       icon: 'handshake',
       title: 'La mise en relation',
-      text: 'Notre IA croise votre profil MAR — spécialités, zone, forfait journalier minimum, type de bloc et disponibilités — avec les besoins déclarés des établissements. Contrat de rempla généré automatiquement, pour une signature électronique.',
+      text: 'Notre IA croise votre profil MAR — spécialités, zone, forfait journalier minimum, type de bloc et disponibilités — avec les besoins exprimés par les titulaires et les établissements. Contrat de rempla généré automatiquement avec signature électronique.',
     },
     {
       icon: 'hotel',
@@ -236,8 +317,8 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
             </span>
           </h2>
           <p className="ml-section-lead">
-            Le <strong>quotidien</strong> du rempla (MAR ou établissement), puis la <strong>même vacation</strong> avec
-            MedicusLoop MAR.
+            Le <strong>quotidien d’un remplacement</strong>, côté MAR comme côté titulaire/établissement, puis ce{' '}
+            <strong>même remplacement</strong> avec MedicusLoop MAR.
           </p>
         </header>
 
@@ -253,10 +334,10 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
               <div className="ccm-compare-col-head ccm-compare-col-head--mb" data-reveal>
                 <p className="ccm-pill ccm-pill--muted">Avant</p>
                 <h3 id="probleme-title" className="font-fraunces ml-title-block ccm-ml-title--tight">
-                  Ce quotidien, côté MAR ou côté établissement ?
+                  Ce quotidien, vu côté MAR ou côté établissement ?
                 </h3>
                 <p className="ccm-compare-intro">
-                  Le rempla en libéral tel qu&apos;il se vit au bloc — ce que l&apos;on vit à chaque rempla.
+                  Le rempla libéral tel qu&apos;il se vit au bloc — la réalité du terrain à chaque mission.
                 </p>
               </div>
               <ul className="ccm-compare-steps-list" data-stagger>
@@ -288,7 +369,7 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
                 Simple comme un match.
               </h3>
               <p className="ccm-compare-intro">
-                Trois étapes — même logique pour le MAR en rempla et pour l&apos;établissement.
+                Trois étapes — même logique pour le MAR en rempla et pour le besoin MAR (titulaire ou établissement).
               </p>
             </div>
 
@@ -339,8 +420,8 @@ function VersusSection({ listePleinePionniers }: { listePleinePionniers: boolean
     { icon: 'check_circle', text: 'Contrat de rempla généré + signature électronique en 1 clic.' },
     { icon: 'check_circle', text: 'Profil MAR vérifié CNOM avant toute mise en relation.' },
     { icon: 'check_circle', text: 'Relances automatiques J-7, J-3, J-1 : confirmation de présence, zéro désistement surprise.' },
-    { icon: 'check_circle', text: 'LoopExpérience (hôtels, tables, activités, ...) dès la proposition de mission.' },
-    { icon: 'check_circle', text: 'Toujours gratuit pour les MAR en rempla.' },
+    { icon: 'check_circle', text: 'LoopExpérience (hôtels, tables, activités, etc.) dès la proposition de mission.' },
+    { icon: 'check_circle', text: 'Toujours gratuit pour les MAR remplaçants.' },
   ]
 
   return (
@@ -615,17 +696,17 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
     {
       icon: 'groups',
       title: 'Vous co-construisez la plateforme',
-      text: "Accès direct à l'équipe fondatrice. Vous testez les nouvelles fonctionnalités en avant-première, votez sur les features ; vos retours du terrain guident chaque évolution de MedicusLoop.",
+      text: 'Équipe fondatrice accessible : bêta des fonctionnalités, votes sur les évolutions — vos retours de bloc et de terrain orientent la roadmap.',
     },
     {
       icon: 'contract',
-      title: 'Commission divisée par 2',
-      text: "Sur les premières mises en relation avec un MAR, les établissements Pionniers paient la moitié du tarif standard — garantie contractuelle à vie sur cette réduction, même si le barème standard évolue.",
+      title: 'Commission divisée par 2 (titulaire ou établissement)',
+      text: 'Les titulaires et établissements parmi les 50 premiers inscrits paient 3 % au lieu de 6 % sur les mises en relation avec un MAR. Réduction figée à vie au contrat, même si le barème standard change.',
     },
     {
       icon: 'verified',
       title: 'Badge Membre Pionnier',
-      text: "Votre profil affiche le badge Membre Pionnier. Signal de confiance fort pour vos pairs : vous avez cru au projet en avant-première. Ce badge ne sera jamais redistribué.",
+      text: 'Visible sur le profil : preuve d’engagement tôt pour vos pairs. Réservé aux tout premiers inscrits — le badge n’est pas redistribué ensuite.',
     },
   ]
 
@@ -651,8 +732,9 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
             <span className="pionniers-head-title__rule" aria-hidden="true" />
           </h2>
           <p className="ml-section-lead">
-            Les 50 premiers inscrits ont un statut à part. La réduction de commission qu&apos;ils cherchent et les
-            nombreux autres avantages sont figés par contrat.
+            MAR, titulaire ou établissement : les {PIONNIER_PLACES_TOTAL} premières inscriptions ouvrent le programme
+            Pionniers — statut et avantages (dont la moitié de commission côté titulaire ou établissement) sont{' '}
+            <strong className="ml-text-strong">figés au contrat</strong>, avec la jauge ci-dessous.
           </p>
         </div>
 
@@ -693,7 +775,7 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
                 {...(!listePleine ? { 'data-tilt': '' as const } : {})}
               >
                 <div
-                  className={`pionniers-avantage-card-icon${a.icon === 'verified' ? ' pionniers-avantage-card-icon--pionnier-seal' : ''}`}
+                  className={`pionniers-avantage-card-icon${a.icon === 'verified' ? ' pionniers-avantage-card-icon--badge-verified' : ''}`}
                   aria-hidden="true"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">
@@ -711,7 +793,7 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
   )
 }
 
-// ─── Section Tarifs (grille MAR / établissement / Pionnier) ──────────────────
+// ─── Section Tarifs (grille MAR / titulaire ou établissement / Pionnier) ─────
 
 function TarifsSection({ placesPrises }: { placesPrises: number }) {
   const listePleine = placesPrises >= PIONNIER_PLACES_TOTAL
@@ -728,8 +810,13 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
             </span>
           </h2>
           <p className="ml-section-lead">
-            MAR en rempla, établissement au tarif standard ou Pionnier :{' '}
-            <strong className="ml-text-strong">qui paie quoi</strong> est dans le tableau ci-dessous. Le barème exact et les cas particuliers (récurrent, longue durée, etc.) sont au contrat.
+            <strong className="ml-text-strong">Côté MAR en remplacement : 0 €</strong> — matching, contrat et
+            vérification CNOM sans frais pour vous.{' '}
+            <strong className="ml-text-strong">Côté titulaire / établissement</strong> (celui qui porte le besoin MAR){' '}
+            : commission uniquement sur les mises en relation.{' '}
+            <strong className="ml-text-strong">Pas d’abonnement obligatoire</strong> — pas de forfait mensuel séparé
+            pour les structures : le barème à la commission est le même, que le besoin soit publié par un titulaire ou un
+            établissement.
           </p>
         </header>
 
@@ -761,11 +848,14 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
 
             {/* Établissement tarif standard */}
             <div className={`tarifs-pricing-col${listePleine ? ' tarifs-pricing-col--std-actif' : ''}`}>
-              <div className="tarifs-pricing-col-head">
+              <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
                 <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
                   <span className="material-symbols-outlined">business</span>
                 </span>
-                <span className="tarifs-pricing-col-label-text">Établissement · Tarif standard</span>
+                <span className="tarifs-pricing-col-label-text">
+                  <span className="tarifs-pricing-col-label-text__line">Titulaire ou établissement ·</span>
+                  <span className="tarifs-pricing-col-label-text__line">Tarif standard</span>
+                </span>
               </div>
               <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">
                 6%
@@ -790,11 +880,14 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
               <div
                 className={`tarifs-pricing-col-inner${listePleine ? ' tarifs-pricing-col-inner--liste-pleine-dim' : ''}`}
               >
-                <div className="tarifs-pricing-col-head tarifs-pricing-col-head--pionnier">
+                <div className="tarifs-pricing-col-head tarifs-pricing-col-head--pionnier tarifs-pricing-col-head--stacked-label">
                   <span className="tarifs-pricing-col-label-badge tarifs-pricing-col-label-badge--pionnier" aria-hidden="true">
                     <span className="material-symbols-outlined tarifs-pricing-col-label-badge__icon--verified">verified</span>
                   </span>
-                  <span className="tarifs-pricing-col-label-text">Établissement · Tarif Pionnier</span>
+                  <span className="tarifs-pricing-col-label-text">
+                    <span className="tarifs-pricing-col-label-text__line">Titulaire ou établissement ·</span>
+                    <span className="tarifs-pricing-col-label-text__line">Tarif Pionnier</span>
+                  </span>
                 </div>
                 <div className="tarifs-pricing-price-row">
                   <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--pionnier">
@@ -805,14 +898,27 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
                 <p className="tarifs-pricing-col-lead tarifs-pricing-col-lead--pionnier">
                   <strong>sur les premières mises en relation.</strong>
                 </p>
-                <ul className="tarifs-pricing-features tarifs-pricing-features--pionnier">
-                  {['Barème standard inclus', 'Réduction pour la 1re mise en relation', 'Co-construction de la plateforme', 'Badge Pionnier à vie'].map((f) => (
-                    <li key={f}>
-                      <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--pionnier" aria-hidden="true">check_circle</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+                {listePleine ? (
+                  <p className="tarifs-pionnier-program-note">
+                    Places Pionniers complètes : les nouvelles inscriptions côté besoin MAR sont au tarif standard
+                    (6 %).{' '}
+                    <a href="#pionniers" className="ml-faq-inline-link">
+                      Ce qu&apos;avaient les {PIONNIER_PLACES_TOTAL} premiers
+                    </a>
+                    .
+                  </p>
+                ) : (
+                  <p className="tarifs-pionnier-program-note">
+                    Réservé aux <strong>titulaires et établissements</strong> parmi les {PIONNIER_PLACES_TOTAL}{' '}
+                    premiers inscrits :
+                    moitié de commission par rapport au barème standard sur les premières mises en relation, garantie à vie au contrat — plus
+                    co-construction produit et badge profil.{' '}
+                    <a href="#pionniers" className="ml-faq-inline-link">
+                      Détail programme Pionniers
+                    </a>
+                    .
+                  </p>
+                )}
               </div>
               {listePleine ? (
                 <div className="tarifs-pricing-pionnier-epuise-banner" role="region" aria-labelledby="tarifs-pionnier-epuise-title">
@@ -838,7 +944,7 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
           className="tarifs-pricing-notes-wrap"
           data-reveal
           role="region"
-          aria-label="Règles communes aux établissements"
+          aria-label="Règles communes côté titulaire ou établissement"
         >
           <div className="tarifs-pricing-notes">
             <article className="tarifs-pricing-notes-card">
@@ -872,7 +978,7 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
           </div>
         </div>
       </div>
-      <PionnierCtaStrip listePleinePionniers={listePleine} />
+      <PionnierCtaStrip listePleinePionniers={listePleine} withShareInvite={false} />
     </section>
   )
 }
@@ -882,9 +988,14 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
 export default async function HomePage() {
   const placesPrises = await getWaitlistPionniersCount()
   const listePleinePionniers = placesPrises >= PIONNIER_PLACES_TOTAL
+  const homeStructuredData = buildHomeStructuredData()
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
+      />
       <Navbar listePleinePionniers={listePleinePionniers} />
       <main id="intro">
       <PageAnimations />

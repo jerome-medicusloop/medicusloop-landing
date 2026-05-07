@@ -6,7 +6,7 @@ export const SITE_URL = 'https://medicus-loop.com' as const
 export const OG_SITE_TITLE = 'MedicusLoop · Remplacement MAR — matching, contrat et LoopExpérience'
 
 export const OG_SITE_DESCRIPTION =
-  'MedicusLoop met en relation MAR et établissements de santé : matching clair, forfait journalier explicite, contrat avec signature électronique, vérification CNOM. Moins de friction administrative, plus de temps pour le soin.'
+  'MedicusLoop met en relation MAR, titulaires remplacés et établissements : matching clair, forfait journalier explicite, contrat avec signature électronique, vérification CNOM. Moins de friction administrative, plus de temps pour le soin.'
 
 /** Fichier produit par `npm run compress:public` (JPEG 2400×1260 — LinkedIn / RS downscales plus net que du 1200 upscalé). */
 export const OG_IMAGE_PATH = '/og-image.jpg' as const

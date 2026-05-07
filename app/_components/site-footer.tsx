@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import { PATH_CONDITIONS_GENERALES_UTILISATION } from '@/lib/legal-routes'
+import { PATH_CONDITIONS_GENERALES_UTILISATION, PATH_CONTACT } from '@/lib/legal-routes'
 import MedicusLoopLogo from './medicusloop-logo'
-import MentionsLegalesContactMail from './mentions-legales-contact-mail'
 import { IconFacebook, IconInstagram, IconLinkedIn, IconTikTok, IconX } from './share-channel-icons'
 
-const COMING_SOON = ['Kinésithérapeutes', 'Infirmiers', 'Pharmaciens'] as const
+const COMING_SOON = ['Médecin urgentiste', 'Kinésithérapeutes', 'Infirmiers', 'Pharmaciens'] as const
 
 /** Lien vers la page CGU (même chemin que `lib/legal-routes`). */
 export const SITE_FOOTER_CGU_HREF = PATH_CONDITIONS_GENERALES_UTILISATION
@@ -42,7 +41,9 @@ export default function SiteFooter() {
           <p className="site-footer__col-title">Contact</p>
           <div className="site-footer__contact-lines">
             <div className="site-footer__contact-line">
-              <MentionsLegalesContactMail className="site-footer__contact-mail" />
+              <Link href={PATH_CONTACT} prefetch={false} className="site-footer__contact-mail">
+                Nous contacter
+              </Link>
             </div>
           </div>
           <div className="site-footer__social" aria-label="Réseaux sociaux">
@@ -118,6 +119,9 @@ export default function SiteFooter() {
         <div className="site-footer__legal">
           <Link href="/mentions-legales" prefetch={false} rel="nofollow">
             Mentions légales
+          </Link>
+          <Link href={PATH_CONTACT} prefetch={false} rel="nofollow">
+            Contact
           </Link>
           <Link href={SITE_FOOTER_CGU_HREF} prefetch={false} rel="nofollow">
             Conditions générales d&apos;utilisation

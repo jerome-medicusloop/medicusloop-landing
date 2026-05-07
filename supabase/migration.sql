@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.waitlist_pionniers (
   region             TEXT,
   annees_experience  TEXT,
   validated          BOOLEAN NOT NULL DEFAULT false,
-  profil             TEXT NOT NULL CHECK (profil IN ('remplacant', 'etablissement', 'les_deux')),
+  profil             TEXT NOT NULL CHECK (profil IN ('remplacant', 'etablissement', 'les_deux', 'titulaire')),
   unsubscribe_token  UUID NOT NULL DEFAULT gen_random_uuid(),
   email_communication_status TEXT NOT NULL DEFAULT 'subscribed' CHECK (email_communication_status IN ('subscribed', 'unsubscribed')),
   unsubscribed_at    TIMESTAMPTZ,
@@ -42,7 +42,10 @@ GRANT INSERT ON public.waitlist_pionniers TO anon, authenticated;
 -- Étendre la contrainte profil si la table existait déjà (anciennes migrations sans « les_deux »).
 ALTER TABLE public.waitlist_pionniers DROP CONSTRAINT IF EXISTS waitlist_pionniers_profil_check;
 ALTER TABLE public.waitlist_pionniers ADD CONSTRAINT waitlist_pionniers_profil_check
-  CHECK (profil IN ('remplacant', 'etablissement', 'les_deux'));
+  CHECK (profil IN ('remplacant', 'etablissement', 'les_deux', 'titulaire'));
+
+COMMENT ON COLUMN public.waitlist_pionniers.profil IS
+  'remplacant = MAR en rempla ; titulaire = MAR remplacé qui porte le besoin pour son poste ; etablissement = structure (RH, direction…) ; les_deux = même praticien : rempla + titulaire remplacé (il remplace et se fait remplacer).';
 
 -- Bases créées avant `source` dans le CREATE.
 ALTER TABLE public.waitlist_pionniers ADD COLUMN IF NOT EXISTS source TEXT;

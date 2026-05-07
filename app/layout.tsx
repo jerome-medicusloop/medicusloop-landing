@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
 import { Fraunces, DM_Sans } from 'next/font/google'
 import Script from 'next/script'
 import {
@@ -9,7 +8,6 @@ import {
   OG_SITE_TITLE,
   SITE_URL,
 } from '@/lib/site-metadata'
-import { GoogleTagManagerHead, GoogleTagManagerNoscript } from './_components/google-tag-manager'
 import '@fontsource-variable/material-symbols-outlined/full.css'
 import './globals.css'
 
@@ -39,6 +37,12 @@ function supabaseOriginForHints(): string | null {
   }
 }
 
+/** Conteneur GTM public. Surcharge possible : `NEXT_PUBLIC_GTM_ID=GTM-XXXX` dans `.env.local`. */
+function gtmContainerId(): string {
+  const raw = (process.env.NEXT_PUBLIC_GTM_ID ?? 'GTM-PQLS8DFS').trim()
+  return /^GTM-[A-Z0-9]+$/i.test(raw) ? raw : 'GTM-PQLS8DFS'
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -49,6 +53,7 @@ export const metadata: Metadata = {
   keywords: [
     'remplacement MAR',
     'médecin anesthésiste remplaçant',
+    'MAR titulaire remplacé',
     'recrutement MAR',
     'structure de santé',
     'contrat de rétrocession MAR',
@@ -133,6 +138,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const supabaseOrigin = supabaseOriginForHints()
+  const gtmId = gtmContainerId()
 
   return (
     <html
@@ -142,14 +148,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <GoogleTagManagerHead />
         <Script
           id="theme-boot"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){
-var m=typeof matchMedia==='function'&&matchMedia('(max-width: 991.98px)').matches;
-var d=m?'dark':'light';
+var d='light';
+try{
+  if(typeof matchMedia==='function'&&matchMedia('(prefers-color-scheme: dark)').matches){d='dark';}
+}catch(e){}
 try{
 var t=localStorage.getItem('medicusloop-theme');
 document.documentElement.setAttribute('data-theme',(t==='dark'||t==='light')?t:d);
@@ -159,50 +166,113 @@ document.documentElement.setAttribute('data-theme',d);
 })();`,
           }}
         />
-        {/* Axeptio — chargement SDK (preconnect ici, scripts en tête de <body>) */}
-        <link rel="preconnect" href="https://static.axept.io" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://static.axept.io" />
+        {/* CookieConsent (CMP) */}
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
+        />
         {supabaseOrigin ? (
           <>
             <link rel="dns-prefetch" href={supabaseOrigin} />
             <link rel="preconnect" href={supabaseOrigin} crossOrigin="anonymous" />
           </>
         ) : null}
-        {/* GA / mesure — souvent invoqués via GTM après consentement */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://vercel.live" />
         {/* Partage (liens du bloc public) — résolution DNS en avance, sans preconnect agressif */}
         <link rel="dns-prefetch" href="https://wa.me" />
         <link rel="dns-prefetch" href="https://www.linkedin.com" />
         <link rel="dns-prefetch" href="https://www.facebook.com" />
         <link rel="dns-prefetch" href="https://twitter.com" />
         <link rel="dns-prefetch" href="https://www.instagram.com" />
-      </head>
-      <body>
-        <GoogleTagManagerNoscript />
-        {/*
-          Axeptio : config inline tôt ; SDK en afterInteractive pour ne pas bloquer le document hors ligne
-          (beforeInteractive + src externe = attente timeout réseau avant hydratation).
-        */}
-        <Script
-          id="axeptio-settings"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `window.axeptioSettings={clientId:"69fa81c62584b79a6f940428",cookiesVersion:"029bbdd5-b329-4b84-9c94-645dbda2fb53"};`,
-          }}
-        />
-        <Script
-          id="axeptio-sdk"
-          src="https://static.axept.io/sdk.js"
-          strategy="afterInteractive"
-        />
-        {children}
-        <Script
-          id="schema-org"
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body>
+        <Script
+          id="cookieconsent-lib"
+          src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"
           strategy="afterInteractive"
         />
-        <Analytics />
+        <Script
+          id="cookieconsent-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function initCc(){
+  if (!window.cookieconsent || typeof window.cookieconsent.initialise !== 'function') {
+    window.setTimeout(initCc, 30);
+    return;
+  }
+
+  var GTM_ID = '${gtmId}';
+  function loadGtm(){
+    if (window.__mlGtmLoaded) return;
+    window.__mlGtmLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(GTM_ID);
+    document.head.appendChild(s);
+  }
+  function loadVercelAnalytics(){
+    if (window.__mlVercelLoaded) return;
+    var host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') return;
+    window.__mlVercelLoaded = true;
+    var s = document.createElement('script');
+    s.id = 'vercel-analytics-script';
+    s.defer = true;
+    s.src = '/_vercel/insights/script.js';
+    document.head.appendChild(s);
+  }
+  function consentGranted(ctx, status){
+    if (status === 'allow') return true;
+    if (ctx && typeof ctx.hasConsented === 'function') return !!ctx.hasConsented();
+    return false;
+  }
+  function applyAnalyticsConsent(ctx, status){
+    if (!consentGranted(ctx, status)) return;
+    loadGtm();
+    loadVercelAnalytics();
+  }
+
+  window.cookieconsent.initialise({
+    cookie: {
+      name: 'medicusloop_cookieconsent_v1'
+    },
+    palette: {
+      popup: { background: '#111827', text: '#f9fafb' },
+      button: { background: '#10b981', text: '#0b1220' }
+    },
+    position: 'bottom',
+    theme: 'classic',
+    type: 'opt-in',
+    onInitialise: function(status){
+      applyAnalyticsConsent(this, status);
+    },
+    onStatusChange: function(status){
+      applyAnalyticsConsent(this, status);
+    },
+    revokable: false,
+    animateRevokable: false,
+    content: {
+      message: 'Nous utilisons des cookies pour mesurer l’audience et améliorer votre expérience.',
+      dismiss: 'Refuser',
+      allow: 'Accepter',
+      deny: 'Refuser',
+      link: 'En savoir plus',
+      href: '/mentions-legales'
+    }
+  });
+})();`,
+          }}
+        />
+        {children}
       </body>
     </html>
   )

@@ -12,10 +12,10 @@ import { parseReferralSourceParam } from '@/lib/referral-source-param'
 import { REGIONS_FRANCE_TRIEES } from '@/lib/regions-france'
 import InvitationBlock from './invitation-block'
 
-type ProfilPionnier = 'remplacant' | 'etablissement' | 'les_deux'
+type ProfilPionnier = 'remplacant' | 'titulaire' | 'etablissement' | 'les_deux'
 
 function isProfilPionnierUrl(v: string | null | undefined): v is ProfilPionnier {
-  return v === 'remplacant' || v === 'etablissement' || v === 'les_deux'
+  return v === 'remplacant' || v === 'titulaire' || v === 'etablissement' || v === 'les_deux'
 }
 
 const FORM_CGU_HREF = PATH_CONDITIONS_GENERALES_UTILISATION
@@ -296,8 +296,8 @@ function FormulaireLegalNotices({ children }: { children: ReactNode }) {
   return (
     <>
       <p className="formulaire-trust-note">
-        Vos coordonnées <strong>ne sont pas partagées avec des tiers</strong>. Les données que vous saisissez sont{' '}
-        <strong>traitées de façon sécurisée</strong>, uniquement pour votre inscription et nos échanges avec vous.
+        Vos coordonnées <strong>ne sont pas partagées avec des tiers</strong> ; elles sont traitées de façon sécurisée,
+        uniquement pour votre inscription et nos échanges avec vous.
       </p>
       {children}
       <p className="formulaire-data-rights-note">
@@ -454,9 +454,39 @@ function FormulairePionnier() {
             </span>
           </legend>
           <div
+            id="formulaire-profil-aide"
+            style={{
+              margin: '0 0 12px',
+              width: '100%',
+              maxWidth: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              fontSize: '0.8125rem',
+              lineHeight: 1.55,
+              color: 'var(--text-muted)',
+            }}
+          >
+            <p style={{ margin: 0 }}>
+              <strong>Remplaçant</strong> : vous faites des remplacements pour d&apos;autres structures ou équipes.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Titulaire</strong> : vous êtes remplacé et portez le besoin MAR pour votre poste (sans parler au nom
+              de toute la structure).
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Remplaçant et titulaire</strong> : vous faites des remplas chez d&apos;autres{' '}
+              <strong>et</strong> vous portez aussi le besoin pour votre poste de titulaire.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Établissement</strong> : vous agissez pour la structure (RH, direction, secrétariat).
+            </p>
+          </div>
+          <div
             className="formulaire-profil-radios"
             role="radiogroup"
             aria-label="Profil d’inscription"
+            aria-describedby="formulaire-profil-aide"
             aria-required="true"
           >
             <label
@@ -481,7 +511,7 @@ function FormulairePionnier() {
                 onChange={() => setProfil('remplacant')}
                 style={{ accentColor: 'var(--nav-cta-bg)', width: '18px', height: '18px', flexShrink: 0 }}
               />
-              MAR en rempla
+              Remplaçant
             </label>
             <label
               style={{
@@ -490,25 +520,27 @@ function FormulairePionnier() {
                 gap: '10px',
                 padding: '12px 14px',
                 borderRadius: '12px',
-                border: `1px solid ${profil === 'etablissement' ? 'var(--nav-cta-border)' : 'var(--border)'}`,
+                border: `1px solid ${profil === 'titulaire' ? 'var(--nav-cta-border)' : 'var(--border)'}`,
                 background:
-                  profil === 'etablissement'
+                  profil === 'titulaire'
                     ? 'color-mix(in srgb, var(--nav-cta-bg) 12%, var(--surface))'
                     : 'var(--surface-2)',
                 cursor: 'pointer',
-                fontWeight: profil === 'etablissement' ? 600 : 500,
+                fontWeight: profil === 'titulaire' ? 600 : 500,
                 fontSize: '0.875rem',
               }}
             >
               <input
                 type="radio"
                 name="profil"
-                value="etablissement"
-                checked={profil === 'etablissement'}
-                onChange={() => setProfil('etablissement')}
+                value="titulaire"
+                checked={profil === 'titulaire'}
+                onChange={() => setProfil('titulaire')}
                 style={{ accentColor: 'var(--nav-cta-bg)', width: '18px', height: '18px', flexShrink: 0 }}
               />
-              Établissement
+              <strong style={{ fontWeight: 600 }}>Titulaire</strong>
+              {' '}
+              <span style={{ fontWeight: 500, opacity: 0.92 }}>(remplacé)</span>
             </label>
             <label
               style={{
@@ -535,7 +567,34 @@ function FormulairePionnier() {
                 onChange={() => setProfil('les_deux')}
                 style={{ accentColor: 'var(--nav-cta-bg)', width: '18px', height: '18px', flexShrink: 0 }}
               />
-              Les deux
+              Remplaçant et titulaire
+            </label>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 14px',
+                borderRadius: '12px',
+                border: `1px solid ${profil === 'etablissement' ? 'var(--nav-cta-border)' : 'var(--border)'}`,
+                background:
+                  profil === 'etablissement'
+                    ? 'color-mix(in srgb, var(--nav-cta-bg) 12%, var(--surface))'
+                    : 'var(--surface-2)',
+                cursor: 'pointer',
+                fontWeight: profil === 'etablissement' ? 600 : 500,
+                fontSize: '0.875rem',
+              }}
+            >
+              <input
+                type="radio"
+                name="profil"
+                value="etablissement"
+                checked={profil === 'etablissement'}
+                onChange={() => setProfil('etablissement')}
+                style={{ accentColor: 'var(--nav-cta-bg)', width: '18px', height: '18px', flexShrink: 0 }}
+              />
+              Établissement (RH, direction…)
             </label>
           </div>
           {state.errors?.profil && (

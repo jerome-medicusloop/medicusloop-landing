@@ -7,7 +7,7 @@ import MedicusLoopLogo from './medicusloop-logo'
 import ThemeToggle from './theme-toggle'
 
 const NAV_SECTION_LINKS = [
-  { label: 'MAR ou établissement', href: '/#profils' },
+  { label: 'MAR / structures', href: '/#profils' },
   { label: 'Comment ça marche', href: '/#comment-ca-marche' },
   { label: 'Comparatif', href: '/#comparatif' },
   { label: 'LoopExpérience', href: '/#loopexperience' },
@@ -89,7 +89,7 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
           ))}
         </nav>
         <div className="nav-drawer-footer">
-          <span className="nav-drawer-footer__label">Clair / sombre</span>
+          <span className="nav-drawer-footer__label">Mode clair / sombre</span>
           <ThemeToggle />
         </div>
       </div>

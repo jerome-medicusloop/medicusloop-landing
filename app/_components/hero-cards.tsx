@@ -69,9 +69,9 @@ type Card = {
   clinic: string
   clinicRating: string
   specialty: string
-  /** Jours à partir d’aujourd’hui jusqu’au premier jour de vacation (0 = aujourd’hui). */
+  /** Jours à partir d’aujourd’hui jusqu’au premier jour de rempla (0 = aujourd’hui). */
   missionStartOffsetDays: number
-  /** Nombre de jours de vacation (inclusif entre première et dernière date). */
+  /** Nombre de jours de rempla (inclusif entre première et dernière date). */
   missionDays: number
   /** Forfait journalier en euros (brut indicatif démo). */
   rateEuros: number

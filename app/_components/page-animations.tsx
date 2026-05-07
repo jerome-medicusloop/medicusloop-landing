@@ -95,24 +95,6 @@ export default function PageAnimations() {
       card.addEventListener('mouseleave', handleTiltLeave as EventListener)
     })
 
-    // ─── Magnetic CTAs ──────────────────────────────────────────────────────
-    const handleMagneticMove = (e: MouseEvent) => {
-      const btn = e.currentTarget as HTMLElement
-      const rect = btn.getBoundingClientRect()
-      const x = (e.clientX - rect.left - rect.width / 2) * 0.25
-      const y = (e.clientY - rect.top - rect.height / 2) * 0.25
-      btn.style.transform = `translate(${x}px, ${y}px)`
-    }
-    const handleMagneticLeave = (e: MouseEvent) => {
-      ;(e.currentTarget as HTMLElement).style.transform = ''
-    }
-
-    const magneticBtns = document.querySelectorAll('[data-magnetic]')
-    magneticBtns.forEach((btn) => {
-      btn.addEventListener('mousemove', handleMagneticMove as EventListener)
-      btn.addEventListener('mouseleave', handleMagneticLeave as EventListener)
-    })
-
     // ─── Cleanup ────────────────────────────────────────────────────────────
     return () => {
       revealObserver.disconnect()
@@ -121,10 +103,6 @@ export default function PageAnimations() {
       tiltCards.forEach((card) => {
         card.removeEventListener('mousemove', handleTiltMove as EventListener)
         card.removeEventListener('mouseleave', handleTiltLeave as EventListener)
-      })
-      magneticBtns.forEach((btn) => {
-        btn.removeEventListener('mousemove', handleMagneticMove as EventListener)
-        btn.removeEventListener('mouseleave', handleMagneticLeave as EventListener)
       })
     }
   }, [])

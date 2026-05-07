@@ -9,7 +9,7 @@ const POINTS_REMPLACANT = [
   {
     icon: 'visibility',
     title: 'Critères avant engagement',
-    text: 'Spécialités, forfait, secteur, type de bloc — ce qui conditionne la vacation est visible avant que vous ne signiez.',
+    text: 'Spécialités, forfait, secteur, type de bloc — ce qui conditionne le rempla est visible avant que vous ne signiez.',
   },
   {
     icon: 'contract',
@@ -26,8 +26,8 @@ const POINTS_REMPLACANT = [
 const POINTS_ETABLISSEMENT = [
   {
     icon: 'schedule',
-    title: 'Temps RH préservé',
-    text: "Moins d'allers-retours téléphoniques et de relances manuelles pour sécuriser chaque vacation.",
+    title: 'Temps gagné',
+    text: "Titulaire, secrétariat ou RH : moins d'allers-retours téléphoniques et de relances manuelles pour sécuriser chaque rempla.",
   },
   {
     icon: 'assignment_turned_in',
@@ -55,7 +55,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
 
   const applyHash = useCallback(() => {
     const h = window.location.hash
-    if (h === '#profils-etablissement') {
+    if (h === '#profils-etablissement' || h === '#profils-titulaire') {
       setTab('etablissement')
       return
     }
@@ -100,17 +100,16 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
               Vous voulez{' '}
               <span className="profils-mar-title-verb profils-mar-title-verb--rem">faire un rempla</span>
               <span className="profils-mar-title-punct">, </span>
-              <br />
               ou vous{' '}
-              <span className="profils-mar-title-verb profils-mar-title-verb--acc">souhaitez accueillir</span>
-              {' '}
-              <span className="profils-mar-title-tail">un </span>
+              <span className="profils-mar-title-verb profils-mar-title-verb--acc">avez besoin d&apos;un</span>{' '}
               <span className="profils-mar-title-verb profils-mar-title-verb--mar">MAR</span>
             </span>
           </h2>
           <p className="ml-section-lead">
-            Même parcours pour les MAR en rempla et les établissements : critères et contrat lisibles avant le jour J, relances
-            tracées — moins de désistements à la dernière minute ou sans nouvelle, plus de simplicité côté RH et bloc.
+            Même parcours pour les <strong>MAR remplaçant</strong> et pour ceux qui portent le besoin côté bloc —{' '}
+            <strong>titulaire</strong> (remplacé), membre d&apos;équipe ou <strong>établissement</strong> : critères et
+            contrat lisibles avant le jour J, relances tracées — moins de désistements à la dernière minute ou sans
+            nouvelle, plus de simplicité côté agenda, RH et bloc.
           </p>
         </header>
 
@@ -118,7 +117,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
           id="profils-mar-tabs-top"
           className="profils-mar-tablist"
           role="tablist"
-          aria-label="Choisissez votre profil : MAR en rempla ou établissement"
+          aria-label="Choisissez votre profil : MAR remplaçant, ou titulaire et établissement côté besoin MAR"
           data-reveal
         >
           <button
@@ -131,7 +130,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
             className={`profils-mar-tab${tab === 'remplacant' ? ' profils-mar-tab--active' : ''}`}
             onClick={() => setTab('remplacant')}
           >
-            Vous êtes un MAR en rempla
+            MAR remplaçant
           </button>
           <button
             type="button"
@@ -143,7 +142,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
             className={`profils-mar-tab${tab === 'etablissement' ? ' profils-mar-tab--active' : ''}`}
             onClick={() => setTab('etablissement')}
           >
-            Vous êtes un établissement
+            Titulaire ou établissement
           </button>
         </div>
 
@@ -156,7 +155,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
         >
           <div className="profils-mar-panel-head">
             <h3 className="etablissement-mar-title font-fraunces">
-              Votre vacation MAR, lisible avant la signature
+              Votre rempla MAR, lisible avant la signature
             </h3>
             <p className="etablissement-mar-lead">
               Critères, contrat, relances jusqu&apos;au jour J : tout est factuel — vous tranchez à partir du dossier,
@@ -185,11 +184,12 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
         >
           <div className="profils-mar-panel-head">
             <h3 className="etablissement-mar-title font-fraunces">
-              Votre besoin MAR, avant même le jour J au bloc
+              Votre besoin MAR — titulaire remplacé ou équipe hospitalière
             </h3>
             <p className="etablissement-mar-lead">
-              Dossier RH, confirmations et historique des échanges : tout reste lié à la vacation MAR, avec la même vue pour
-              l&apos;établissement et pour le MAR qui signe au bloc.
+              Que vous soyez <strong>titulaire</strong> à faire remplacer (sans parler au nom de toute la structure) ou{' '}
+              <strong>établissement</strong> : dossier, confirmations et historique des échanges restent liés au rempla
+              MAR, avec la même vue côté demande et pour le MAR qui signe au bloc.
             </p>
           </div>
           <div className="etablissement-mar-grid">
@@ -208,7 +208,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
         <div
           className="profils-mar-tablist profils-mar-tablist--endcap"
           role="group"
-          aria-label="Raccourci : même choix MAR ou établissement qu’en haut de section ; le clic remonte pour afficher le contenu depuis le début"
+          aria-label="Raccourci : même choix MAR remplaçant ou titulaire / établissement qu’en haut de section ; le clic remonte pour afficher le contenu depuis le début"
         >
           <button
             type="button"
@@ -216,7 +216,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
             className={`profils-mar-tab${tab === 'remplacant' ? ' profils-mar-tab--active' : ''}`}
             onClick={selectRemFromEndcap}
           >
-            Vous êtes un MAR en rempla
+            MAR remplaçant
           </button>
           <button
             type="button"
@@ -224,7 +224,7 @@ export default function ProfilsMarSection({ listePleinePionniers = false }: Prof
             className={`profils-mar-tab${tab === 'etablissement' ? ' profils-mar-tab--active' : ''}`}
             onClick={selectEtabFromEndcap}
           >
-            Vous êtes un établissement
+            Titulaire ou établissement
           </button>
         </div>
 
