@@ -700,8 +700,8 @@ function PionniersSection({ placesPrises }: { placesPrises: number }) {
     },
     {
       icon: 'contract',
-      title: 'Commission divisée par 2 (titulaire ou établissement)',
-      text: 'Les titulaires et établissements parmi les 50 premiers inscrits paient 3 % au lieu de 6 % sur les mises en relation avec un MAR. Réduction figée à vie au contrat, même si le barème standard change.',
+      title: 'Commission divisée par 2 (titulaire)',
+      text: 'Les titulaires parmi les 50 premiers inscrits paient 3 % au lieu de 6 % sur les mises en relation avec un MAR. Réduction figée à vie au contrat, même si le barème standard change.',
     },
     {
       icon: 'verified',
@@ -812,169 +812,323 @@ function TarifsSection({ placesPrises }: { placesPrises: number }) {
           <p className="ml-section-lead">
             <strong className="ml-text-strong">Côté MAR en remplacement : 0 €</strong> — matching, contrat et
             vérification CNOM sans frais pour vous.{' '}
-            <strong className="ml-text-strong">Côté titulaire / établissement</strong> (celui qui porte le besoin MAR){' '}
+            <strong className="ml-text-strong">Côté titulaire</strong> (celui qui porte le besoin MAR){' '}
             : commission uniquement sur les mises en relation.{' '}
             <strong className="ml-text-strong">Pas d’abonnement obligatoire</strong> — pas de forfait mensuel séparé
-            pour les structures : le barème à la commission est le même, que le besoin soit publié par un titulaire ou un
-            établissement.
+            pour les structures : le barème à la commission s’applique côté titulaire.
           </p>
         </header>
 
-        <div className="tarifs-pricing-shell" data-reveal aria-label="Grille tarifaire">
-          <div className="tarifs-pricing-grid">
-            {/* MAR en rempla */}
-            <div className="tarifs-pricing-col">
-              <div className="tarifs-pricing-col-head">
-                <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
-                  <span className="material-symbols-outlined">person</span>
-                </span>
-                <span className="tarifs-pricing-col-label-text">MAR en rempla</span>
-              </div>
-              <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--mar">
-                0 €
-              </p>
-              <p className="tarifs-pricing-col-lead">
-                <strong>Gratuit à vie. Sans conditions. Toujours.</strong>
-              </p>
-              <ul className="tarifs-pricing-features">
-                {['Matching illimité', 'Contrat de rempla automatique', 'LoopExpérience inclus', 'Vérification CNOM incluse'].map((f) => (
-                  <li key={f}>
-                    <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="tarifs-switch" data-reveal role="region" aria-label="Choix du profil pour les tarifs">
+          <input
+            type="radio"
+            id="tarifs-tab-mar"
+            name="tarifs-tab"
+            className="tarifs-switch__input"
+            defaultChecked
+          />
+          <input
+            type="radio"
+            id="tarifs-tab-etablissement"
+            name="tarifs-tab"
+            className="tarifs-switch__input"
+          />
 
-            {/* Établissement tarif standard */}
-            <div className={`tarifs-pricing-col${listePleine ? ' tarifs-pricing-col--std-actif' : ''}`}>
-              <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
-                <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
-                  <span className="material-symbols-outlined">business</span>
-                </span>
-                <span className="tarifs-pricing-col-label-text">
-                  <span className="tarifs-pricing-col-label-text__line">Titulaire ou établissement ·</span>
-                  <span className="tarifs-pricing-col-label-text__line">Tarif standard</span>
-                </span>
-              </div>
-              <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">
-                6%
-              </p>
-              <p className="tarifs-pricing-col-lead">
-                <strong>sur les premières mises en relation.</strong>
-              </p>
-              <ul className="tarifs-pricing-features">
-                {['Sans abonnement', 'Pas de frais fixes', 'Facturation post-mission', 'Résiliation à tout moment'].map((f) => (
-                  <li key={f}>
-                    <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Établissement · Tarif Pionnier */}
-            <div
-              className={`tarifs-pricing-col tarifs-pricing-col--pionnier${listePleine ? ' tarifs-pricing-col--pionnier-epuise' : ''}`}
-            >
-              <div
-                className={`tarifs-pricing-col-inner${listePleine ? ' tarifs-pricing-col-inner--liste-pleine-dim' : ''}`}
-              >
-                <div className="tarifs-pricing-col-head tarifs-pricing-col-head--pionnier tarifs-pricing-col-head--stacked-label">
-                  <span className="tarifs-pricing-col-label-badge tarifs-pricing-col-label-badge--pionnier" aria-hidden="true">
-                    <span className="material-symbols-outlined tarifs-pricing-col-label-badge__icon--verified">verified</span>
-                  </span>
-                  <span className="tarifs-pricing-col-label-text">
-                    <span className="tarifs-pricing-col-label-text__line">Titulaire ou établissement ·</span>
-                    <span className="tarifs-pricing-col-label-text__line">Tarif Pionnier</span>
-                  </span>
-                </div>
-                <div className="tarifs-pricing-price-row">
-                  <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--pionnier">
-                    3%
-                  </p>
-                  <p className="tarifs-pricing-price-struck">6%</p>
-                </div>
-                <p className="tarifs-pricing-col-lead tarifs-pricing-col-lead--pionnier">
-                  <strong>sur les premières mises en relation.</strong>
-                </p>
-                {listePleine ? (
-                  <p className="tarifs-pionnier-program-note">
-                    Places Pionniers complètes : les nouvelles inscriptions côté besoin MAR sont au tarif standard
-                    (6 %).{' '}
-                    <a href="#pionniers" className="ml-faq-inline-link">
-                      Ce qu&apos;avaient les {PIONNIER_PLACES_TOTAL} premiers
-                    </a>
-                    .
-                  </p>
-                ) : (
-                  <p className="tarifs-pionnier-program-note">
-                    Réservé aux <strong>titulaires et établissements</strong> parmi les {PIONNIER_PLACES_TOTAL}{' '}
-                    premiers inscrits :
-                    moitié de commission par rapport au barème standard sur les premières mises en relation, garantie à vie au contrat — plus
-                    co-construction produit et badge profil.{' '}
-                    <a href="#pionniers" className="ml-faq-inline-link">
-                      Détail programme Pionniers
-                    </a>
-                    .
-                  </p>
-                )}
-              </div>
-              {listePleine ? (
-                <div className="tarifs-pricing-pionnier-epuise-banner" role="region" aria-labelledby="tarifs-pionnier-epuise-title">
-                  <div className="tarifs-pricing-pionnier-epuise-banner__head">
-                    <span className="tarifs-pricing-pionnier-epuise-banner__icon" aria-hidden="true">
-                      <span className="material-symbols-outlined">notifications_active</span>
-                    </span>
-                    <p id="tarifs-pionnier-epuise-title" className="tarifs-pricing-pionnier-epuise-banner__title">
-                      Liste Pionniers complète.
-                    </p>
-                  </div>
-                  <p className="tarifs-pricing-pionnier-epuise-banner__text">
-                    Inscrivez-vous pour être tenu au courant de la{' '}
-                    <strong>date officielle de lancement</strong>.
-                  </p>
-                </div>
-              ) : null}
-            </div>
+          <div className="tarifs-switch__track" role="tablist" aria-label="Profils de tarification">
+            <label htmlFor="tarifs-tab-mar" id="tarifs-tab-mar-label" className="tarifs-switch__btn" role="tab">
+              MAR (remplaçant / titulaire)
+            </label>
+            <label htmlFor="tarifs-tab-etablissement" id="tarifs-tab-etablissement-label" className="tarifs-switch__btn" role="tab">
+              Établissement
+            </label>
           </div>
-        </div>
 
-        <div
-          className="tarifs-pricing-notes-wrap"
-          data-reveal
-          role="region"
-          aria-label="Règles communes côté titulaire ou établissement"
-        >
-          <div className="tarifs-pricing-notes">
-            <article className="tarifs-pricing-notes-card">
-              <header className="tarifs-pricing-notes-head">
-                <div className="tarifs-pricing-notes-icon" aria-hidden="true">
-                  <span className="material-symbols-outlined">repeat</span>
+          <div className="tarifs-switch__panels">
+            <div className="tarifs-switch__panel tarifs-switch__panel--mar" role="tabpanel" aria-labelledby="tarifs-tab-mar-label">
+              <div className="tarifs-pricing-shell" aria-label="Grille tarifaire — MAR (remplaçant / titulaire)">
+                <div className="tarifs-pricing-grid">
+                  <div className="tarifs-pricing-col">
+                    <div className="tarifs-pricing-col-head">
+                      <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
+                        <span className="material-symbols-outlined">person</span>
+                      </span>
+                      <span className="tarifs-pricing-col-label-text">MAR en rempla</span>
+                    </div>
+                    <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--mar">0 €</p>
+                    <p className="tarifs-pricing-col-lead">
+                      <strong>Gratuit à vie. Sans conditions.</strong>
+                    </p>
+                    <ul className="tarifs-pricing-features">
+                      {['Matching illimité', 'Contrat de rempla automatique', 'LoopExpérience inclus', 'Vérification CNOM incluse'].map((f) => (
+                        <li key={f}>
+                          <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className={`tarifs-pricing-col${listePleine ? ' tarifs-pricing-col--std-actif' : ''}`}>
+                    <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
+                      <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
+                        <span className="material-symbols-outlined">business</span>
+                      </span>
+                      <span className="tarifs-pricing-col-label-text">Titulaire · Tarif standard</span>
+                    </div>
+                    <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">6%</p>
+                    <p className="tarifs-pricing-col-lead">
+                      <strong>sur les premières mises en relation.</strong>
+                    </p>
+                    <ul className="tarifs-pricing-features">
+                      {['Sans abonnement', 'Pas de frais fixes', 'Facturation post-mission', 'Résiliation à tout moment'].map((f) => (
+                        <li key={f}>
+                          <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className={`tarifs-pricing-col tarifs-pricing-col--pionnier${listePleine ? ' tarifs-pricing-col--pionnier-epuise' : ''}`}>
+                    <div className={`tarifs-pricing-col-inner${listePleine ? ' tarifs-pricing-col-inner--liste-pleine-dim' : ''}`}>
+                      <div className="tarifs-pricing-col-head tarifs-pricing-col-head--pionnier tarifs-pricing-col-head--stacked-label">
+                        <span className="tarifs-pricing-col-label-badge tarifs-pricing-col-label-badge--pionnier" aria-hidden="true">
+                          <span className="material-symbols-outlined tarifs-pricing-col-label-badge__icon--verified">verified</span>
+                        </span>
+                        <span className="tarifs-pricing-col-label-text">Titulaire · Tarif Pionnier</span>
+                      </div>
+                      <div className="tarifs-pricing-price-row">
+                        <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--pionnier">3%</p>
+                        <p className="tarifs-pricing-price-struck">6%</p>
+                      </div>
+                      <p className="tarifs-pricing-col-lead tarifs-pricing-col-lead--pionnier">
+                        <strong>sur les premières mises en relation.</strong>
+                      </p>
+                      {listePleine ? (
+                        <p className="tarifs-pionnier-program-note">
+                          Places Pionniers complètes : les nouvelles inscriptions côté besoin MAR sont au tarif standard
+                          (6 %).{' '}
+                          <a href="#pionniers" className="ml-faq-inline-link">
+                            Ce qu&apos;avaient les {PIONNIER_PLACES_TOTAL} premiers
+                          </a>
+                          .
+                        </p>
+                      ) : (
+                        <p className="tarifs-pionnier-program-note">
+                          Réservé aux <strong>titulaires</strong> parmi les {PIONNIER_PLACES_TOTAL}{' '}
+                          premiers inscrits :
+                          moitié de commission par rapport au barème standard sur les premières mises en relation, garantie à vie au contrat — plus
+                          co-construction produit et badge profil.{' '}
+                          <a href="#pionniers" className="ml-faq-inline-link">
+                            Détail programme Pionniers
+                          </a>
+                          .
+                        </p>
+                      )}
+                    </div>
+                    {listePleine ? (
+                      <div className="tarifs-pricing-pionnier-epuise-banner" role="region" aria-labelledby="tarifs-pionnier-epuise-title">
+                        <div className="tarifs-pricing-pionnier-epuise-banner__head">
+                          <span className="tarifs-pricing-pionnier-epuise-banner__icon" aria-hidden="true">
+                            <span className="material-symbols-outlined">notifications_active</span>
+                          </span>
+                          <p id="tarifs-pionnier-epuise-title" className="tarifs-pricing-pionnier-epuise-banner__title">
+                            Liste Pionniers complète.
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
-                <p className="tarifs-pricing-notes-title">Missions récurrentes</p>
-              </header>
-              <div className="tarifs-pricing-notes-body">
-                <p className="tarifs-pricing-notes-highlight font-fraunces">3&nbsp;%</p>
-                <p className="tarifs-pricing-notes-text">
-                  Même MAR, missions suivantes — barème récurrent au contrat.
-                </p>
               </div>
-            </article>
-            <article className="tarifs-pricing-notes-card">
-              <header className="tarifs-pricing-notes-head">
-                <div className="tarifs-pricing-notes-icon" aria-hidden="true">
-                  <span className="material-symbols-outlined">contract</span>
+
+              <div className="tarifs-pricing-notes-wrap" role="region" aria-label="Règles communes côté titulaire">
+                <div className="tarifs-pricing-notes">
+                  <article className="tarifs-pricing-notes-card">
+                    <header className="tarifs-pricing-notes-head">
+                      <div className="tarifs-pricing-notes-icon" aria-hidden="true">
+                        <span className="material-symbols-outlined">repeat</span>
+                      </div>
+                      <p className="tarifs-pricing-notes-title">Missions récurrentes</p>
+                    </header>
+                    <div className="tarifs-pricing-notes-body">
+                      <p className="tarifs-pricing-notes-highlight font-fraunces">3&nbsp;%</p>
+                      <p className="tarifs-pricing-notes-text">
+                        Même MAR, missions suivantes — barème récurrent au contrat.
+                      </p>
+                    </div>
+                  </article>
+                  <article className="tarifs-pricing-notes-card">
+                    <header className="tarifs-pricing-notes-head">
+                      <div className="tarifs-pricing-notes-icon" aria-hidden="true">
+                        <span className="material-symbols-outlined">contract</span>
+                      </div>
+                      <p className="tarifs-pricing-notes-title">Missions de longue durée</p>
+                    </header>
+                    <div className="tarifs-pricing-notes-body">
+                      <p className="tarifs-pricing-notes-highlight font-fraunces">Commission plafonnée</p>
+                      <p className="tarifs-pricing-notes-text">
+                        Fixée au contrat — la part MedicusLoop ne dépasse pas ce plafond.
+                      </p>
+                    </div>
+                  </article>
                 </div>
-                <p className="tarifs-pricing-notes-title">Missions de longue durée</p>
-              </header>
-              <div className="tarifs-pricing-notes-body">
-                <p className="tarifs-pricing-notes-highlight font-fraunces">Commission plafonnée</p>
-                <p className="tarifs-pricing-notes-text">
-                  Fixée au contrat — la part MedicusLoop ne dépasse pas ce plafond.
-                </p>
               </div>
-            </article>
+            </div>
+
+            <div className="tarifs-switch__panel tarifs-switch__panel--etablissement" role="tabpanel" aria-labelledby="tarifs-tab-etablissement-label">
+              <div className="tarifs-pricing-shell" aria-label="Grille tarifaire — Établissement">
+                <div className="tarifs-pricing-grid">
+                  <div className="tarifs-pricing-col">
+                    <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
+                      <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
+                        <span className="material-symbols-outlined">storefront</span>
+                      </span>
+                      <span className="tarifs-pricing-col-label-text">Établissement · Offre Essentielle</span>
+                    </div>
+                    <div className="tarifs-pricing-price-row">
+                      <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">
+                        {listePleine ? '99€' : '79€'}
+                      </p>
+                      <p className="tarifs-pricing-price-note">
+                        {listePleine ? (
+                          <>
+                            Ancien tarif Pionniers
+                            <br />
+                            79€
+                          </>
+                        ) : (
+                          <>
+                            Tarif Pionniers
+                            <br />
+                            au lieu de 99€
+                          </>
+                        )}
+                      </p>
+                    </div>
+                    <p className="tarifs-pricing-col-lead">
+                      <strong>par mois, par établissement.</strong>
+                    </p>
+                    <ul className="tarifs-pricing-features">
+                      {['1 mise en relation incluse / mois', 'Mises en relation supplémentaires : 5%', 'Contrat + signature électronique', 'Résiliation à tout moment'].map((f) => (
+                        <li key={f}>
+                          <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    {listePleine ? (
+                      <div className="tarifs-pricing-pionnier-epuise-banner" role="region" aria-label="Liste Pionniers complète">
+                        <div className="tarifs-pricing-pionnier-epuise-banner__head">
+                          <span className="tarifs-pricing-pionnier-epuise-banner__icon" aria-hidden="true">
+                            <span className="material-symbols-outlined">notifications_active</span>
+                          </span>
+                          <p className="tarifs-pricing-pionnier-epuise-banner__title">
+                            Liste Pionniers complète.
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="tarifs-pricing-col">
+                    <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
+                      <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
+                        <span className="material-symbols-outlined">business</span>
+                      </span>
+                      <span className="tarifs-pricing-col-label-text">Établissement · Offre Croissance</span>
+                    </div>
+                    <div className="tarifs-pricing-price-row">
+                        <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">
+                          {listePleine ? '199€' : '149€'}
+                        </p>
+                        <p className="tarifs-pricing-price-note">
+                          {listePleine ? (
+                            <>
+                              Ancien tarif Pionniers
+                              <br />
+                              149€
+                            </>
+                          ) : (
+                            <>
+                              Tarif Pionniers
+                              <br />
+                              au lieu de 199€
+                            </>
+                          )}
+                        </p>
+                    </div>
+                    <p className="tarifs-pricing-col-lead">
+                      <strong>par mois, par établissement.</strong>
+                    </p>
+                    <ul className="tarifs-pricing-features">
+                      {['5 mises en relation incluses / mois', 'Mises en relation supplémentaires : 5%', 'Suivi des postes urgents', 'Support prioritaire'].map((f) => (
+                        <li key={f}>
+                          <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    {listePleine ? (
+                      <div className="tarifs-pricing-pionnier-epuise-banner" role="region" aria-label="Liste Pionniers complète">
+                        <div className="tarifs-pricing-pionnier-epuise-banner__head">
+                          <span className="tarifs-pricing-pionnier-epuise-banner__icon" aria-hidden="true">
+                            <span className="material-symbols-outlined">notifications_active</span>
+                          </span>
+                          <p className="tarifs-pricing-pionnier-epuise-banner__title">
+                            Liste Pionniers complète.
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="tarifs-pricing-col">
+                    <div className="tarifs-pricing-col-inner">
+                      <div className="tarifs-pricing-col-head tarifs-pricing-col-head--stacked-label">
+                        <span className="tarifs-pricing-col-label-badge" aria-hidden="true">
+                          <span className="material-symbols-outlined">business_center</span>
+                        </span>
+                        <span className="tarifs-pricing-col-label-text">Établissement · Offre Réseau+</span>
+                      </div>
+                      <p className="font-fraunces tarifs-pricing-price tarifs-pricing-price--std">Sur devis</p>
+                      <p className="tarifs-pricing-col-lead">
+                        <strong>tarification adaptée à votre volume.</strong>
+                      </p>
+                      <ul className="tarifs-pricing-features">
+                        {['À partir de 15 mises en relation / mois', 'Commission entre 3% et 5% selon volume', 'Gestion multi établissements, réseaux, groupements', 'Accompagnement personnalisé'].map((f) => (
+                          <li key={f}>
+                            <span className="material-symbols-outlined tarifs-pricing-feature-icon tarifs-pricing-feature-icon--blue" aria-hidden="true">check_circle</span>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="tarifs-pricing-notes-wrap" role="region" aria-label="Règles communes côté établissement">
+                <div className="tarifs-pricing-notes tarifs-pricing-notes--single">
+                  <article className="tarifs-pricing-notes-card">
+                    <header className="tarifs-pricing-notes-head">
+                      <div className="tarifs-pricing-notes-icon" aria-hidden="true">
+                        <span className="material-symbols-outlined">verified_user</span>
+                      </div>
+                      <p className="tarifs-pricing-notes-title">Conditions souples</p>
+                    </header>
+                    <div className="tarifs-pricing-notes-body">
+                      <p className="tarifs-pricing-notes-highlight font-fraunces">Sans engagement, offre évolutive</p>
+                      <p className="tarifs-pricing-notes-text">
+                        Vous pouvez annuler à tout moment, changer d’offre selon l’évolution de votre activité, et
+                        bénéficier du tarif Pionniers tant qu’il est disponible.
+                      </p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
