@@ -273,6 +273,18 @@ document.documentElement.setAttribute('data-theme',d);
           }}
         />
         {children}
+        <div className="mobile-sticky-cta-root">
+          <a
+            href="/#inscription"
+            className="nav-cta mobile-sticky-cta-btn"
+            aria-label="Devenir Pionnier MedicusLoop — aller au formulaire"
+          >
+            <span className="material-symbols-outlined nav-cta__icon" aria-hidden="true">
+              rocket_launch
+            </span>
+            <span className="nav-cta__label">Devenir pionnier</span>
+          </a>
+        </div>
       </body>
     </html>
   )

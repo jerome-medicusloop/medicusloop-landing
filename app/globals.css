@@ -2615,6 +2615,37 @@ html[data-theme="dark"] .hero-cta-secondary {
   justify-self: center;
 }
 
+/* CTA sticky mobile vers #inscription */
+.mobile-sticky-cta-root {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .mobile-sticky-cta-root {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    padding: 10px var(--ml-content-inline) calc(10px + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--navbar-bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    display: block;
+  }
+
+  .mobile-sticky-cta-btn {
+    width: min(var(--ml-content-max), 100%);
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  main {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* CookieConsent: masquer complètement le bouton de révocation flottant */
 .cc-revoke,
 .cc-window.cc-revoke {
@@ -3456,6 +3487,14 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 .site-footer__legal {
   display: flex;
   gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .site-footer__legal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
 .site-footer__legal a {

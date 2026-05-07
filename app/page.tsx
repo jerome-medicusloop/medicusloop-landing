@@ -997,7 +997,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
       />
       <Navbar listePleinePionniers={listePleinePionniers} />
-      <main id="intro">
+      <main id="intro" className="home-main">
       <PageAnimations />
       <Hero placesPrises={placesPrises} />
       <ProfilsMarSection listePleinePionniers={listePleinePionniers} />
