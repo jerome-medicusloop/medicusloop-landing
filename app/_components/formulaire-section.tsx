@@ -664,7 +664,12 @@ export default function FormulaireSection({
       ref={sectionRef}
       id="inscription"
       style={{
-        background: 'var(--surface)',
+        backgroundColor: 'var(--bg)',
+        backgroundImage:
+          'radial-gradient(ellipse 108% 92% at 86% -12%, color-mix(in srgb, var(--nav-cta-bg) 22%, transparent) 0%, transparent 58%), radial-gradient(ellipse 92% 78% at -10% 104%, color-mix(in srgb, var(--accent-teal) 16%, transparent) 0%, transparent 52%), radial-gradient(ellipse 52% 40% at 78% 92%, color-mix(in srgb, var(--nav-cta-bg) 8%, transparent) 0%, transparent 64%)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '132% 100%, 118% 88%, 100% 62%',
+        backgroundPosition: '100% 0%, 0% 100%, 78% 100%',
         borderTop: '1px solid var(--border)',
         padding: `${compactSectionTop ? 'clamp(16px, 2.2vw, 26px)' : 'var(--ml-section-pad-top)'} var(--ml-content-inline) ${compactSectionTop ? 'clamp(20px, 3.2vw, 40px)' : 'var(--ml-section-pad-bottom)'}`,
         overflowX: 'clip',

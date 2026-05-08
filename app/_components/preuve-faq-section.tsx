@@ -99,23 +99,9 @@ export default function PreuveFaqSection() {
   return (
     <section
       className="ml-preuve-faq-section"
-      aria-labelledby="preuve-sociale-title"
+      aria-label="Preuves et questions fréquentes"
     >
       <div className="ml-section-max">
-        <header className="ml-section-head-center ml-preuve-head" data-reveal>
-          <h2 id="preuve-sociale-title" className="font-fraunces ml-title-hero comparatif-head-title ml-section-h2-tight">
-            <span className="comparatif-head-title__line">Ce que disent les premiers échanges</span>
-            <span className="comparatif-head-title__accent">
-              <span className="profils-mar-title-verb profils-mar-title-verb--rem">Avant même le lancement public.</span>
-            </span>
-            <span className="comparatif-head-title__rule" aria-hidden="true" />
-          </h2>
-          <p className="ml-section-lead">
-            Commentaires reformulés à partir de discussions avec des MAR et des établissements (salons, entretiens,
-            pré-inscriptions).
-          </p>
-        </header>
-
         <div className="ml-preuve-quotes-grid" data-stagger>
           {ILLUSTRATIVE_QUOTES.map((t) => (
             <blockquote key={t.initials} className="ml-preuve-quote glass card-hover">
@@ -134,15 +120,6 @@ export default function PreuveFaqSection() {
         </div>
 
         <div className="ml-faq-block" id="faq" data-reveal>
-          <header className="ml-faq-head">
-            <h2 className="font-fraunces ml-title-hero comparatif-head-title ml-section-h2-tight ml-faq-title">
-              <span className="comparatif-head-title__line">Questions fréquentes</span>
-            </h2>
-            <p className="ml-section-lead ml-faq-lead">
-              Les objections qu’on se fait avant de s’inscrire — réponses synthétiques ; le détail juridique est dans les
-              pages dédiées.
-            </p>
-          </header>
           <div className="ml-faq-list">
             {FAQ_ITEMS.map((item) => (
               <details key={item.q} className="ml-faq-details">

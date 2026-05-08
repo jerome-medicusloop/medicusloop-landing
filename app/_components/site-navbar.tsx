@@ -7,12 +7,11 @@ import MedicusLoopLogo from './medicusloop-logo'
 import ThemeToggle from './theme-toggle'
 
 const NAV_SECTION_LINKS = [
-  { label: 'MAR / structures', href: '/#profils' },
   { label: 'Comment ça marche', href: '/#comment-ca-marche' },
   { label: 'Comparatif', href: '/#comparatif' },
   { label: 'LoopExpérience', href: '/#loopexperience' },
-  { label: 'Tarifs', href: '/#tarifs' },
   { label: 'Pionniers', href: '/#pionniers' },
+  { label: 'Tarifs', href: '/#tarifs' },
 ] as const
 
 /** Liens du tiroir mobile : accueil + mêmes ancres que la nav desktop (`/#` pour les sous-pages). */

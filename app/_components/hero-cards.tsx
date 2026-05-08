@@ -1101,7 +1101,7 @@ export default function HeroCards() {
                       style={{ ...detailIconStyle, color: palette.main, fontVariationSettings: "'FILL' 1" }}
                       aria-hidden="true"
                     >
-                      verified
+                      workspace_premium
                     </span>
                     Rémunération
                   </span>

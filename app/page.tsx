@@ -10,9 +10,7 @@ import PageAnimations from './_components/page-animations'
 import HeroCards from './_components/hero-cards'
 import Navbar from './_components/site-navbar'
 import HeroTrustBlock from './_components/trust-strip'
-import ProfilsMarSection from './_components/profils-mar-section'
 import PionnierCtaStrip from './_components/pionnier-cta-strip'
-import PreuveFaqSection from './_components/preuve-faq-section'
 import SharePublicSection from './_components/share-public-section'
 import SiteFooter from './_components/site-footer'
 
@@ -294,6 +292,19 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
     },
   ]
 
+  const profileFocus = [
+    {
+      icon: 'directions_run',
+      title: 'Côté MAR remplaçant',
+      text: 'Vous voyez les critères clés avant de vous engager (bloc, forfait, contexte), avec contrat signé électroniquement et relances automatiques jusqu’au jour J. Côté MAR, la mission reste gratuite.',
+    },
+    {
+      icon: 'business',
+      title: 'Côté titulaire / établissement',
+      text: 'Vous réduisez les allers-retours de dernière minute grâce à un suivi clair : mise en relation, confirmations J-7/J-3/J-1, contrat signé et historique de chaque étape pour sécuriser le rempla.',
+    },
+  ]
+
   const ccmRowIcon = (icon: string) => (
     <div className="ccm-row-icon-wrap" aria-hidden="true">
       <span className="material-symbols-outlined" aria-hidden="true">
@@ -329,7 +340,6 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
           aria-labelledby="probleme-title"
         >
           <div className="ccm-probleme-inner">
-            <GrainSvg filterSuffix="ccm" />
             <div className="ccm-probleme-stack">
               <div className="ccm-compare-col-head ccm-compare-col-head--mb" data-reveal>
                 <p className="ccm-pill ccm-pill--muted">Avant</p>
@@ -337,7 +347,7 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
                   Ce quotidien, vu côté MAR ou côté établissement ?
                 </h3>
                 <p className="ccm-compare-intro">
-                  Le rempla libéral tel qu&apos;il se vit au bloc — la réalité du terrain à chaque mission.
+                  Le rempla tel qu&apos;il se vit au bloc — la réalité du terrain, du premier contact au jour de mission.
                 </p>
               </div>
               <ul className="ccm-compare-steps-list" data-stagger>
@@ -366,7 +376,7 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
             <div className="ccm-compare-col-head ccm-compare-col-head--mb" data-reveal>
               <p className="ccm-pill ccm-pill--accent">Après — MedicusLoop</p>
               <h3 id="etapes-rempla-title" className="font-fraunces ml-title-block ccm-ml-title--loose">
-                Simple comme un match.
+                Un parcours clair, du profil à la mission.
               </h3>
               <p className="ccm-compare-intro">
                 Trois étapes — même logique pour le MAR en rempla et pour le besoin MAR (titulaire ou établissement).
@@ -387,6 +397,29 @@ function SolutionSection({ listePleinePionniers }: { listePleinePionniers: boole
           </div>
         </section>
         </div>
+
+        <section aria-label="Parcours par profil" className="ccm-compare-col ccm-compare-col--bare" data-reveal>
+          <div className="ccm-compare-col-head ccm-compare-col-head--mb">
+            <p className="ccm-pill ccm-pill--accent">Selon votre profil</p>
+            <h3 className="font-fraunces ml-title-block ccm-ml-title--loose">
+              Vu du MAR en rempla et du titulaire / établissement
+            </h3>
+            <p className="ccm-compare-intro">
+              Même mission, deux besoins complémentaires : visibilité, fiabilité et suivi jusqu&apos;au jour J.
+            </p>
+          </div>
+          <ul className="ccm-compare-steps-list" data-stagger>
+            {profileFocus.map((item) => (
+              <li key={item.title} className="glass card-hover ccm-compare-card">
+                <div className="ccm-compare-card__icon-title">
+                  {ccmRowIcon(item.icon)}
+                  <h4 className="ml-title-card">{item.title}</h4>
+                </div>
+                <p className="ccm-compare-card-body">{item.text}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
 
       <PionnierCtaStrip listePleinePionniers={listePleinePionniers} withShareInvite={false} />
@@ -1154,12 +1187,11 @@ export default async function HomePage() {
       <main id="intro" className="home-main">
       <PageAnimations />
       <Hero placesPrises={placesPrises} />
-      <ProfilsMarSection listePleinePionniers={listePleinePionniers} />
       <SolutionSection listePleinePionniers={listePleinePionniers} />
       <VersusSection listePleinePionniers={listePleinePionniers} />
       <LoopExperienceSection listePleinePionniers={listePleinePionniers} />
-      <TarifsSection placesPrises={placesPrises} />
       <PionniersSection placesPrises={placesPrises} />
+      <TarifsSection placesPrises={placesPrises} />
       <FormulaireSection compactSectionTop listePleinePionniers={listePleinePionniers} />
       <div
         className="share-public-wrap--post-form"
@@ -1174,7 +1206,6 @@ export default async function HomePage() {
           <SharePublicSection embedded />
         </div>
       </div>
-      <PreuveFaqSection />
       <SiteFooter />
       </main>
     </>

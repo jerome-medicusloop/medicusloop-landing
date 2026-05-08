@@ -1935,7 +1935,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   padding: 4px 12px;
   border-radius: 9999px;
   font-size: clamp(0.7rem, 0.2vw + 0.64rem, 0.78rem);
@@ -1951,15 +1951,27 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
+/* Après / Selon votre profil : fond primaire (clair + sombre) */
 .ccm-pill--accent {
-  color: var(--accent-blue);
-  border: 1px solid var(--pill-blue-soft-border);
-  background: var(--pill-blue-soft-bg);
+  color: var(--text-on-primary);
+  border: 1px solid var(--nav-cta-border);
+  background: var(--nav-cta-bg);
+  box-shadow: none;
+  text-shadow: none;
 }
 
 /* Pilule + titre + accroche : centrés au-dessus des cartes (chaque colonne) */
 .ccm-compare-col-head {
   text-align: center;
+}
+
+@media (min-width: 960px) {
+  .ccm-compare-shell > section .ccm-compare-col-head {
+    min-height: clamp(128px, 13vw, 170px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 }
 
 .ccm-compare-col-head .ccm-compare-intro {
@@ -1981,7 +1993,7 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   line-height: 1.65;
 }
 
-.ccm-compare-shell h4.ml-title-card {
+.ccm-compare-card h4.ml-title-card {
   font-size: clamp(0.95rem, 0.28vw + 0.88rem, 1.05rem);
   line-height: 1.38;
   font-weight: 700; /* aligné titres cartes Profils MAR */
@@ -1994,6 +2006,20 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   flex-direction: column;
   gap: 10px;
   align-items: stretch;
+  background: color-mix(in srgb, var(--surface-2) 65%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--border) 62%, var(--surface) 38%);
+  box-shadow: none;
+}
+
+/*
+ * Dark : fond carte uniquement (pas de halo ni ombre large — sinon le gap flex laisse voir un fond plus sombre).
+ */
+html[data-theme='dark'] .ccm-compare-card {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .ccm-compare-card__icon-title {
@@ -2016,7 +2042,19 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(12px, 1.8vw, 14px);
+  gap: clamp(10px, 1.5vw, 16px);
+  /* Pas de fond : l’espace entre cartes laisse voir le fond de section (.ccm-outer). */
+  background: transparent;
+}
+
+/* Bloc bas "Selon votre profil" : un peu plus présent (titre + texte) */
+#comment-ca-marche > .ccm-inner > section:last-of-type .ccm-ml-title--loose {
+  font-size: clamp(1.14rem, 0.58vw + 1.02rem, 1.34rem);
+  line-height: 1.26;
+}
+
+#comment-ca-marche > .ccm-inner > section:last-of-type .ccm-compare-card-body {
+  font-size: clamp(0.9rem, 0.28vw + 0.84rem, 1rem);
 }
 
 /* ─── Material Symbols (self-host @fontsource-variable ; hors ligne après 1er chargement du bundle) ─── */
@@ -2039,11 +2077,8 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
 }
 
 /* ─── Page d’accueil (app/page.tsx) : mises en page / cartes (évite styles inline) ─── */
-/* Hero + Comment ça marche (.ccm-outer) + LoopExpérience + Pionniers : fond --bg + halos primary / teal */
+/* Hero : fond --bg + halos primary / teal */
 .ml-hero,
-.ccm-outer,
-.loopexperience-section,
-.pionniers-section,
 .ml-preuve-faq-section {
   background-color: var(--bg);
   background-image:
@@ -2266,7 +2301,7 @@ html[data-theme="dark"] .hero-cta-secondary {
 
 .ccm-probleme-inner {
   position: relative;
-  padding: clamp(16px, 2.2vw, 24px) 0;
+  padding: clamp(14px, 2vw, 21px) 0;
   overflow: hidden;
 }
 
@@ -2277,19 +2312,19 @@ html[data-theme="dark"] .hero-cta-secondary {
 
 .ccm-etapes-inner {
   position: relative;
-  padding: clamp(16px, 2.2vw, 24px) 0;
+  padding: clamp(14px, 2vw, 21px) 0;
 }
 
 .ccm-compare-col-head--mb {
-  margin-bottom: 14px;
+  margin-bottom: 11px;
 }
 
 .ccm-ml-title--tight {
-  margin: 0 0 4px;
+  margin: 0 0 3px;
 }
 
 .ccm-ml-title--loose {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .ccm-row-icon-wrap {
@@ -2326,8 +2361,25 @@ html[data-theme="dark"] .hero-cta-secondary {
   margin: 0 0 16px;
 }
 
-.comparatif-section {
+.ccm-outer {
   background: var(--surface);
+}
+
+.comparatif-section {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 108% 92% at 86% -12%, color-mix(in srgb, var(--nav-cta-bg) 22%, transparent) 0%, transparent 58%),
+    radial-gradient(ellipse 92% 78% at -10% 104%, color-mix(in srgb, var(--accent-teal) 16%, transparent) 0%, transparent 52%),
+    radial-gradient(ellipse 52% 40% at 78% 92%, color-mix(in srgb, var(--nav-cta-bg) 8%, transparent) 0%, transparent 64%);
+  background-repeat: no-repeat;
+  background-size:
+    132% 100%,
+    118% 88%,
+    100% 62%;
+  background-position:
+    100% 0%,
+    0% 100%,
+    78% 100%;
   padding: var(--ml-section-pad-top) 24px 0;
   position: relative;
   overflow: hidden;
@@ -2694,35 +2746,106 @@ html[data-theme="dark"] .hero-cta-secondary {
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
 }
 
-.comparatif-vs-col--muted-soft {
-  background: color-mix(in srgb, var(--surface-2) 48%, var(--surface) 52%);
+/* Pas de variante de fond : même carte que la colonne 1 (clair + dark). */
+
+/* Dark : colonnes Site d’annonces / Agence = même carte élevée que MedicusLoop */
+html[data-theme='dark'] .comparatif-vs-col--muted,
+html[data-theme='dark'] .comparatif-vs-col--muted-soft {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
+  border-style: solid;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--text) 7%, transparent),
+    0 14px 40px color-mix(in srgb, var(--text) 9%, transparent);
 }
 
-/* Colonne MedicusLoop : halo primary (vert) pour la mettre en avant */
+html[data-theme='dark'] .comparatif-vs-col--muted::before,
+html[data-theme='dark'] .comparatif-vs-col--muted-soft::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 58%;
+  z-index: 0;
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 92% 95% at 50% 0%,
+    color-mix(in srgb, var(--surface-2) 58%, transparent) 0%,
+    transparent 72%
+  );
+}
+
+html[data-theme='dark'] .comparatif-vs-col--muted > *,
+html[data-theme='dark'] .comparatif-vs-col--muted-soft > * {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * Référence carte « dark » validée (colonne MedicusLoop, comparatif) — à réutiliser telle quelle si besoin :
+ * - fond base : var(--surface)
+ * - halo haut : .comparatif-vs-orb (radial surface-2 → transparent)
+ * - contour : 1px solid color-mix(border 88%, surface)
+ * - relief : box-shadow 0 1px line + ombre portée légère (voir bloc ci-dessous)
+ */
+
+/* Colonne MedicusLoop : relief par le fond (halo discret) — pas de contour / ombres verts */
 .comparatif-vs-col--positive {
   background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 38%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
   border-radius: 20px;
   padding: 28px;
   position: relative;
   z-index: 1;
-  overflow: visible;
+  overflow: hidden;
   isolation: isolate;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--nav-cta-bg) 22%, transparent),
-    0 6px 28px color-mix(in srgb, var(--nav-cta-bg) 14%, transparent),
-    0 16px 56px color-mix(in srgb, var(--nav-cta-bg) 12%, transparent),
-    0 0 72px color-mix(in srgb, var(--nav-cta-bg) 18%, transparent);
+    0 1px 0 color-mix(in srgb, var(--text) 7%, transparent),
+    0 14px 40px color-mix(in srgb, var(--text) 9%, transparent);
 }
 
+/* Halo doux en tête de carte (contenu dans le rayon : compatible overflow hidden) */
 .comparatif-vs-orb {
-  display: none;
+  display: block;
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 58%;
+  z-index: 0;
+  border-radius: 20px 20px 0 0;
+  background: radial-gradient(
+    ellipse 92% 95% at 50% 0%,
+    color-mix(in srgb, var(--surface-2) 58%, transparent) 0%,
+    transparent 72%
+  );
 }
 
 .comparatif-vs-head-block {
   position: relative;
   z-index: 1;
   margin-bottom: 20px;
+}
+
+/* Colonne MedicusLoop : pilule = fond primaire comme .ccm-pill--accent (clair + sombre) */
+.comparatif-vs-col--positive .comparatif-vs-pill--accent {
+  background: var(--nav-cta-bg);
+  border: 1px solid var(--nav-cta-border);
+  color: var(--text-on-primary);
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.comparatif-vs-col--positive .comparatif-vs-pill--accent .material-symbols-outlined {
+  color: var(--text-on-primary);
+}
+
+.comparatif-vs-col--positive .comparatif-vs-icon--ok {
+  color: var(--accent-blue);
 }
 
 .ml-text-strong {
@@ -2751,6 +2874,7 @@ html[data-theme="dark"] .hero-cta-secondary {
 
 .tarifs-section {
   background: var(--surface);
+  background-image: none;
   padding: var(--ml-section-pad-top) var(--ml-content-inline) 0;
   position: relative;
   overflow: hidden;
@@ -3374,14 +3498,15 @@ span.mentions-legales-mail--obfuscated:hover {
 .site-footer__contact-mail {
   color: var(--text-muted);
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1.4px;
-  transition: color 0.15s ease;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-muted) 40%, transparent);
+  padding-bottom: 1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .site-footer__contact-mail:hover {
   color: var(--text);
+  border-bottom-color: color-mix(in srgb, var(--text) 60%, transparent);
 }
 
 .site-footer__contact-mail:focus-visible {
@@ -3498,11 +3623,13 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 }
 
 .site-footer__legal a {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1.3px;
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: none;
+  padding-bottom: 0;
+  transition: color 0.15s ease;
 }
 
 .site-footer__legal a:hover {
@@ -3753,6 +3880,8 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 
 /* LoopExpérience : fond = groupe halos (sans orbes animés) */
 .loopexperience-section {
+  background: var(--surface);
+  background-image: none;
   padding: var(--ml-section-pad-top) 24px 0;
   position: relative;
   overflow: hidden;
@@ -3787,12 +3916,13 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(24px, 4vw, 48px);
-  align-items: start;
+  align-items: center;
 }
 
 @media (max-width: 900px) {
   .loopexperience-split-top {
     grid-template-columns: 1fr;
+    align-items: start;
   }
 }
 
@@ -3840,7 +3970,7 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 .loopexperience-interest-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
 }
 
@@ -3852,10 +3982,10 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 .loopexperience-interest-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   border-radius: 9999px;
-  padding: 8px 16px;
-  font-size: clamp(0.84rem, 0.35vw + 0.78rem, 0.9375rem);
+  padding: 7px 14px;
+  font-size: clamp(0.81rem, 0.32vw + 0.76rem, 0.9rem);
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
   box-sizing: border-box;
 }
@@ -4048,6 +4178,11 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
   color: var(--text-subtle);
 }
 
+html[data-theme='dark'] .loopexperience-card-category {
+  color: color-mix(in srgb, var(--text) 76%, var(--accent-blue) 24%);
+  text-shadow: 0 1px 8px color-mix(in srgb, var(--bg) 72%, transparent);
+}
+
 .loopexperience-card-title {
   margin: 0;
   font-size: clamp(1rem, 2.1vw, 1.12rem);
@@ -4168,6 +4303,46 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
   background: color-mix(in srgb, var(--nav-cta-bg) 18%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 32%, transparent);
   color: var(--nav-cta-bg);
+}
+
+/* Dark : bloc hero confiance = même carte élevée que MedicusLoop comparatif */
+html[data-theme='dark'] .trust-strip--in-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--text) 7%, transparent),
+    0 14px 40px color-mix(in srgb, var(--text) 9%, transparent);
+}
+
+html[data-theme='dark'] .trust-strip--in-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 58%;
+  z-index: 0;
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 92% 95% at 50% 0%,
+    color-mix(in srgb, var(--surface-2) 58%, transparent) 0%,
+    transparent 72%
+  );
+}
+
+html[data-theme='dark'] .trust-strip--in-hero .trust-strip-inner--in-hero {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme='dark'] .trust-strip--in-hero .trust-strip-icon {
+  background: var(--pill-blue-mid-bg);
+  border: 1px solid var(--pill-blue-mid-border);
+  color: var(--accent-blue);
+  box-shadow: none;
 }
 
 .trust-strip-title {
@@ -4940,6 +5115,20 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
 /* Section Pionniers : fond = groupe halos (sans orbe décoratif) */
 .pionniers-section {
   box-sizing: border-box;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 108% 92% at 86% -12%, color-mix(in srgb, var(--nav-cta-bg) 22%, transparent) 0%, transparent 58%),
+    radial-gradient(ellipse 92% 78% at -10% 104%, color-mix(in srgb, var(--accent-teal) 16%, transparent) 0%, transparent 52%),
+    radial-gradient(ellipse 52% 40% at 78% 92%, color-mix(in srgb, var(--nav-cta-bg) 8%, transparent) 0%, transparent 64%);
+  background-repeat: no-repeat;
+  background-size:
+    132% 100%,
+    118% 88%,
+    100% 62%;
+  background-position:
+    100% 0%,
+    0% 100%,
+    78% 100%;
   /* Bas = bandeau CTA uniquement (comme Tarifs) — évite le double vide avant #inscription */
   padding: var(--ml-section-pad-top) var(--ml-content-inline) 0;
   position: relative;
@@ -6002,14 +6191,15 @@ button.nav-cta {
 
 /* Secondaire à côté du CTA inscription (ouvre popup partage) */
 .nav-cta--secondary {
-  background: color-mix(in srgb, var(--surface) 88%, var(--surface-2)) !important;
-  border-color: var(--border-hover) !important;
-  color: var(--text-muted) !important;
+  background: color-mix(in srgb, var(--nav-cta-bg) 16%, var(--surface)) !important;
+  border-color: color-mix(in srgb, var(--nav-cta-bg) 40%, var(--border-hover)) !important;
+  color: color-mix(in srgb, var(--text) 86%, var(--nav-cta-bg) 14%) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nav-cta-bg) 18%, transparent) inset;
 }
 
 .nav-cta--secondary:hover {
-  background: var(--surface-2) !important;
-  border-color: color-mix(in srgb, var(--accent-blue) 42%, var(--border-hover)) !important;
+  background: color-mix(in srgb, var(--nav-cta-bg) 24%, var(--surface)) !important;
+  border-color: color-mix(in srgb, var(--accent-blue) 52%, var(--border-hover)) !important;
   color: var(--text) !important;
 }
 
