@@ -141,31 +141,8 @@ export default function RootLayout({
   const gtmId = gtmContainerId()
 
   return (
-    <html
-      lang="fr"
-      data-theme="light"
-      className={`${fraunces.variable} ${dmSans.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="fr" className={`${fraunces.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <head>
-        <Script
-          id="theme-boot"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(){
-var d='light';
-try{
-  if(typeof matchMedia==='function'&&matchMedia('(prefers-color-scheme: dark)').matches){d='dark';}
-}catch(e){}
-try{
-var t=localStorage.getItem('medicusloop-theme');
-document.documentElement.setAttribute('data-theme',(t==='dark'||t==='light')?t:d);
-}catch(e){
-document.documentElement.setAttribute('data-theme',d);
-}
-})();`,
-          }}
-        />
         {/* CookieConsent (CMP) */}
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link

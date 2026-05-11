@@ -6,253 +6,19 @@
 }
 
 :root {
-  /* Défaut navigateur : clair (le thème sombre impose color-scheme via html[data-theme="dark"]) */
-  color-scheme: light;
-  /* Fond sombre : ardoise bleutée (moins « trou noir » que #07090F) */
-  --bg: #121a26;
-  --surface: #171f2d;
-  --surface-2: #1e2838;
-  /* Carte hero dark : fond un cran plus clair (badges / forfait / CTA lisibles) ; panneaux restent plus sombres */
-  --hero-card-bg: #3d4a5a;
-  --hero-card-panel-bg: #2a3340;
-  --hero-card-rim: rgba(255, 255, 255, 0.18);
-  /* Séparation légère entre panneaux (service, dates, etc.) */
-  --hero-card-inner-border: rgba(255, 255, 255, 0.12);
-  /* Trait sous le nom d’établissement : plus lisible que --hero-card-inner-border (photo + fond clair) */
-  --hero-card-clinic-separator: rgba(255, 255, 255, 0.28);
-  /* Département · région sous la ville (carte hero) */
-  --hero-card-region-text: #94a3b8;
-  /* Libellés panneaux (dark) : un peu plus clairs vs fond panneau */
-  --hero-card-panel-label: #d4dde8;
-  --border: #2a3548;
-  --border-hover: #3a4a62;
+  /* Thème unique : clair */
+
   --accent-blue: #10B981;
-  --accent-blue-glow: rgba(16, 185, 129, 0.12);
   --accent-teal: #14b8a6;
-  --accent-teal-glow: rgba(20, 184, 166, 0.12);
   --accent-violet: #047857;
   --accent-gold: #D97706;
-  --accent-gold-subtle: rgba(217, 119, 6, 0.12);
   --success: #059669;
   --accent-green: #34D399;
   --accent-green-subtle: rgba(52, 211, 153, 0.08);
   --accent-green-border: rgba(52, 211, 153, 0.25);
-  --text: #E2E8F0;
-  --text-muted: #64748B;
-  /* Liens / contrôles navbar sombre : plus lisibles que --text-muted sur fond nav */
-  --nav-link: #b6c0ce;
-  --nav-chrome-border: rgba(255, 255, 255, 0.18);
-  --text-subtle: #334155;
-  /* Placeholders champs : plus pâle que le texte saisi (formulaire + .ml-input) */
-  --ml-input-placeholder: rgba(148, 163, 184, 0.55);
-  --text-on-primary: #ffffff;
-  --glass-bg: rgba(22, 30, 42, 0.75);
-  /* Barre nav sombre : un cran au-dessus du fond page */
-  --navbar-bg: rgba(30, 40, 56, 0.98);
-  --navbar-border: rgba(255, 255, 255, 0.2);
-  --navbar-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.14),
-    0 18px 48px rgba(0, 0, 0, 0.58);
-  --nav-cta-bg: #10B981;
-  --nav-cta-border: #059669;
-  --nav-cta-text: #ffffff;
-  --nav-cta-hover-bg: #059669;
-  --nav-cta-hover-border: #047857;
-  --nav-cta-hover-text: #ffffff;
-  --nav-cta-pulse: rgba(16, 185, 129, 0.4);
-  /*
-   * Ancres menu : une seule source pour la hauteur utile de la nav (sync .ml-navbar-inner dans page.tsx).
-   * En rem → suit le zoom / taille de police racine ; scroll-padding dérivé sans « magic number » px isolé.
-   */
-  --ml-navbar-inner-height: 4.75rem; /* 76px @ root 16px */
-  /* Ancres : hauteur nav + bordure basse — sans marge supplémentaire (alignement sur le changement de fond de section) */
-  --ml-anchor-scroll-padding: calc(env(safe-area-inset-top, 0px) + var(--ml-navbar-inner-height) + 1px);
-  --footer-border: rgba(42, 53, 72, 0.45);
-  --orb-blue-core: rgba(16, 185, 129, 0.18);
-  --orb-violet-core: rgba(4, 120, 87, 0.15);
-  --grain-opacity: 0.025;
-  /* Pas d’ombre interne (inset) : sinon le fond paraît en dégradé alors que --hero-card-bg est uni */
-  --shadow-hero-top:
-    0 28px 72px rgba(0, 0, 0, 0.55),
-    0 12px 36px rgba(0, 0, 0, 0.38),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  --shadow-hero-urgent:
-    0 28px 72px rgba(0, 0, 0, 0.58),
-    0 12px 36px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.09),
-    0 0 40px rgba(245, 158, 11, 0.22);
-  --shadow-hero-stack:
-    0 14px 36px rgba(0, 0, 0, 0.42),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
-  --shadow-hero-accent-glow: 0 0 60px;
-  --star-rating: #fcd34d;
+  --nav-chrome-border: rgba(148, 163, 184, 0.45);
   --accent-amber: #f59e0b;
-  --accent-amber-soft-bg: rgba(245, 158, 11, 0.1);
-  --accent-amber-border-strong: rgba(245, 158, 11, 0.45);
-  --accent-amber-border-soft: rgba(245, 158, 11, 0.4);
-  --accent-amber-glow: rgba(245, 158, 11, 0.7);
-  --hero-cta-secondary-hover-bg: rgba(16, 185, 129, 0.05);
-  --pill-blue-soft-bg: rgba(16, 185, 129, 0.07);
-  --pill-blue-soft-border: rgba(16, 185, 129, 0.35);
-  --pill-blue-mid-bg: rgba(16, 185, 129, 0.1);
-  --pill-blue-mid-border: rgba(16, 185, 129, 0.3);
-  --pill-blue-faint-bg: rgba(16, 185, 129, 0.08);
-  --pill-blue-strong-border: rgba(16, 185, 129, 0.5);
-  --success-notice-bg: rgba(5, 150, 105, 0.05);
-  --success-notice-border: rgba(5, 150, 105, 0.2);
-  --pill-teal-soft-bg: rgba(20, 184, 166, 0.07);
-  --pill-teal-soft-border: rgba(20, 184, 166, 0.35);
-  --pill-teal-mid-bg: rgba(20, 184, 166, 0.1);
-  --pill-teal-mid-border: rgba(20, 184, 166, 0.35);
-  /* Comparatif « hors jeu » : même famille que les cartes Pionniers (teinte marque), pas gris ardoise froid */
-  --versus-icon: color-mix(in srgb, var(--accent-blue) 35%, var(--text-muted));
-  --versus-text: var(--text-muted);
-  --versus-col-bg: color-mix(in srgb, var(--accent-blue) 8%, var(--surface-2));
-  --versus-col-border: color-mix(in srgb, var(--accent-blue) 22%, var(--border) 78%);
-  --faq-card-bg: rgba(22, 30, 42, 0.82);
-  --faq-card-border: rgba(16, 185, 129, 0.3);
-  --radial-blue-soft: rgba(16, 185, 129, 0.12);
-  --radial-blue-faint: rgba(16, 185, 129, 0.07);
-  --radial-blue-section: rgba(16, 185, 129, 0.05);
-  --radial-gold-faint: rgba(217, 119, 6, 0.05);
-  --radial-gold-soft: rgba(217, 119, 6, 0.1);
-  --founder-gold-bg: rgba(217, 119, 6, 0.04);
-  /* Bandeau LoopExperience : fond assez dense pour lire le texte sur la photo ville */
-  --loopexperience-row-bg: rgba(22, 30, 42, 0.82);
-  --loopexperience-row-border: rgba(148, 163, 184, 0.35);
-  --loopexperience-icon-bg: rgba(30, 41, 59, 0.72);
-  --loopexperience-icon-border: rgba(148, 163, 184, 0.28);
-  /* Carte hero LoopExperience : en sombre le teal reste l’accent */
-  --loopexperience-accent: var(--accent-teal);
-  --match-btn-bg: rgba(16, 185, 129, 0.2);
-  --match-btn-bg-active: rgba(16, 185, 129, 0.36);
-  --match-btn-border: rgba(52, 211, 153, 0.55);
-  --match-btn-border-active: rgba(110, 231, 183, 0.85);
-  --match-text: #6ee7b7;
-  --passer-btn-bg-active: rgba(100, 116, 139, 0.22);
-  --passer-btn-border-active: rgba(100, 116, 139, 0.5);
-  /* Bouton « Passer » carte hero : lisible sur fond sombre */
-  --passer-btn-bg: rgba(255, 255, 255, 0.09);
-  --passer-btn-border: rgba(255, 255, 255, 0.2);
-  --passer-btn-text: #c4cdd6;
-  /* Titres landing : une échelle pour tout le site */
-  --ml-title-hero: clamp(1.55rem, 3.8vw, 2.45rem);
-  --ml-title-hero-line: 1.12;
-  --ml-title-hero-tracking: -0.03em;
-  --ml-title-block: clamp(1.05rem, 2.2vw, 1.35rem);
-  --ml-title-block-line: 1.25;
-  --ml-title-card: 0.9rem;
-  --ml-title-card-line: 1.3;
-  /* Largeur utile alignée hero / nav (grille + titres) */
-  --ml-content-max: 1280px;
-  --ml-content-inline: 24px;
-  /* Espace au-dessus du titre de section = même rythme que .ccm-inner (ex. « Comment ça marche ») */
-  --ml-section-pad-top: clamp(22px, 3.2vw, 36px);
-  --ml-section-pad-bottom: clamp(48px, 6vw, 80px);
-}
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --bg: #f1f5f9;
-    --surface: #ffffff;
-    --surface-2: #e8eef5;
-    --hero-card-bg: #ffffff;
-    /* Panneaux mission : plus clair que avant, mais plus « présent » que le bandeau LoopExperience */
-    --hero-card-panel-bg: #f1f4f9;
-    --hero-card-rim: rgba(15, 23, 42, 0.1);
-    --hero-card-inner-border: rgba(15, 23, 42, 0.08);
-    --hero-card-clinic-separator: rgba(15, 23, 42, 0.24);
-    --hero-card-region-text: #334155;
-    --border: #cbd5e1;
-    --border-hover: #94a3b8;
-    --accent-blue-glow: rgba(16, 185, 129, 0.22);
-    --accent-teal-glow: rgba(20, 184, 166, 0.18);
-    --accent-gold-subtle: rgba(217, 119, 6, 0.08);
-    --text: #0f172a;
-    /* Libellés panneaux mission : même contraste que le corps (évite gris trop pâle sur fond clair) */
-    --hero-card-panel-label: var(--text);
-    --text-muted: #475569;
-    --nav-link: #475569;
-    --text-subtle: #64748b;
-    --ml-input-placeholder: #9ca3af;
-    --text-on-primary: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.82);
-    --navbar-bg: rgba(255, 255, 255, 0.97);
-    --navbar-border: rgba(15, 23, 42, 0.1);
-    --navbar-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
-    --nav-cta-bg: #10B981;
-    --nav-cta-border: #059669;
-    --nav-cta-text: #ffffff;
-    --nav-cta-hover-bg: #059669;
-    --nav-cta-hover-border: #047857;
-    --nav-cta-hover-text: #ffffff;
-    --nav-cta-pulse: rgba(16, 185, 129, 0.35);
-    --footer-border: rgba(148, 163, 184, 0.45);
-    --orb-blue-core: rgba(16, 185, 129, 0.12);
-    --orb-violet-core: rgba(4, 120, 87, 0.1);
-    --grain-opacity: 0.04;
-    --shadow-hero-top: 0 20px 50px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 23, 42, 0.06);
-    --shadow-hero-urgent:
-      0 0 0 1px rgba(217, 119, 6, 0.42),
-      0 0 36px rgba(245, 158, 11, 0.32),
-      0 16px 48px rgba(15, 23, 42, 0.14),
-      inset 0 1px 0 rgba(254, 243, 199, 0.65);
-    --shadow-hero-stack: 0 6px 20px rgba(15, 23, 42, 0.08);
-    --shadow-hero-accent-glow: 0 0 40px;
-    --star-rating: #ca8a04;
-    --accent-amber-soft-bg: rgba(245, 158, 11, 0.12);
-    --accent-amber-border-strong: rgba(217, 119, 6, 0.5);
-    --accent-amber-border-soft: rgba(217, 119, 6, 0.42);
-    --accent-amber-glow: rgba(217, 119, 6, 0.45);
-    --hero-cta-secondary-hover-bg: rgba(16, 185, 129, 0.08);
-    --pill-blue-soft-bg: rgba(16, 185, 129, 0.1);
-    --pill-blue-soft-border: rgba(16, 185, 129, 0.35);
-    --pill-blue-mid-bg: rgba(16, 185, 129, 0.12);
-    --pill-blue-mid-border: rgba(16, 185, 129, 0.38);
-    --pill-blue-faint-bg: rgba(16, 185, 129, 0.1);
-    --pill-blue-strong-border: rgba(16, 185, 129, 0.45);
-    --success-notice-bg: rgba(5, 150, 105, 0.08);
-    --success-notice-border: rgba(5, 150, 105, 0.28);
-    --pill-teal-soft-bg: rgba(20, 184, 166, 0.1);
-    --pill-teal-soft-border: rgba(20, 184, 166, 0.32);
-    --pill-teal-mid-bg: rgba(20, 184, 166, 0.12);
-    --pill-teal-mid-border: rgba(20, 184, 166, 0.32);
-    --versus-icon: color-mix(in srgb, var(--accent-blue) 42%, var(--text-muted));
-    --versus-text: var(--text-muted);
-    --versus-col-bg: color-mix(in srgb, var(--accent-blue) 9%, var(--surface));
-    --versus-col-border: color-mix(in srgb, var(--accent-blue) 24%, var(--border) 76%);
-    --faq-card-bg: rgba(255, 255, 255, 0.92);
-    --faq-card-border: rgba(16, 185, 129, 0.28);
-    --radial-blue-soft: rgba(16, 185, 129, 0.14);
-    --radial-blue-faint: rgba(16, 185, 129, 0.1);
-    --radial-blue-section: rgba(16, 185, 129, 0.08);
-    --radial-gold-faint: rgba(217, 119, 6, 0.06);
-    --radial-gold-soft: rgba(217, 119, 6, 0.12);
-    --founder-gold-bg: rgba(217, 119, 6, 0.06);
-    /* LoopExperience carte hero : lisible sur photo (fond + bordure plus marqués) */
-    --loopexperience-row-bg: rgba(255, 255, 255, 0.9);
-    --loopexperience-row-border: rgba(71, 85, 105, 0.22);
-    --loopexperience-icon-bg: rgba(248, 250, 252, 0.95);
-    --loopexperience-icon-border: rgba(71, 85, 105, 0.16);
-    --loopexperience-accent: #64748b;
-    /* Matcher : fond bien visible sur carte claire (CTA swipe) */
-    --match-btn-bg: rgba(16, 185, 129, 0.28);
-    --match-btn-bg-active: rgba(16, 185, 129, 0.46);
-    --match-btn-border: rgba(5, 150, 105, 0.52);
-    --match-btn-border-active: rgba(4, 120, 87, 0.78);
-    --match-text: #047857;
-    /* Passer : très discret en clair (éviter les clics accidentels) */
-    --passer-btn-bg-active: rgba(100, 116, 139, 0.09);
-    --passer-btn-border-active: rgba(148, 163, 184, 0.35);
-    --passer-btn-bg: #f4f6f9;
-    --passer-btn-border: #e2e8f0;
-    --passer-btn-text: #94a3b8;
-  }
-}
-
-/* Forçage manuel (prioritaire sur prefers-color-scheme) */
-html[data-theme="light"] {
   color-scheme: light;
   --bg: #f1f5f9;
   --surface: #ffffff;
@@ -344,51 +110,28 @@ html[data-theme="light"] {
   --passer-btn-bg: #f4f6f9;
   --passer-btn-border: #e2e8f0;
   --passer-btn-text: #94a3b8;
-}
 
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-/*
- * Cartes missions (hero) : même rendu qu’en mode clair même si le site est en dark.
- * Les variables sont rescopées sur .hero-cards-wrapper uniquement.
- */
-html[data-theme="dark"] .hero-cards-wrapper {
-  --hero-card-bg: #ffffff;
-  --hero-card-panel-bg: #f1f4f9;
-  --hero-card-rim: rgba(15, 23, 42, 0.1);
-  --hero-card-inner-border: rgba(15, 23, 42, 0.08);
-  --hero-card-clinic-separator: rgba(15, 23, 42, 0.24);
-  --hero-card-region-text: #334155;
-  --text: #0f172a;
-  --hero-card-panel-label: var(--text);
-  --text-muted: #475569;
-  --border: #cbd5e1;
-  --star-rating: #ca8a04;
-  --shadow-hero-top: 0 20px 50px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(15, 23, 42, 0.06);
-  --shadow-hero-urgent:
-    0 0 0 1px rgba(217, 119, 6, 0.42),
-    0 0 36px rgba(245, 158, 11, 0.32),
-    0 16px 48px rgba(15, 23, 42, 0.14),
-    inset 0 1px 0 rgba(254, 243, 199, 0.65);
-  --shadow-hero-stack: 0 6px 20px rgba(15, 23, 42, 0.08);
-  --accent-gold-subtle: rgba(217, 119, 6, 0.08);
-  --loopexperience-row-bg: rgba(255, 255, 255, 0.9);
-  --loopexperience-row-border: rgba(71, 85, 105, 0.22);
-  --loopexperience-icon-bg: rgba(248, 250, 252, 0.95);
-  --loopexperience-icon-border: rgba(71, 85, 105, 0.16);
-  --loopexperience-accent: #64748b;
-  --match-btn-bg: rgba(16, 185, 129, 0.28);
-  --match-btn-bg-active: rgba(16, 185, 129, 0.46);
-  --match-btn-border: rgba(5, 150, 105, 0.52);
-  --match-btn-border-active: rgba(4, 120, 87, 0.78);
-  --match-text: #047857;
-  --passer-btn-bg-active: rgba(100, 116, 139, 0.09);
-  --passer-btn-border-active: rgba(148, 163, 184, 0.35);
-  --passer-btn-bg: #f4f6f9;
-  --passer-btn-border: #e2e8f0;
-  --passer-btn-text: #94a3b8;
+  /*
+   * Ancres menu : une seule source pour la hauteur utile de la nav (sync .ml-navbar-inner dans page.tsx).
+   * En rem → suit le zoom / taille de police racine ; scroll-padding dérivé sans « magic number » px isolé.
+   */
+  --ml-navbar-inner-height: 4.75rem; /* 76px @ root 16px */
+  /* Ancres : hauteur nav + bordure basse — sans marge supplémentaire (alignement sur le changement de fond de section) */
+  --ml-anchor-scroll-padding: calc(env(safe-area-inset-top, 0px) + var(--ml-navbar-inner-height) + 1px);
+  /* Titres landing : une échelle pour tout le site */
+  --ml-title-hero: clamp(1.55rem, 3.8vw, 2.45rem);
+  --ml-title-hero-line: 1.12;
+  --ml-title-hero-tracking: -0.03em;
+  --ml-title-block: clamp(1.05rem, 2.2vw, 1.35rem);
+  --ml-title-block-line: 1.25;
+  --ml-title-card: 0.9rem;
+  --ml-title-card-line: 1.3;
+  /* Largeur utile alignée hero / nav (grille + titres) */
+  --ml-content-max: 1280px;
+  --ml-content-inline: 24px;
+  /* Espace au-dessus du titre de section = même rythme que .ccm-inner (ex. « Comment ça marche ») */
+  --ml-section-pad-top: clamp(22px, 3.2vw, 36px);
+  --ml-section-pad-bottom: clamp(48px, 6vw, 80px);
 }
 
 @layer base {
@@ -898,23 +641,13 @@ select.ml-input option {
   color: var(--text);
 }
 
-/* ─── Nav links hover : primary léger (opacité via color-mix — évite le bloc gris lourd en light) ─── */
+/* ─── Nav links hover : primary léger (opacité via color-mix) ─── */
 .nav-link:hover {
   color: var(--accent-blue) !important;
-  background: color-mix(in srgb, var(--accent-blue) 14%, var(--navbar-bg)) !important;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .nav-link:hover {
-    background: color-mix(in srgb, var(--accent-blue) 9%, var(--navbar-bg)) !important;
-  }
-}
-
-html[data-theme="light"] .nav-link:hover {
   background: color-mix(in srgb, var(--accent-blue) 9%, var(--navbar-bg)) !important;
 }
 
-/* ─── Theme toggle (navbar) — clair / sombre ─── */
+/* ─── Boutons chrome nav (menu, fermer) ─── */
 .nav-theme-btn {
   position: relative;
   display: inline-flex;
@@ -926,103 +659,26 @@ html[data-theme="light"] .nav-link:hover {
   overflow: visible;
   border-radius: 10px;
   border: 1px solid var(--nav-chrome-border, var(--border));
-  /* Fond discret en thème sombre ; le mode clair applique un dégradé plus bas */
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--nav-link);
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
-  padding: 0;
-  font-family: inherit;
-}
-.nav-theme-btn:hover {
-  border-color: var(--border-hover);
-  color: var(--accent-blue);
-  background: var(--surface-2);
-}
-
-/* Mode clair : relief (dégradé + ombre + highlight interne), pas un aplati uniforme */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .nav-theme-btn {
-    background: linear-gradient(165deg, #ffffff 0%, #f4f7fb 45%, #e8edf4 100%);
-    border-color: rgba(148, 163, 184, 0.55);
-    box-shadow:
-      0 1px 2px rgba(15, 23, 42, 0.06),
-      0 4px 12px rgba(15, 23, 42, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.92);
-  }
-  :root:not([data-theme]) .nav-theme-btn:hover {
-    background: linear-gradient(165deg, #fafcfd 0%, #eef2f8 50%, #e2e8f0 100%);
-    border-color: var(--border-hover);
-    box-shadow:
-      0 2px 4px rgba(15, 23, 42, 0.07),
-      0 6px 16px rgba(15, 23, 42, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  }
-}
-html[data-theme="light"] .nav-theme-btn {
   background: linear-gradient(165deg, #ffffff 0%, #f4f7fb 45%, #e8edf4 100%);
   border-color: rgba(148, 163, 184, 0.55);
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.06),
     0 4px 12px rgba(15, 23, 42, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  color: var(--nav-link);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+  font-family: inherit;
 }
-html[data-theme="light"] .nav-theme-btn:hover {
-  background: linear-gradient(165deg, #fafcfd 0%, #eef2f8 50%, #e2e8f0 100%);
+.nav-theme-btn:hover {
   border-color: var(--border-hover);
+  color: var(--accent-blue);
+  background: linear-gradient(165deg, #fafcfd 0%, #eef2f8 50%, #e2e8f0 100%);
   box-shadow:
     0 2px 4px rgba(15, 23, 42, 0.07),
     0 6px 16px rgba(15, 23, 42, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
-}
-
-.nav-theme-tooltip {
-  position: absolute;
-  top: calc(100% + 10px);
-  /* Ancré à droite du bouton : la bulle s’étend vers la gauche, pas vers le CTA « Devenir Pionnier » */
-  left: auto;
-  right: 0;
-  transform: translateY(-4px);
-  z-index: 100;
-  width: max-content;
-  max-width: min(220px, calc(100vw - 24px));
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  line-height: 1.35;
-  text-align: right;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .nav-theme-tooltip,
-  html[data-theme="light"] .nav-theme-tooltip {
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-  }
-}
-.nav-theme-btn:is(:hover, :focus-visible) .nav-theme-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.nav-theme-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 /* ─── Navbar CTA « Devenir Pionnier » : fond lisible + halo doux (pas de flash) ─── */
@@ -1181,11 +837,6 @@ html[data-theme="light"] .nav-theme-btn:hover {
     max-width: min(300px, 78vw);
   }
 
-  /* Thème uniquement dans le menu latéral (évite doublon avec le soleil dans la barre) */
-  .nav-header-actions .nav-header-theme {
-    display: none !important;
-  }
-
   /* Icône seule : uniquement le CTA du header, pas le bandeau Pionnier (inscription + partage). */
   .nav-header-actions .nav-cta__label {
     display: none;
@@ -1323,36 +974,7 @@ html[data-theme="light"] .nav-theme-btn:hover {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 8px 0 0;
-}
-
-.nav-drawer-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-shrink: 0;
-  /* Padding bas un peu plus généreux : évite le coin bas-gauche du viewport (indicateur Next.js « N » en dev, home indicator) */
-  padding: 14px 16px calc(22px + env(safe-area-inset-bottom, 0px))
-    calc(16px + env(safe-area-inset-left, 0px));
-  border-top: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface-2) 35%, var(--navbar-bg));
-  position: relative;
-  z-index: 100001;
-}
-
-.nav-drawer-footer__label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  line-height: 1.2;
-  margin: 0;
-}
-
-/* Bouton aligné avec le libellé */
-.nav-drawer-footer .nav-theme-btn {
-  align-self: center;
-  flex-shrink: 0;
+  padding: 8px 0 calc(12px + env(safe-area-inset-bottom, 0px));
 }
 
 .nav-drawer-link {
@@ -1443,10 +1065,10 @@ html[data-theme="light"] .nav-theme-btn:hover {
   letter-spacing: 0.015em;
   text-align: center;
   text-decoration: none;
-  color: var(--accent-blue);
-  background: transparent;
-  border: 1px solid var(--pill-blue-soft-border);
-  box-shadow: none;
+  color: var(--text);
+  background: var(--pill-blue-soft-bg);
+  border: 1px solid var(--pill-blue-mid-border);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   transition:
     border-color 0.2s ease,
     background 0.2s ease,
@@ -1474,7 +1096,7 @@ html[data-theme="light"] .nav-theme-btn:hover {
   flex-shrink: 0;
   font-size: 16px;
   line-height: 1;
-  color: inherit;
+  color: var(--accent-blue);
 }
 
 .hero-pionniers-badge-link__seal {
@@ -1490,44 +1112,18 @@ html[data-theme="light"] .nav-theme-btn:hover {
   }
 }
 
-html[data-theme="light"] .hero-pionniers-badge-link {
-  color: var(--text);
-  background: var(--pill-blue-soft-bg);
-  border-color: var(--pill-blue-mid-border);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-html[data-theme="light"] .hero-pionniers-badge-link > .material-symbols-outlined {
-  color: var(--accent-blue);
-}
-
-html[data-theme="light"] .hero-pionniers-badge-link__seal {
-  color: var(--accent-gold);
-}
-
 .hero-pionniers-badge-link:hover {
-  border-color: rgba(52, 211, 153, 0.55) !important;
-  background: rgba(16, 185, 129, 0.12) !important;
-  color: var(--accent-green) !important;
-  box-shadow: 0 0 24px rgba(16, 185, 129, 0.12);
-}
-
-.hero-pionniers-badge-link:hover > .hero-pionniers-badge-link__seal {
-  color: var(--accent-gold) !important;
-}
-
-html[data-theme="light"] .hero-pionniers-badge-link:hover {
   border-color: var(--accent-blue) !important;
   background: var(--pill-blue-mid-bg) !important;
   color: var(--text) !important;
   box-shadow: 0 4px 16px rgba(16, 185, 129, 0.14);
 }
 
-html[data-theme="light"] .hero-pionniers-badge-link:hover > .material-symbols-outlined {
+.hero-pionniers-badge-link:hover > .material-symbols-outlined {
   color: var(--accent-blue) !important;
 }
 
-html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badge-link__seal {
+.hero-pionniers-badge-link:hover > .hero-pionniers-badge-link__seal {
   color: var(--accent-gold) !important;
 }
 
@@ -1960,6 +1556,13 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   text-shadow: none;
 }
 
+/* Colonne en flex column : align-self stretch étirait la pilule sur toute la largeur */
+.ccm-compare-col-head > .ccm-pill {
+  align-self: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
 /* Pilule + titre + accroche : centrés au-dessus des cartes (chaque colonne) */
 .ccm-compare-col-head {
   text-align: center;
@@ -2009,17 +1612,6 @@ html[data-theme="light"] .hero-pionniers-badge-link:hover > .hero-pionniers-badg
   background: color-mix(in srgb, var(--surface-2) 65%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--border) 62%, var(--surface) 38%);
   box-shadow: none;
-}
-
-/*
- * Dark : fond carte uniquement (pas de halo ni ombre large — sinon le gap flex laisse voir un fond plus sombre).
- */
-html[data-theme='dark'] .ccm-compare-card {
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 .ccm-compare-card__icon-title {
@@ -2283,11 +1875,6 @@ html[data-theme='dark'] .ccm-compare-card {
 
 .hero-cta-secondary .material-symbols-outlined {
   font-size: 18px;
-}
-
-/* Clair : texte vert forêt sur pastille ; sombre : vert plus vif sur fond teinté */
-html[data-theme="dark"] .hero-cta-secondary {
-  color: var(--nav-cta-bg);
 }
 
 .ccm-compare-col--bare {
@@ -2745,53 +2332,6 @@ html[data-theme="dark"] .hero-cta-secondary {
   border: 1px dashed color-mix(in srgb, var(--text-muted) 35%, var(--border) 65%);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent);
 }
-
-/* Pas de variante de fond : même carte que la colonne 1 (clair + dark). */
-
-/* Dark : colonnes Site d’annonces / Agence = même carte élevée que MedicusLoop */
-html[data-theme='dark'] .comparatif-vs-col--muted,
-html[data-theme='dark'] .comparatif-vs-col--muted-soft {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
-  border-style: solid;
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--text) 7%, transparent),
-    0 14px 40px color-mix(in srgb, var(--text) 9%, transparent);
-}
-
-html[data-theme='dark'] .comparatif-vs-col--muted::before,
-html[data-theme='dark'] .comparatif-vs-col--muted-soft::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  width: 100%;
-  height: 58%;
-  z-index: 0;
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 92% 95% at 50% 0%,
-    color-mix(in srgb, var(--surface-2) 58%, transparent) 0%,
-    transparent 72%
-  );
-}
-
-html[data-theme='dark'] .comparatif-vs-col--muted > *,
-html[data-theme='dark'] .comparatif-vs-col--muted-soft > * {
-  position: relative;
-  z-index: 1;
-}
-
-/*
- * Référence carte « dark » validée (colonne MedicusLoop, comparatif) — à réutiliser telle quelle si besoin :
- * - fond base : var(--surface)
- * - halo haut : .comparatif-vs-orb (radial surface-2 → transparent)
- * - contour : 1px solid color-mix(border 88%, surface)
- * - relief : box-shadow 0 1px line + ombre portée légère (voir bloc ci-dessous)
- */
 
 /* Colonne MedicusLoop : relief par le fond (halo discret) — pas de contour / ombres verts */
 .comparatif-vs-col--positive {
@@ -4178,11 +3718,6 @@ span.site-footer__contact-mail.mentions-legales-mail--obfuscated:hover {
   color: var(--text-subtle);
 }
 
-html[data-theme='dark'] .loopexperience-card-category {
-  color: color-mix(in srgb, var(--text) 76%, var(--accent-blue) 24%);
-  text-shadow: 0 1px 8px color-mix(in srgb, var(--bg) 72%, transparent);
-}
-
 .loopexperience-card-title {
   margin: 0;
   font-size: clamp(1rem, 2.1vw, 1.12rem);
@@ -4303,46 +3838,6 @@ html[data-theme='dark'] .loopexperience-card-category {
   background: color-mix(in srgb, var(--nav-cta-bg) 18%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--nav-cta-bg) 32%, transparent);
   color: var(--nav-cta-bg);
-}
-
-/* Dark : bloc hero confiance = même carte élevée que MedicusLoop comparatif */
-html[data-theme='dark'] .trust-strip--in-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--surface));
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--text) 7%, transparent),
-    0 14px 40px color-mix(in srgb, var(--text) 9%, transparent);
-}
-
-html[data-theme='dark'] .trust-strip--in-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  width: 100%;
-  height: 58%;
-  z-index: 0;
-  border-radius: 16px 16px 0 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 92% 95% at 50% 0%,
-    color-mix(in srgb, var(--surface-2) 58%, transparent) 0%,
-    transparent 72%
-  );
-}
-
-html[data-theme='dark'] .trust-strip--in-hero .trust-strip-inner--in-hero {
-  position: relative;
-  z-index: 1;
-}
-
-html[data-theme='dark'] .trust-strip--in-hero .trust-strip-icon {
-  background: var(--pill-blue-mid-bg);
-  border: 1px solid var(--pill-blue-mid-border);
-  color: var(--accent-blue);
-  box-shadow: none;
 }
 
 .trust-strip-title {

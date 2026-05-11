@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 
-/** Chrome carte mission : aligné sur le mode clair (y compris si data-theme=dark sur le document). */
-
 /** Espaces insécables fines entre milliers (affichage FR type « 4 250 € »). */
 function formatEurosFr(amount: number): string {
   const n = Math.round(amount)

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useId, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { inscriptionCtaFromListePleine } from '@/lib/pionnier-constants'
 import MedicusLoopLogo from './medicusloop-logo'
-import ThemeToggle from './theme-toggle'
 
 const NAV_SECTION_LINKS = [
   { label: 'Comment ça marche', href: '/#comment-ca-marche' },
@@ -87,10 +86,6 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
             </a>
           ))}
         </nav>
-        <div className="nav-drawer-footer">
-          <span className="nav-drawer-footer__label">Mode clair / sombre</span>
-          <ThemeToggle />
-        </div>
       </div>
     </div>
   )
@@ -188,9 +183,6 @@ export default function Navbar({ listePleinePionniers = false }: NavbarProps) {
           </div>
 
           <div className="nav-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-            <div className="nav-header-theme">
-              <ThemeToggle />
-            </div>
             <a href="/#inscription" className="nav-cta" aria-label={cta.ariaNav}>
               <span className="material-symbols-outlined nav-cta__icon" aria-hidden="true">
                 {cta.icon}
